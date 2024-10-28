@@ -20,7 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.htc.luminaos.R;
+import com.htc.luminaos.activity.MainActivity;
 import com.htc.luminaos.entry.AppInfoBean;
+import com.htc.luminaos.fragment.NewFragment;
+import com.htc.luminaos.fragment.OriginalFragment;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.utils.ScrollUtils;
 import com.htc.luminaos.widget.AppDetailDialog;
@@ -43,7 +46,17 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
     private PackageManager mPm;
     private String TAG = "AppsAdapter";
 
-    public AppsAdapter(Context mContext,List<AppInfoBean> infoBeans, RecyclerView recyclerView) {
+    private MainActivity activity=null;
+
+    public AppsAdapter(Context mContext, List<AppInfoBean> infoBeans, RecyclerView recyclerView,MainActivity activity) {
+        this.mContext = mContext;
+        this.infoBeans = infoBeans;
+        this.recyclerView = recyclerView;
+        this.mPm = mContext.getPackageManager();
+        this.activity = activity;
+    }
+
+    public AppsAdapter(Context mContext, List<AppInfoBean> infoBeans, RecyclerView recyclerView) {
         this.mContext = mContext;
         this.infoBeans = infoBeans;
         this.recyclerView = recyclerView;
@@ -64,21 +77,26 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         myViewHolder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUtils.startNewApp(mContext,info.getApppackagename());
+                AppUtils.startNewApp(mContext, info.getApppackagename());
             }
         });
+
+        if(i==0) {
+            myViewHolder.rl_item.requestFocus();
+        }
+
 
         myViewHolder.rl_item.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if (recyclerView==null)
+                if (recyclerView == null)
                     return;
 
-                int position = ((RecyclerView) view.getParent()).getChildAdapterPosition(view);
-                if(hasFocus&&position!=0){
-                    int[] amount = ScrollUtils.getScrollAmount(recyclerView, view);//计算需要滑动的距离
-                    recyclerView.smoothScrollBy(amount[0], amount[1]);
-                }
+//                int position = recyclerView.getChildAdapterPosition(view);
+//                if (hasFocus && position != 0) {
+//                    int[] amount = ScrollUtils.getScrollAmount(recyclerView, view);//计算需要滑动的距离
+//                    recyclerView.smoothScrollBy(amount[0], amount[1]);
+//                }
 
                 AnimationSet animationSet = new AnimationSet(true);
                 view.bringToFront();
@@ -104,6 +122,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         });
 
         myViewHolder.rl_item.setOnKeyListener(this);
+
     }
 
     @Override
@@ -119,14 +138,27 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-        if(keyCode == KeyEvent.KEYCODE_MENU && event.getAction()==KeyEvent.ACTION_DOWN){
-            Log.d(TAG,"卸载收到MENU按键");
-            int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
+        int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 8
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            Log.d(TAG, " 顶部焦点向上 "+position);
+            enableFocus();
+            ((MainActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
+                    .replace(R.id.fragment_container, MainActivity.originalFragment)
+                    .commit();
+
+            return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
+            Log.d(TAG, "卸载收到MENU按键");
+//            int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
             final AppInfoBean info = infoBeans.get(position);
 
             boolean[] result = AppUtils.checkIfSystemAppAndCanUninstall(mContext, info.getApplicationInfo().packageName);
             if (result[0] && !result[1]) {
-                AlertDialog dialog =new AlertDialog.Builder(mContext)
+                AlertDialog dialog = new AlertDialog.Builder(mContext)
                         .setTitle(mContext.getString(R.string.hint)) // 对话框标题
                         .setMessage(mContext.getString(R.string.system_app_cannot_uninstalled)) // 对话框内容
                         .setPositiveButton(mContext.getString(R.string.enter), new DialogInterface.OnClickListener() {
@@ -153,20 +185,20 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                 return true;
             }
 
-            AppDetailDialog detailDialog = new AppDetailDialog(mContext,R.style.DialogTheme);
+            AppDetailDialog detailDialog = new AppDetailDialog(mContext, R.style.DialogTheme);
             detailDialog.setData(info.getApplicationInfo());
             detailDialog.setOnClickCallBack(new AppDetailDialog.OnAppDetailCallBack() {
                 @Override
                 public void onClear_cache(String packageName) {
                     ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
-                    activityManager.clearApplicationUserData(packageName,null);
+                    activityManager.clearApplicationUserData(packageName, null);
                 }
 
                 @Override
                 public void onUninstall(String packageName) {
                     try {
-                        Intent intent=new Intent();
-                        Uri uri = Uri.parse("package:"+packageName);
+                        Intent intent = new Intent();
+                        Uri uri = Uri.parse("package:" + packageName);
                         //获取删除包名的URI
                         intent.setAction(Intent.ACTION_DELETE);
                         //设置我们要执行的卸载动作
@@ -196,5 +228,24 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             rl_item = itemView.findViewById(R.id.rl_item);
             icon = itemView.findViewById(R.id.app_icon);
         }
+    }
+
+    // 获取 View 在适配器中的位置
+    private int getAdapterPositionForView(View view) {
+        // 查找父视图 RecyclerView
+        RecyclerView recyclerView = (RecyclerView) view.getParent();
+        if (recyclerView != null) {
+            return recyclerView.getChildAdapterPosition(view);
+        }
+        return -1; // 返回无效位置
+    }
+
+    private void enableFocus() {
+        activity.htcosBinding.rlWifi.setFocusable(true);
+        activity.htcosBinding.rlUsbConnect.setFocusable(true);
+        activity.htcosBinding.rlBattery.setFocusable(true);
+        activity.htcosBinding.rlBluetooth.setFocusable(true);
+        activity.htcosBinding.rlSettings.setFocusable(true);
+        activity.htcosBinding.rlWallpapers.setFocusable(true);
     }
 }

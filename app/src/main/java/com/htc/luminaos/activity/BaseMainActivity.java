@@ -25,13 +25,14 @@ import com.htc.luminaos.utils.Contants;
 import com.htc.luminaos.utils.Utils;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Author:
  * Date:
  * Description:
  */
-public class BaseMainActivity extends Activity implements View.OnClickListener, View.OnHoverListener, View.OnFocusChangeListener {
+public class BaseMainActivity extends AppCompatActivity implements View.OnClickListener, View.OnHoverListener, View.OnFocusChangeListener {
 
 
     @Override

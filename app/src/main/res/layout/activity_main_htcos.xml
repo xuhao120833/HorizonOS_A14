@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/htcos_default_bg"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    tools:context=".activity.MainActivity">
+
+    <!--    第一排-->
+
+    <RelativeLayout
+        android:id="@+id/first_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_92">
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x_50"
+            android:layout_marginTop="@dimen/y_15"
+            android:includeFontPadding="false"
+            android:text="12:00"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/x_64"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <View
+            android:id="@+id/white_line"
+            android:layout_width="@dimen/x_4"
+            android:layout_height="@dimen/x_54"
+            android:layout_marginStart="@dimen/x_13"
+            android:layout_marginTop="@dimen/y_25"
+            android:layout_toEndOf="@+id/time"
+            android:background="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x_13"
+            android:layout_marginTop="@dimen/y_25"
+            android:layout_toEndOf="@+id/white_line"
+            android:includeFontPadding="false"
+            android:text="2024/10/9"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/x_21"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/calendar"
+            android:layout_marginStart="@dimen/x_13"
+            android:layout_marginTop="@dimen/y_5"
+            android:layout_toEndOf="@+id/white_line"
+            android:includeFontPadding="false"
+            android:text="Wed."
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/x_21"
+            android:textStyle="bold">
+
+        </TextView>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_battery"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            android:layout_toStartOf="@+id/rl_usb_connect"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/battery"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:clickable="true"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/battery_4" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_usb_connect"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            android:layout_toStartOf="@+id/rl_wallpapers"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/usb_connect"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:clickable="true"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/usb_green" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_wallpapers"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            android:layout_toStartOf="@+id/rl_settings"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/wallpaper"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:clickable="true"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/htc_switch_bg" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_settings"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            android:layout_toStartOf="@+id/rl_bluetooth"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/settings"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:clickable="true"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/home_icon_set" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_bluetooth"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            android:layout_toStartOf="@+id/rl_wifi"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/home_bluetooth"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:padding="@dimen/y_2"
+                android:src="@drawable/bt_custom2" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_wifi"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_50"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/home_wifi"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:clickable="true"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/wifi_custom_4" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y_628"
+        android:layout_below="@+id/first_row">
+
+
+    </FrameLayout>
+
+
+</RelativeLayout>

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.htc.luminaos.widget.RLRelativelayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/x_180"
-    android:layout_height="@dimen/y_160"
-    android:minWidth="@dimen/x_180"
-    android:minHeight="@dimen/y_160"
+    android:layout_width="@dimen/x_120"
+    android:layout_height="@dimen/y_140"
     style="@style/focusStyle"
     android:id="@+id/rl_item"
     android:background="@drawable/app_item_bg"
     >
 
     <ImageView
-        android:layout_width="@dimen/x_100"
-        android:layout_height="@dimen/y_100"
+        android:layout_width="@dimen/x_104"
+        android:layout_height="@dimen/y_104"
         android:id="@+id/app_icon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y_10"

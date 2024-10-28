@@ -174,7 +174,7 @@ public class MyApplication extends Application {
         Utils.drawables.add(getResources().getDrawable(R.drawable.background_custom));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background1));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background5));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background10));
+        Utils.drawables.add(getResources().getDrawable(R.drawable.htcos_default_bg));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background11));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background12));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background13));
