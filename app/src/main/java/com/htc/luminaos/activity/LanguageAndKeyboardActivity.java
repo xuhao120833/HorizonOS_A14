@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.nfc.Tag;
+import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -47,6 +47,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
     private List<InputMethodInfo> mInputMethodList;
     private ArrayList<InputMethodBean> mArrayList = new ArrayList<>();
     private static String TAG = "LanguageAndKeyboardActivity";
+    private ContentObserver inputMethodObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +57,54 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
         initView();
         initData();
     }
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 注销观察者
+        getContentResolver().unregisterContentObserver(inputMethodObserver);
+    }
+
+
     private void initView(){
         languageKeyboardBinding.rlLanguage.setOnClickListener(this);
+        languageKeyboardBinding.rlLanguage.setOnHoverListener(this);
         languageKeyboardBinding.rlKeyboard.setOnClickListener(this);
+        languageKeyboardBinding.rlKeyboard.setOnHoverListener(this);
         languageKeyboardBinding.rlKeyboardSetting.setOnClickListener(this);
+        languageKeyboardBinding.rlKeyboardSetting.setOnHoverListener(this);
     }
     
     @SuppressLint("SetTextI18n")
     private void initData(){
         languageKeyboardBinding.keyboardTv.setText(getKeyBoardDefault());
+        Log.d(TAG," initData默认输入法 "+getKeyBoardDefault());
         Locale currentLocale = Locale.getDefault();
         // 获取当前语言的显示名称（本地化）
         String displayLanguage = currentLocale.getDisplayLanguage(currentLocale);
         String displayCountry = currentLocale.getDisplayCountry(currentLocale);
         languageKeyboardBinding.languageTv.setText(displayCountry+" "+displayLanguage);
+
+        inputMethodObserver = new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                super.onChange(selfChange);
+                // 当输入法设置变化时，更新当前输入法
+                String currentInputMethod = getKeyBoardDefault();
+                Log.d(TAG," inputMethodObserver默认输入法 "+getKeyBoardDefault());
+                languageKeyboardBinding.keyboardTv.setText(currentInputMethod);
+            }
+        };
+        getContentResolver().registerContentObserver(
+                Settings.Secure.CONTENT_URI,
+                true,
+                inputMethodObserver
+        );
     }
 
     private void loadDefault() {

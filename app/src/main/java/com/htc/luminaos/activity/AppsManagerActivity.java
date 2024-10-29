@@ -1,7 +1,5 @@
 package com.htc.luminaos.activity;
 
-import androidx.annotation.NonNull;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -10,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
+
+import androidx.annotation.NonNull;
 
 import com.htc.luminaos.adapter.AppsManagerAdapter;
 import com.htc.luminaos.databinding.ActivityAppsManagerBinding;

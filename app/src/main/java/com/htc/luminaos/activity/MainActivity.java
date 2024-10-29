@@ -160,7 +160,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     private static String TAG = "MainActivity";
 
-    private String appName = "";
+    public String appName = "";
 
     private boolean requestFlag = false;
 
@@ -240,7 +240,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     .commit();
             initViewCustom();
             initDataCustom();
-//            initReceiver();
+            initReceiver();
             wifiManager = (WifiManager) getSystemService(Service.WIFI_SERVICE);
 //            Log.d(TAG, " onCreate快捷图标 short_list " + short_list.size());
         } catch (Exception e) {
@@ -362,37 +362,37 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         switch (level) {
             case "0":
                 if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_charging_1);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_charging_1);
                 } else if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("0")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_1);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_1);
                 }
                 break;
             case "1":
                 if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_charging_2);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_charging_2);
                 } else if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("0")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_2);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_2);
                 }
                 break;
             case "2":
                 if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_charging_3);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_charging_3);
                 } else if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("0")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_3);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_3);
                 }
                 break;
             case "3":
                 if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_charging_4);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_charging_4);
                 } else if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("0")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_4);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_4);
                 }
                 break;
             case "4":
                 if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_charging_5);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_charging_5);
                 } else if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("0")) {
-                    customBinding.battery.setImageResource(R.drawable.battery_5);
+                    htcosBinding.battery.setImageResource(R.drawable.battery_5);
                 }
                 break;
         }
@@ -404,19 +404,19 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         Log.d(TAG, "电池状态 Plug_in_charger");
         switch (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryLevel)) {
             case "0":
-                customBinding.battery.setImageResource(R.drawable.battery_charging_1);
+                htcosBinding.battery.setImageResource(R.drawable.battery_charging_1);
                 break;
             case "1":
-                customBinding.battery.setImageResource(R.drawable.battery_charging_2);
+                htcosBinding.battery.setImageResource(R.drawable.battery_charging_2);
                 break;
             case "2":
-                customBinding.battery.setImageResource(R.drawable.battery_charging_3);
+                htcosBinding.battery.setImageResource(R.drawable.battery_charging_3);
                 break;
             case "3":
-                customBinding.battery.setImageResource(R.drawable.battery_charging_4);
+                htcosBinding.battery.setImageResource(R.drawable.battery_charging_4);
                 break;
             case "4":
-                customBinding.battery.setImageResource(R.drawable.battery_charging_5);
+                htcosBinding.battery.setImageResource(R.drawable.battery_charging_5);
                 break;
         }
     }
@@ -426,19 +426,19 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         Log.d(TAG, "电池状态 Unplug_the_charger");
         switch (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryLevel)) {
             case "0":
-                customBinding.battery.setImageResource(R.drawable.battery_1);
+                htcosBinding.battery.setImageResource(R.drawable.battery_1);
                 break;
             case "1":
-                customBinding.battery.setImageResource(R.drawable.battery_2);
+                htcosBinding.battery.setImageResource(R.drawable.battery_2);
                 break;
             case "2":
-                customBinding.battery.setImageResource(R.drawable.battery_3);
+                htcosBinding.battery.setImageResource(R.drawable.battery_3);
                 break;
             case "3":
-                customBinding.battery.setImageResource(R.drawable.battery_4);
+                htcosBinding.battery.setImageResource(R.drawable.battery_4);
                 break;
             case "4":
-                customBinding.battery.setImageResource(R.drawable.battery_5);
+                htcosBinding.battery.setImageResource(R.drawable.battery_5);
                 break;
         }
     }
@@ -478,17 +478,10 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         wifiFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
         wifiFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         wifiFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-
         wifiReceiver = new MyWifiReceiver(this);
         registerReceiver(wifiReceiver, wifiFilter);
 
         // 蓝牙
-        // blueFilter.addAction("android.bluetooth.device.action.ACL_CONNECTED");
-        // blueFilter
-        // .addAction("android.bluetooth.device.action.ACL_DISCONNECTED");
-        // blueFilter.addAction("android.bluetooth.device.action.FOUND");
-        // blueFilter
-        // .addAction("android.bluetooth.device.action.ACL_DISCONNECT_REQUESTED");
         blueFilter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
         blueFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         blueReceiver = new BluetoothReceiver(this);
@@ -496,8 +489,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
         //Usb设备插入、拔出
         usbDeviceReceiver = new UsbDeviceReceiver(this);
-//        usbDeviceFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-//        usbDeviceFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         usbDeviceFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         usbDeviceFilter.addAction(Intent.ACTION_MEDIA_REMOVED);
         usbDeviceFilter.addAction(Intent.ACTION_MEDIA_BAD_REMOVAL);
@@ -520,8 +511,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         batteryFilter.addAction("action.projector.dcin");
         batteryFilter.addAction("action.projector.batterylevel");
         registerReceiver(batteryReceiver, batteryFilter);
-
-
     }
 
     ShortcutsAdapter.ItemCallBack itemCallBack = new ShortcutsAdapter.ItemCallBack() {
@@ -792,7 +781,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     }
 
-    private void goAction(String listaction) {
+    public void goAction(String listaction) {
         Log.d(TAG, " goAction list配置跳转 " + listaction);
         if (listaction.contains("/")) {
             String[] parts = listaction.split("/", 2);
@@ -807,7 +796,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         }
     }
 
-    private void startSource(String sourceName) {
+    public void startSource(String sourceName) {
         Intent intent_hdmi = new Intent();
         intent_hdmi.setComponent(new ComponentName("com.softwinner.awlivetv", "com.softwinner.awlivetv.MainActivity"));
         intent_hdmi.putExtra("input_source", sourceName);
@@ -1134,10 +1123,8 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         boolean isConnected = BluetoothUtils.getInstance(this)
                 .isBluetoothConnected();
         if (isConnected) {
-//            mainBinding.homeBluetooth.setBackgroundResource(R.drawable.bluetooth_con);
             htcosBinding.homeBluetooth.setImageResource(R.drawable.bt_custom_green);
         } else {
-//            mainBinding.homeBluetooth.setBackgroundResource(R.drawable.bluetooth_not);
             htcosBinding.homeBluetooth.setImageResource(R.drawable.bt_custom2);
         }
     }
@@ -1177,11 +1164,11 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
         if (Utils.hasUsbDevice) {
             Log.d("UsbDeviceChange ", "usbConnect设为VISIBLE");
-            customBinding.rlUsbConnect.setVisibility(View.VISIBLE);
+            htcosBinding.rlUsbConnect.setVisibility(View.VISIBLE);
         } else {
-            customBinding.rlUsbConnect.clearFocus();
-            customBinding.rlUsbConnect.clearAnimation();
-            customBinding.rlUsbConnect.setVisibility(View.GONE);
+            htcosBinding.rlUsbConnect.clearFocus();
+            htcosBinding.rlUsbConnect.clearAnimation();
+            htcosBinding.rlUsbConnect.setVisibility(View.GONE);
             Log.d("UsbDeviceChange ", "usbConnect设为GONE");
         }
     }
@@ -1195,95 +1182,35 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     public void getWifiState(int state) {
         if (state == 1) {
 //            mainBinding.homeWifi.setBackgroundResource(R.drawable.wifi_not);
-            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_4);
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_4);
         }
     }
 
-//    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-//        @Override
-//        public void onFocusChange(View v, boolean hasFocus) {
-//            AnimationSet animationSet = new AnimationSet(true);
-//            v.bringToFront();
-//            if (hasFocus) {
-//                ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.50f,
-//                        1.0f, 1.50f, Animation.RELATIVE_TO_SELF, 0.5f,
-//                        Animation.RELATIVE_TO_SELF, 0.5f);
-//                scaleAnimation.setDuration(150);
-//                animationSet.addAnimation(scaleAnimation);
-//                animationSet.setFillAfter(true);
-//                v.startAnimation(animationSet);
-//            } else {
-//                ScaleAnimation scaleAnimation = new ScaleAnimation(1.50f, 1.0f,
-//                        1.50f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-//                        Animation.RELATIVE_TO_SELF, 0.5f);
-//                animationSet.addAnimation(scaleAnimation);
-//                scaleAnimation.setDuration(150);
-//                animationSet.setFillAfter(true);
-//                v.startAnimation(animationSet);
-//            }
-//        }
-//    };
-
-//    @Override
-//    public void getWifiNumber(int count) {
-//
-//        List<ScanResult> wifiList = wifiManager.getScanResults();
-//        Log.d(TAG,"getWifiNumber "+count);
-//        switch (count) {
-//            case -1:
-////                mainBinding.homeWifi.setBackgroundResource(R.drawable.wifi_not);
-//                customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_4);
-//                break;
-//            case 0:
-////                mainBinding.homeWifi.setBackgroundResource(R.drawable.bar_wifi_1_focus);
-//                customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_1);
-//                break;
-//            case 1:
-////                mainBinding.homeWifi.setBackgroundResource(R.drawable.bar_wifi_2_focus);
-//                customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_2);
-//                break;
-//            case 2:
-////                mainBinding.homeWifi.setBackgroundResource(R.drawable.bar_wifi_2_focus);
-//                customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_3);
-//                break;
-//            case 3:
-////                mainBinding.homeWifi.setBackgroundResource(R.drawable.bar_wifi_2_focus);
-//                customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
-//                break;
-//            default:
-////                mainBinding.homeWifi.setBackgroundResource(R.drawable.bar_wifi_full_focus);
-//                customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
-//                break;
-//
-//        }
-//    }
 
     @Override
     public void getWifiNumber(int count) {
+        List<ScanResult> wifiList = wifiManager.getScanResults();
+        Log.d(TAG, "getWifiNumber " + count);
 
-//        List<ScanResult> wifiList = wifiManager.getScanResults();
-//        Log.d(TAG, "getWifiNumber " + count);
-//
-//        if (count == 1) {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_4);
-//            return;
-//        } else if (count == 3) {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
-//            return;
-//        }
-//
-//        Log.d(TAG, " level数据" + count);
-//        if (count < -85) {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_1);
-//        } else if (count < -70) {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_2);
-//        } else if (count < -60) {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_3);
-//        } else if (count < -50) {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
-//        } else {
-//            customBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
-//        }
+        if (count == 1) {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_4);
+            return;
+        } else if (count == 3) {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
+            return;
+        }
+        Log.d(TAG, " level数据" + count);
+        if (count < -85) {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_1);
+        } else if (count < -70) {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_2);
+        } else if (count < -60) {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_3);
+        } else if (count < -50) {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
+        } else {
+            htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
+        }
     }
 
     @Override
@@ -1299,7 +1226,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     }
 
-    private void requestChannelData() {
+    public void requestChannelData() {
         if (requestFlag)
             return;
 
@@ -1647,8 +1574,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             return;
         }
         DBUtils.getInstance(this).deleteFavorites(packageName);
-//        short_list = loadHomeAppData();
-//        handler.sendEmptyMessage(204);
     }
 
     @Override

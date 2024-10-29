@@ -1,7 +1,9 @@
 package com.htc.luminaos.fragment;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,19 +14,24 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
 import com.htc.luminaos.R;
 import com.htc.luminaos.activity.MainActivity;
 import com.htc.luminaos.databinding.ActivityMainHtcosBinding;
 import com.htc.luminaos.databinding.OriginalfragmentBinding;
+import com.htc.luminaos.utils.AppUtils;
+import com.htc.luminaos.utils.DBUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link OriginalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OriginalFragment extends Fragment implements View.OnKeyListener , View.OnHoverListener , View.OnClickListener{
+public class OriginalFragment extends Fragment implements View.OnKeyListener , View.OnHoverListener , View.OnClickListener, View.OnFocusChangeListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,16 +85,16 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         View view = binding.getRoot();
 
         //onClick
-        binding.rlScreenCast.setOnKeyListener(this);
-        binding.rlSignalSource.setOnKeyListener(this);
-        binding.rlFileExplorer.setOnKeyListener(this);
-        binding.rlAppStore.setOnKeyListener(this);
-        binding.netflix.setOnKeyListener(this);
-        binding.youtube.setOnKeyListener(this);
-        binding.disney.setOnKeyListener(this);
-        binding.max.setOnKeyListener(this);
-        binding.primeVideo.setOnKeyListener(this);
-        binding.hulu.setOnKeyListener(this);
+        binding.rlScreenCast.setOnClickListener(this);
+        binding.rlSignalSource.setOnClickListener(this);
+        binding.rlFileExplorer.setOnClickListener(this);
+        binding.rlAppStore.setOnClickListener(this);
+        binding.netflix.setOnClickListener(this);
+        binding.youtube.setOnClickListener(this);
+        binding.disney.setOnClickListener(this);
+        binding.max.setOnClickListener(this);
+        binding.primeVideo.setOnClickListener(this);
+        binding.hulu.setOnClickListener(this);
 
         //onHover
         binding.rlScreenCast.setOnHoverListener(this);
@@ -100,6 +107,18 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         binding.max.setOnHoverListener(this);
         binding.primeVideo.setOnHoverListener(this);
         binding.hulu.setOnHoverListener(this);
+
+        //onFocus
+        binding.rlScreenCast.setOnFocusChangeListener(this);
+        binding.rlSignalSource.setOnFocusChangeListener(this);
+        binding.rlFileExplorer.setOnFocusChangeListener(this);
+        binding.rlAppStore.setOnFocusChangeListener(this);
+        binding.netflix.setOnFocusChangeListener(this);
+        binding.youtube.setOnFocusChangeListener(this);
+        binding.disney.setOnFocusChangeListener(this);
+        binding.max.setOnFocusChangeListener(this);
+        binding.primeVideo.setOnFocusChangeListener(this);
+        binding.hulu.setOnFocusChangeListener(this);
 
         //onKey
         binding.netflix.setOnKeyListener(this);
@@ -152,26 +171,137 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     @Override
     public void onClick(View v) {
 
+        String appname = null;
+        String action = null;
+
+        MainActivity activity = (MainActivity)getActivity();
+
         switch (v.getId()) {
             case R.id.rl_screen_cast:
+                try {
+                    String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list1");
+                    if (listaction != null && !listaction.equals("")) { //读取配置
+                        activity.goAction(listaction);
+                    } else {// 默认跳转
+                        AppUtils.startNewApp(getActivity(), "com.ecloud.eshare.server");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.rl_signal_source:
+                try {
+                    String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list3");
+                    if (listaction != null && !listaction.equals("")) { //读取配置
+                        activity.goAction(listaction);
+                    } else {// 默认跳转
+                        activity.startSource("HDMI1");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.rl_file_explorer:
+                try {
+                    AppUtils.startNewApp(getActivity(), "com.hisilicon.explorer");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.rl_app_store:
+                try {
+                    AppUtils.startNewApp(getActivity(), "com.htc.storeos");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.netflix:
+                Log.d("xuhao", "打开奈飞");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon1");
+                action = DBUtils.getInstance(activity).getActionByTag("icon1");
+                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                    if (!AppUtils.startNewApp(activity, action)) {
+                        Log.d("xuhao", "打开奈飞 第一个坑位不为空 " + appname + "2" + action + "3");
+                        activity.appName = appname;
+                        activity.requestChannelData();
+                    }
+                } else if (!AppUtils.startNewApp(activity, "com.netflix.mediaclient")) {
+                    if (!AppUtils.startNewApp(activity, "com.netflix.ninja")) {
+                        Log.d("xuhao", "打开奈飞 第一个坑位为空");
+                        activity.appName = "Netflix";
+                        activity.requestChannelData();
+                    }
+                }
                 break;
             case R.id.youtube:
+                Log.d("xuhao", "打开YOUtube");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon2");
+                action = DBUtils.getInstance(activity).getActionByTag("icon2");
+                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                    if (!AppUtils.startNewApp(activity, action)) {
+                        activity.appName = appname;
+                        activity.requestChannelData();
+                    }
+                } else if (!AppUtils.startNewApp(activity, "com.google.android.youtube.tv")) {
+                    activity.appName = "Youtube";
+                    activity.requestChannelData();
+                }
                 break;
             case R.id.disney:
+                Log.d("xuhao", "打开迪士尼");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon3");
+                action = DBUtils.getInstance(activity).getActionByTag("icon3");
+                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                    if (!AppUtils.startNewApp(activity, action)) {
+                        activity.appName = appname;
+                        activity.requestChannelData();
+                    }
+                } else if (!AppUtils.startNewApp(activity, "com.disney.disneyplus")) {
+                    activity.appName = "Disney+";
+                    activity.requestChannelData();
+                }
                 break;
             case R.id.max:
+                Log.d("xuhao", "打开max");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
+                action = DBUtils.getInstance(activity).getActionByTag("icon4");
+                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                    if (!AppUtils.startNewApp(activity, action)) {
+                        activity.appName = appname;
+                        activity.requestChannelData();
+                    }
+                } else if (!AppUtils.startNewApp(activity, "com.wbd.stream")) {
+                    activity.appName = "Max";
+                    activity.requestChannelData();
+                }
                 break;
             case R.id.prime_video:
+                Log.d("xuhao", "打开prime_video");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
+                action = DBUtils.getInstance(activity).getActionByTag("icon5");
+                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                    if (!AppUtils.startNewApp(activity, action)) {
+                        activity.appName = appname;
+                        activity.requestChannelData();
+                    }
+                } else if (!AppUtils.startNewApp(activity, "com.amazon.avod.thirdpartyclient")) {
+                    activity.appName = "prime video";
+                    activity.requestChannelData();
+                }
                 break;
             case R.id.hulu:
+                Log.d("xuhao", "打开hulu");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon6");
+                action = DBUtils.getInstance(activity).getActionByTag("icon6");
+                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                    if (!AppUtils.startNewApp(activity, action)) {
+                        activity.appName = appname;
+                        activity.requestChannelData();
+                    }
+                } else if (!AppUtils.startNewApp(activity, "jp.happyon.android")) {
+                    activity.appName = "Hulu";
+                    activity.requestChannelData();
+                }
                 break;
         }
     }
@@ -191,4 +321,26 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         return false;
     }
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        AnimationSet animationSet = new AnimationSet(true);
+        v.bringToFront();
+        if (hasFocus) {
+            ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.10f,
+                    1.0f, 1.10f, Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleAnimation.setDuration(150);
+            animationSet.addAnimation(scaleAnimation);
+            animationSet.setFillAfter(true);
+            v.startAnimation(animationSet);
+        } else {
+            ScaleAnimation scaleAnimation = new ScaleAnimation(1.10f, 1.0f,
+                    1.10f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            animationSet.addAnimation(scaleAnimation);
+            scaleAnimation.setDuration(150);
+            animationSet.setFillAfter(true);
+            v.startAnimation(animationSet);
+        }
+    }
 }

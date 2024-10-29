@@ -2,32 +2,35 @@ package com.htc.luminaos.adapter;
 
 import android.content.Context;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.htc.luminaos.R;
 import com.htc.luminaos.entry.InputMethodBean;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Author:
  * Date:
  * Description:
  */
-public class InputMethodAdapter extends RecyclerView.Adapter<InputMethodAdapter.MyViewHolder>{
+public class InputMethodAdapter extends RecyclerView.Adapter<InputMethodAdapter.MyViewHolder> implements View.OnHoverListener{
 
     private Context mContext;
     private ArrayList<InputMethodBean> marray=null;
     private LayoutInflater mInflater;
     private int currentPosition=-1;
+    private static String TAG = "InputMethodAdapter";
 
     public void setCurrentPosition(int position){
         if(position>=0&&position<marray.size()){
@@ -53,6 +56,7 @@ public class InputMethodAdapter extends RecyclerView.Adapter<InputMethodAdapter.
         myViewHolder.inputMethodName.setText(bean.getInputname());
         if (currentPosition == i){
             myViewHolder.status.setVisibility(View.VISIBLE);
+            myViewHolder.rl_item.requestFocus();
         }else{
             myViewHolder.status.setVisibility(View.GONE);
         }
@@ -63,11 +67,12 @@ public class InputMethodAdapter extends RecyclerView.Adapter<InputMethodAdapter.
                 Settings.Secure.putString(mContext.getContentResolver(),
                         Settings.Secure.DEFAULT_INPUT_METHOD,
                         bean.getPrefkey());
+                Log.d(TAG," bean.getPrefkey() "+bean.getPrefkey());
                 setCurrentPosition(i);
                 notifyDataSetChanged();
             }
         });
-
+        myViewHolder.rl_item.setOnHoverListener(this);
     }
 
     @Override
@@ -90,5 +95,20 @@ public class InputMethodAdapter extends RecyclerView.Adapter<InputMethodAdapter.
             status = itemView.findViewById(R.id.status);
             rl_item = itemView.findViewById(R.id.rl_item);
         }
+    }
+
+    @Override
+    public boolean onHover(View v, MotionEvent event) {
+        int what = event.getAction();
+        switch (what) {
+            case MotionEvent.ACTION_HOVER_ENTER: // 鼠标进入view
+                v.requestFocus();
+                break;
+            case MotionEvent.ACTION_HOVER_MOVE: // 鼠标在view上
+                break;
+            case MotionEvent.ACTION_HOVER_EXIT: // 鼠标离开view
+                break;
+        }
+        return false;
     }
 }

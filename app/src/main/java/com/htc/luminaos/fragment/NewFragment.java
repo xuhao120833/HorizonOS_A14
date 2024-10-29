@@ -103,7 +103,7 @@ public class NewFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),8);
         binding.appsRv.setLayoutManager(layoutManager);
         binding.appsRv.addItemDecoration(new SpacesItemDecoration(0,
-                0,getResources().getDimensionPixelSize(R.dimen.y_7),getResources().getDimensionPixelSize(R.dimen.y_7)));
+                0,getResources().getDimensionPixelSize(R.dimen.y_14),getResources().getDimensionPixelSize(R.dimen.y_32)));
         initData();
     }
 

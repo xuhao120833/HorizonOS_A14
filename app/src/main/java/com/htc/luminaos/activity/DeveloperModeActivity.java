@@ -17,7 +17,7 @@ public class DeveloperModeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        developerModeBinding =ActivityDeveloperModeBinding.inflate(LayoutInflater.from(this));
+        developerModeBinding = ActivityDeveloperModeBinding.inflate(LayoutInflater.from(this));
         setContentView(developerModeBinding.getRoot());
         initView();
         initData();
@@ -25,9 +25,11 @@ public class DeveloperModeActivity extends BaseActivity {
 
     private void initView(){
         developerModeBinding.rlUsbDebug.setOnClickListener(this);
+        developerModeBinding.rlUsbDebug.setOnHoverListener(this);
         developerModeBinding.usbDebugSwitch.setOnClickListener(this);
 
         developerModeBinding.rlAdbDebug.setOnClickListener(this);
+        developerModeBinding.rlAdbDebug.setOnHoverListener(this);
         developerModeBinding.adbDebugSwitch.setOnClickListener(this);
 
         developerModeBinding.adbDebugSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

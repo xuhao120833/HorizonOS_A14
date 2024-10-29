@@ -3,20 +3,15 @@ package com.htc.luminaos.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.util.Log;
-import android.view.View;
 
 import com.htc.luminaos.utils.Utils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UsbDeviceReceiver extends BroadcastReceiver {
 
@@ -37,10 +32,15 @@ public class UsbDeviceReceiver extends BroadcastReceiver {
         try {
             Log.d(TAG, "UsbDeviceReceiver UsbDevice收到广播 intent.getAction() " + intent.getAction());
             if (Intent.ACTION_MEDIA_MOUNTED.equals(intent.getAction())) { // U盘插入且挂载完毕
-                Utils.hasUsbDevice = true;
-                callBack.UsbDeviceChange();
-                Utils.usbDevicesNumber++;
-                Log.d(TAG, "UsbDeviceReceiver 有USB设备插入挂载成功 显示U盘图标" + Utils.usbDevicesNumber);
+                StorageVolume storageVolume = (StorageVolume) intent.getParcelableExtra(StorageVolume.EXTRA_STORAGE_VOLUME);
+                String path = storageVolume.getPath();
+                Log.d(TAG, "UsbDeviceReceiver storageVolume.getPath()" + path);
+                if(isExternalStoragePath(path)) {
+                    Utils.hasUsbDevice = true;
+                    callBack.UsbDeviceChange();
+                    Utils.usbDevicesNumber++;
+                    Log.d(TAG, "UsbDeviceReceiver 有USB设备插入挂载成功 显示U盘图标" + Utils.usbDevicesNumber);
+                }
             } else if (Intent.ACTION_MEDIA_UNMOUNTED.equals(intent.getAction())
                     || Intent.ACTION_MEDIA_BAD_REMOVAL.equals(intent.getAction())) { //U盘拔出卸载完毕
                 if (Utils.usbDevicesNumber > 1) {
@@ -79,6 +79,13 @@ public class UsbDeviceReceiver extends BroadcastReceiver {
         }
         Log.d(TAG, "checkUsb  开机检测到 "+usbCount+" 个U盘");
         return usbCount;
+    }
+
+    public boolean isExternalStoragePath(String path) {
+        if(path.equals("/storage/emulated/0")){
+            return false;
+        }
+        return true;
     }
 
 }

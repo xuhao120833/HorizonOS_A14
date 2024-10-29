@@ -19,13 +19,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.htc.luminaos.R;
 import com.htc.luminaos.databinding.ResetKeystoreLayoutBinding;
 import com.htc.luminaos.utils.KeystoneUtils;
 
-import androidx.annotation.Nullable;
-
-public class CorrectionActivity extends BaseActivity implements View.OnKeyListener {
+public class CorrectionActivity extends BaseActivity {
 
     private CheckBox check_lt;
     private CheckBox check_lb;
@@ -159,16 +159,10 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         check_rt.setChecked(false);
         check_rb.setChecked(false);
 
-        rl_main.setOnKeyListener(this);
-        check_lt.setOnKeyListener(this);
-        check_lb.setOnKeyListener(this);
-        check_rt.setOnKeyListener(this);
-        check_rb.setOnKeyListener(this);
-
-        check_lt.setOnClickListener(this);
-        check_lb.setOnClickListener(this);
-        check_rt.setOnClickListener(this);
-        check_rb.setOnClickListener(this);
+        check_lt.setOnClickListener(Listener);
+        check_lb.setOnClickListener(Listener);
+        check_rt.setOnClickListener(Listener);
+        check_rb.setOnClickListener(Listener);
 
         lt_top.setOnClickListener(valueListener);
         lt_left.setOnClickListener(valueListener);
@@ -190,6 +184,11 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         rb_right.setOnClickListener(valueListener);
         rb_bottom.setOnClickListener(valueListener);
 
+        check_lt.setOnHoverListener(this);
+        check_lb.setOnHoverListener(this);
+        check_rt.setOnHoverListener(this);
+        check_rb.setOnHoverListener(this);
+
         KeystoneUtils.initKeystoneData();
         int[] xy = new int[]{0, 0};
         xy = KeystoneUtils.getKeystoneLeftAndTopXY();
@@ -202,26 +201,30 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         refreshStateValueUI();
     }
 
+    private OnClickListener Listener = new OnClickListener() {
 
-    public void onclick(View view) {
-        switch (view.getId()) {
-            case R.id.check_lt:
-                switchDirection(1);
-                break;
+        @SuppressWarnings("static-access")
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.check_lt:
+                    switchDirection(1);
+                    break;
 
-            case R.id.check_lb:
-                switchDirection(2);
-                break;
+                case R.id.check_lb:
+                    switchDirection(2);
+                    break;
 
-            case R.id.check_rt:
-                switchDirection(3);
-                break;
+                case R.id.check_rt:
+                    switchDirection(3);
+                    break;
 
-            case R.id.check_rb:
-                switchDirection(4);
-                break;
+                case R.id.check_rb:
+                    switchDirection(4);
+                    break;
+            }
         }
-    }
+    };
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
@@ -231,19 +234,11 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         if (repeatCount == 0) {
             key_move_step = 1;
         }
-
         Log.d(TAG, " 手动矫正onKeyDown keyCode " + keyCode + " keyEvent " + keyEvent + " repeatCount " + repeatCount + " key_move_step " + key_move_step);
         ret = calculationValue(keyCode, keyEvent, key_move_step);
         if (key_move_step < 8) {
             key_move_step++;
         }
-
-        //Menu键长按事件处理
-//        if (keyCode == KeyEvent.KEYCODE_MENU) {
-//            Log.d(TAG, " 手动矫正 keyCode == KeyEvent.KEYCODE_MENU");
-//            menu_long_press(keyEvent);
-//        }
-
         return ret;
     }
 
@@ -253,59 +248,9 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         int action = keyEvent.getAction();
         int keyCode = keyEvent.getKeyCode();
 
-        //xuahao add 长按Menu键 复位手动矫正
-//        switch (keyEvent.getAction()) {
-//
-//            case KeyEvent.ACTION_DOWN:
-//                Log.d(TAG, "手动矫正 KeyEvent.ACTION_DOWN");
-//                // 记录按下时间
-//                if (keyEvent.getRepeatCount() == 0) {
-//
-//                    keyDownTime = System.currentTimeMillis();
-//                    Log.d(TAG, "手动矫正 记录下时间keyDownTime "+keyDownTime+" 毫秒");
-//                }
-//                break;
-//            case KeyEvent.ACTION_UP:
-//                if (keyCode == KeyEvent.KEYCODE_MENU) {
-//                    keyUpTime = System.currentTimeMillis();
-//                    Log.d(TAG, "手动矫正 keyUpTime " + keyUpTime+" 毫秒");
-//                    long pressDuration = keyUpTime - keyDownTime;
-//                    Log.d(TAG, "手动矫正 keyCode == KeyEvent.KEYCODE_MENU " + pressDuration+" 毫秒");
-//                    if (pressDuration > LONG_PRESS_THRESHOLD) {
-//                        Log.d(TAG, "手动矫正 MENU长按");
-//                        menu_long_press(keyEvent);
-//                    }
-//                }
-//                break;
-//
-//            default:
-//                break;
-//        }
-
-//        if (action == KeyEvent.ACTION_DOWN) {
-//            Log.d(TAG, "手动矫正 KeyEvent.ACTION_DOWN");
-//            // 记录按下时间
-//            if (keyEvent.getRepeatCount() == 0) {
-//
-//                keyDownTime = System.currentTimeMillis();
-//                Log.d(TAG, "手动矫正 记录下时间keyDownTime " + keyDownTime + " 毫秒");
-//            }
-//        } else if (action == KeyEvent.ACTION_UP) {
-//            if (keyCode == KeyEvent.KEYCODE_MENU) {
-//                keyUpTime = System.currentTimeMillis();
-//                Log.d(TAG, "手动矫正 keyUpTime " + keyUpTime + " 毫秒");
-//                long pressDuration = keyUpTime - keyDownTime;
-//                Log.d(TAG, "手动矫正 keyCode == KeyEvent.KEYCODE_MENU " + pressDuration + " 毫秒");
-//                if (pressDuration > LONG_PRESS_THRESHOLD) {
-//                    Log.d(TAG, "手动矫正 MENU长按");
-//                    menu_long_press(keyEvent);
-//                }
-//            }
-//        }
-//        //xuhao
-
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            menu_long_press(keyEvent);
+        if ((keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_SETTINGS) && action == KeyEvent.ACTION_DOWN) {
+            Log.d(TAG,"dispatchKeyEvent MENU键或者Settings键唤出矫正复位 " +keyCode);
+            menu_press(keyEvent);
             return true;
         }
 
@@ -787,6 +732,164 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
 
     }
 
+//    private void setLRTB(int type,boolean left,boolean right,boolean top,boolean bottom){
+//        switch (type) {
+//            case 1:
+//                if(left){
+//                    lt_left.setVisibility(View.VISIBLE);
+//                }else{
+//                    lt_left.setVisibility(View.GONE);
+//                }
+//                if(right){
+//                    lt_right.setVisibility(View.VISIBLE);
+//                }else{
+//                    lt_right.setVisibility(View.GONE);
+//                }
+//                if(top){
+//                    lt_top.setVisibility(View.VISIBLE);
+//                }else{
+//                    lt_top.setVisibility(View.GONE);
+//                }
+//                if(bottom){
+//                    lt_bottom.setVisibility(View.VISIBLE);
+//                }else{
+//                    lt_bottom.setVisibility(View.GONE);
+//                }
+//
+//                lb_top.setVisibility(View.GONE);
+//                lb_left.setVisibility(View.GONE);
+//                lb_right.setVisibility(View.GONE);
+//                lb_bottom.setVisibility(View.GONE);
+//
+//                rt_top.setVisibility(View.GONE);
+//                rt_left.setVisibility(View.GONE);
+//                rt_right.setVisibility(View.GONE);
+//                rt_bottom.setVisibility(View.GONE);
+//
+//                rb_top.setVisibility(View.GONE);
+//                rb_left.setVisibility(View.GONE);
+//                rb_right.setVisibility(View.GONE);
+//                rb_bottom.setVisibility(View.GONE);
+//
+//                break;
+//
+//            case 2:
+//                lt_top.setVisibility(View.GONE);
+//                lt_left.setVisibility(View.GONE);
+//                lt_right.setVisibility(View.GONE);
+//                lt_bottom.setVisibility(View.GONE);
+//
+//                if(left){
+//                    lb_left.setVisibility(View.VISIBLE);
+//                }else{
+//                    lb_left.setVisibility(View.GONE);
+//                }
+//                if(right){
+//                    lb_right.setVisibility(View.VISIBLE);
+//                }else{
+//                    lb_right.setVisibility(View.GONE);
+//                }
+//                if(top){
+//                    lb_top.setVisibility(View.VISIBLE);
+//                }else{
+//                    lb_top.setVisibility(View.GONE);
+//                }
+//                if(bottom){
+//                    lb_bottom.setVisibility(View.VISIBLE);
+//                }else{
+//                    lb_bottom.setVisibility(View.GONE);
+//                }
+//
+//                rt_top.setVisibility(View.GONE);
+//                rt_left.setVisibility(View.GONE);
+//                rt_right.setVisibility(View.GONE);
+//                rt_bottom.setVisibility(View.GONE);
+//
+//                rb_top.setVisibility(View.GONE);
+//                rb_left.setVisibility(View.GONE);
+//                rb_right.setVisibility(View.GONE);
+//                rb_bottom.setVisibility(View.GONE);
+//                break;
+//
+//            case 3:
+//                lt_top.setVisibility(View.GONE);
+//                lt_left.setVisibility(View.GONE);
+//                lt_right.setVisibility(View.GONE);
+//                lt_bottom.setVisibility(View.GONE);
+//
+//                lb_top.setVisibility(View.GONE);
+//                lb_left.setVisibility(View.GONE);
+//                lb_right.setVisibility(View.GONE);
+//                lb_bottom.setVisibility(View.GONE);
+//
+//                if(left){
+//                    rt_left.setVisibility(View.VISIBLE);
+//                }else{
+//                    rt_left.setVisibility(View.GONE);
+//                }
+//                if(right){
+//                    rt_right.setVisibility(View.VISIBLE);
+//                }else{
+//                    rt_right.setVisibility(View.GONE);
+//                }
+//                if(top){
+//                    rt_top.setVisibility(View.VISIBLE);
+//                }else{
+//                    rt_top.setVisibility(View.GONE);
+//                }
+//                if(bottom){
+//                    rt_bottom.setVisibility(View.VISIBLE);
+//                }else{
+//                    rt_bottom.setVisibility(View.GONE);
+//                }
+//
+//                rb_top.setVisibility(View.GONE);
+//                rb_left.setVisibility(View.GONE);
+//                rb_right.setVisibility(View.GONE);
+//                rb_bottom.setVisibility(View.GONE);
+//                break;
+//
+//            case 4:
+//                lt_top.setVisibility(View.GONE);
+//                lt_left.setVisibility(View.GONE);
+//                lt_right.setVisibility(View.GONE);
+//                lt_bottom.setVisibility(View.GONE);
+//
+//                lb_top.setVisibility(View.GONE);
+//                lb_left.setVisibility(View.GONE);
+//                lb_right.setVisibility(View.GONE);
+//                lb_bottom.setVisibility(View.GONE);
+//
+//                rt_top.setVisibility(View.GONE);
+//                rt_left.setVisibility(View.GONE);
+//                rt_right.setVisibility(View.GONE);
+//                rt_bottom.setVisibility(View.GONE);
+//
+//                if(left){
+//                    rb_left.setVisibility(View.VISIBLE);
+//                }else{
+//                    rb_left.setVisibility(View.GONE);
+//                }
+//                if(right){
+//                    rb_right.setVisibility(View.VISIBLE);
+//                }else{
+//                    rb_right.setVisibility(View.GONE);
+//                }
+//                if(top){
+//                    rb_top.setVisibility(View.VISIBLE);
+//                }else{
+//                    rb_top.setVisibility(View.GONE);
+//                }
+//                if(bottom){
+//                    rb_bottom.setVisibility(View.VISIBLE);
+//                }else{
+//                    rb_bottom.setVisibility(View.GONE);
+//                }
+//                break;
+//        }
+//
+//    }
+
     Runnable reset_step_runnable = new Runnable() {
         @Override
         public void run() {
@@ -840,25 +943,25 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         }
     };
 
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Log.d(TAG, " 手动矫正 onKey");
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_MENU) {
-            Log.d(TAG, " 手动矫正 Enter事件");
-            if (event.isLongPress()) {
-                Log.d(TAG, " 手动矫正 Enter键长按事件");
-                try {
-                    ShowResetKeystoreDialog();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true; // 返回 true 表示事件已处理
-            }
-
-        }
-
-        return false;
-    }
+//    @Override
+//    public boolean onKey(View v, int keyCode, KeyEvent event) {
+//        Log.d(TAG, " 手动矫正 onKey");
+//        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_MENU) {
+//            Log.d(TAG, " 手动矫正 Enter事件");
+//            if (event.isLongPress()) {
+//                Log.d(TAG, " 手动矫正 Enter键长按事件");
+//                try {
+//                    ShowResetKeystoreDialog();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                return true; // 返回 true 表示事件已处理
+//            }
+//
+//        }
+//
+//        return false;
+//    }
 
     private void ShowResetKeystoreDialog() {
         ResetKeystoreLayoutBinding resetKeystoreLayoutBinding = ResetKeystoreLayoutBinding.inflate(LayoutInflater.from(this));
@@ -891,7 +994,7 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         window.setGravity(Gravity.CENTER);// 设置对话框位置
         window.setAttributes(params);
         window.setAttributes(params);
-        resetKeystoreLayoutBinding.enter.setOnClickListener(new View.OnClickListener() {
+        resetKeystoreLayoutBinding.enter.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 KeystoneUtils.resetKeystone();
@@ -900,7 +1003,7 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
                 direction_value_y.setText("0");
             }
         });
-        resetKeystoreLayoutBinding.cancel.setOnClickListener(new View.OnClickListener() {
+        resetKeystoreLayoutBinding.cancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialoge.dismiss();
@@ -909,7 +1012,7 @@ public class CorrectionActivity extends BaseActivity implements View.OnKeyListen
         dialoge.show();
     }
 
-    private void menu_long_press(KeyEvent keyEvent) {
+    private void menu_press(KeyEvent keyEvent) {
         Log.d(TAG, " 手动矫正 menu_long_press");
         try {
             ShowResetKeystoreDialog();
