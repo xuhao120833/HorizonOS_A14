@@ -20,6 +20,8 @@ public class Utils {
     //默认背景使用的ArrayList
     public static ArrayList<Drawable> drawables = new ArrayList<>();
 
+    public static ArrayList<Drawable> appsBgDrawables = new ArrayList<>();
+
     public static final int REQUEST_CODE_PICK_IMAGE = 1;
 
 }

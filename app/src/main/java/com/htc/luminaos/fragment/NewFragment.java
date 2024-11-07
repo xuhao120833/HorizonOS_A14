@@ -19,6 +19,7 @@ import com.htc.luminaos.adapter.AppsAdapter;
 import com.htc.luminaos.databinding.FragmentNewBinding;
 import com.htc.luminaos.entry.AppInfoBean;
 import com.htc.luminaos.utils.AppUtils;
+import com.htc.luminaos.utils.Utils;
 import com.htc.luminaos.widget.SpacesItemDecoration;
 import com.htc.luminaos.widget.SpacesItemDecoration2;
 
@@ -96,7 +97,6 @@ public class NewFragment extends Fragment {
         View view = binding.getRoot();
         init();
 //        enableFocus();
-
         return view;
     }
 
@@ -104,7 +104,7 @@ public class NewFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),5);
         binding.appsRv.setLayoutManager(layoutManager);
         binding.appsRv.addItemDecoration(new SpacesItemDecoration2(SpacesItemDecoration2.px2dp(10.045F), SpacesItemDecoration2.px2dp(10.045F),
-                SpacesItemDecoration.px2dp(10F),0,SpacesItemDecoration2.px2dp(23.11F)));
+                SpacesItemDecoration2.px2dp(10F),0,SpacesItemDecoration2.px2dp(23.11F)));
         initData();
     }
 
@@ -121,6 +121,7 @@ public class NewFragment extends Fragment {
                 handler.sendMessage(message);
             }
         }).start();
+        initAppsBg();
     }
 
     private void enableFocus() {
@@ -133,4 +134,18 @@ public class NewFragment extends Fragment {
         activity.htcosBinding.rlWallpapers.setFocusable(true);
     }
 
+    private void initAppsBg() {
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_1));
+        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_2));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_3));
+        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_4));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_5));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_6));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_7));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_8));
+        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_9));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_10));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_11));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_12));
+    }
 }

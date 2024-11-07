@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Outline;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
@@ -31,9 +33,12 @@ import com.htc.luminaos.fragment.NewFragment;
 import com.htc.luminaos.fragment.OriginalFragment;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.utils.ScrollUtils;
+import com.htc.luminaos.utils.Utils;
 import com.htc.luminaos.widget.AppDetailDialog;
+import com.htc.luminaos.widget.SpacesItemDecoration2;
 
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,6 +85,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         Drawable icon = getAdaptiveIcon(info.getApppackagename());
         if(icon == null) {
             myViewHolder.icon.setImageDrawable(info.getAppicon());
+            icon = getRandomDrawable();
+            myViewHolder.rl_apps.setBackground(icon);
         } else {
             myViewHolder.rl_apps.setBackground(icon);
         }
@@ -288,12 +295,30 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
         RelativeLayout rl_apps;
 
+        Context context;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            context = itemView.getContext();
             name = itemView.findViewById(R.id.app_name);
             rl_item = itemView.findViewById(R.id.rl_item);
             rl_apps = itemView.findViewById(R.id.rl_apps);
             icon = itemView.findViewById(R.id.app_icon);
+
+            //给rl_apps设置圆角
+            float cornerRadius;
+            cornerRadius = SpacesItemDecoration2.pxAdapter(context.getResources().getDimension(R.dimen.x_20));//优先考虑分辨率变化
+//            float cornerRadius = SpacesItemDecoration2.px2dp(13.33F);//优先考虑dpi变化
+            rl_apps.setClipToOutline(true);
+            final float finA = cornerRadius;
+            rl_apps.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    // 创建圆角矩形的轮廓
+                    outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), finA);
+                }
+            });
+
         }
     }
 
@@ -347,5 +372,18 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             e.printStackTrace();
             return null; // 处理找不到包名的异常
         }
+    }
+
+    private Drawable getRandomDrawable() {
+        // 确保列表非空
+        if (Utils.appsBgDrawables.isEmpty()) {
+            return null; // 返回空值，避免出现越界错误
+        }
+        // 创建随机数生成器
+        Random random = new Random();
+        // 生成一个 0 到 appsBgDrawables.size() - 1 的随机索引
+        int randomIndex = random.nextInt(Utils.appsBgDrawables.size());
+        // 返回随机选择的 Drawable
+        return Utils.appsBgDrawables.get(randomIndex);
     }
 }

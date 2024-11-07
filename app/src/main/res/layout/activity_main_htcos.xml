@@ -122,7 +122,7 @@
             android:layout_marginEnd="@dimen/x_20"
             android:layout_toStartOf="@+id/rl_wallpapers"
             android:background="@drawable/circle_bar_bg_custom"
-
+            android:visibility="gone"
             android:clickable="true">
 
             <ImageView

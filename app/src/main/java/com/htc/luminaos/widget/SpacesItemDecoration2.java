@@ -46,8 +46,11 @@ public class SpacesItemDecoration2 extends RecyclerView.ItemDecoration {
         outRect.top = top_space;
         outRect.bottom = bottom_space;
         Log.d(TAG,"getItemOffsets "+outRect.right+ " "+outRect.left);
-        if (position<5) {
+        if (position<5) {//第一行的上边距额外处理
             outRect.top=first_row_top_space;
+        }
+        if(position+5>parent.getAdapter().getItemCount()){ //最后一行解决底部文字放大后被遮挡问题
+            outRect.bottom = SpacesItemDecoration2.px2dp(5F);
         }
 
     }
