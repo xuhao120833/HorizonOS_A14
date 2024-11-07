@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y_628"
+    tools:context=".fragment.OriginalFragment">
+
+    <RelativeLayout
+        android:id="@+id/rl_screen_cast"
+        style="@style/focusStyle"
+        android:layout_width="@dimen/x_270"
+        android:layout_height="@dimen/y_153"
+        android:layout_marginStart="@dimen/x_71"
+        android:layout_marginTop="@dimen/y_295"
+        android:background="@drawable/rounded_background">
+
+        <ImageView
+            android:id="@+id/screen_cast"
+            android:layout_width="@dimen/x_64"
+            android:layout_height="@dimen/y_64"
+            android:layout_marginStart="@dimen/x_29"
+            android:layout_marginTop="@dimen/y_45"
+            android:src="@drawable/home_cast">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/screen_cast_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/screen_cast"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Screen Cast"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x_21">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_signal_source"
+        style="@style/focusStyle"
+        android:layout_width="@dimen/x_270"
+        android:layout_height="@dimen/y_153"
+        android:layout_marginStart="@dimen/x_20"
+        android:layout_marginTop="@dimen/y_295"
+        android:layout_toEndOf="@+id/rl_screen_cast"
+        android:background="@drawable/rounded_background">
+
+        <ImageView
+            android:id="@+id/signal_source"
+            android:layout_width="@dimen/x_64"
+            android:layout_height="@dimen/y_64"
+            android:layout_marginStart="@dimen/x_29"
+            android:layout_marginTop="@dimen/y_45"
+            android:src="@drawable/home_signal">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/signal_source_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/signal_source"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Signal Source"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x_21">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_file_explorer"
+        style="@style/focusStyle"
+        android:layout_width="@dimen/x_270"
+        android:layout_height="@dimen/y_153"
+        android:layout_marginStart="@dimen/x_20"
+        android:layout_marginTop="@dimen/y_295"
+        android:layout_toEndOf="@+id/rl_signal_source"
+        android:background="@drawable/rounded_background">
+
+        <ImageView
+            android:id="@+id/file_explorer"
+            android:layout_width="@dimen/x_64"
+            android:layout_height="@dimen/y_64"
+            android:layout_marginStart="@dimen/x_29"
+            android:layout_marginTop="@dimen/y_45"
+            android:src="@drawable/home_file">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/file_explorer_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/file_explorer"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="File Explorer"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x_21">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_app_store"
+        style="@style/focusStyle"
+        android:layout_width="@dimen/x_270"
+        android:layout_height="@dimen/y_153"
+        android:layout_marginStart="@dimen/x_20"
+        android:layout_marginTop="@dimen/y_295"
+        android:layout_toEndOf="@+id/rl_file_explorer"
+        android:background="@drawable/rounded_background">
+
+        <ImageView
+            android:id="@+id/app_store"
+            android:layout_width="@dimen/x_64"
+            android:layout_height="@dimen/y_64"
+            android:layout_marginStart="@dimen/x_29"
+            android:layout_marginTop="@dimen/y_45"
+            android:src="@drawable/home_store2">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/app_store_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/app_store"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="APP Store"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/x_21">
+
+        </TextView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_last_row"
+        android:layout_width="@dimen/x_1139"
+        android:layout_height="@dimen/y_156"
+        android:layout_below="@+id/rl_screen_cast"
+        android:layout_marginStart="@dimen/x_71"
+        android:layout_marginTop="@dimen/x_10"
+        android:background="@drawable/rounded_background">
+
+        <ImageView
+            android:id="@+id/netflix"
+            style="@style/focusStyle"
+            android:layout_width="@dimen/x_197"
+            android:layout_height="@dimen/y_119"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x_25"
+            android:background="@drawable/rounded_background2"
+            android:padding="@dimen/x_1"
+            android:scaleType="fitXY"
+            android:src="@drawable/app_netflix_150">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/youtube"
+            style="@style/focusStyle"
+            android:layout_width="@dimen/x_197"
+            android:layout_height="@dimen/y_119"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x_25"
+            android:layout_marginTop="@dimen/x_40"
+            android:layout_toEndOf="@+id/netflix"
+            android:background="@drawable/rounded_background2"
+            android:padding="@dimen/x_1"
+            android:scaleType="fitXY"
+            android:src="@drawable/app_youtube_150">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/disney"
+            style="@style/focusStyle"
+            android:layout_width="@dimen/x_197"
+            android:layout_height="@dimen/y_119"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x_25"
+            android:layout_toEndOf="@+id/youtube"
+            android:background="@drawable/rounded_background2"
+            android:padding="@dimen/x_1"
+            android:scaleType="fitXY"
+            android:src="@drawable/app_dixney_150">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/prime_video"
+            style="@style/focusStyle"
+            android:layout_width="@dimen/x_197"
+            android:layout_height="@dimen/y_119"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x_25"
+            android:layout_toEndOf="@+id/disney"
+            android:background="@drawable/rounded_background2"
+            android:padding="@dimen/x_1"
+            android:scaleType="fitXY"
+            android:src="@drawable/app_prime_150">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/hulu"
+            style="@style/focusStyle"
+            android:layout_width="@dimen/x_197"
+            android:layout_height="@dimen/y_119"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x_25"
+            android:layout_toEndOf="@+id/prime_video"
+            android:background="@drawable/rounded_background2"
+            android:padding="@dimen/x_1"
+            android:scaleType="fitXY"
+            android:src="@drawable/app_hulu_150">
+
+        </ImageView>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/rl_down"
+        android:layout_width="@dimen/x_33"
+        android:layout_height="@dimen/y_33"
+        android:layout_toEndOf="@+id/rl_last_row"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/x_14"
+        android:layout_marginStart="@dimen/x_18"
+        android:src="@drawable/arrow_down2">
+
+    </ImageView>
+
+
+</RelativeLayout>

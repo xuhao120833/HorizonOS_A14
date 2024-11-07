@@ -5,7 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -67,13 +71,18 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.app_item, null));
+        return new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.app_item2, null));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         final AppInfoBean info = infoBeans.get(i);
-        myViewHolder.icon.setImageDrawable(info.getAppicon());
+        Drawable icon = getAdaptiveIcon(info.getApppackagename());
+        if(icon == null) {
+            myViewHolder.icon.setImageDrawable(info.getAppicon());
+        } else {
+            myViewHolder.rl_apps.setBackground(icon);
+        }
         myViewHolder.name.setText(info.getAppname());
         myViewHolder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,23 +91,11 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             }
         });
 
-        if(i==0) {
-            myViewHolder.rl_item.requestFocus();
-        }
-
-
         myViewHolder.rl_item.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
-                if (recyclerView == null)
-                    return;
-
-//                int position = recyclerView.getChildAdapterPosition(view);
-//                if (hasFocus && position != 0) {
-//                    int[] amount = ScrollUtils.getScrollAmount(recyclerView, view);//计算需要滑动的距离
-//                    recyclerView.smoothScrollBy(amount[0], amount[1]);
-//                }
-
+//                if (recyclerView == null)
+//                    return;
                 AnimationSet animationSet = new AnimationSet(true);
                 view.bringToFront();
                 if (hasFocus) {
@@ -110,6 +107,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                     animationSet.addAnimation(scaleAnimation);
                     animationSet.setFillAfter(true);
                     view.startAnimation(animationSet);
+                    myViewHolder.name.setVisibility(View.VISIBLE);
+                    myViewHolder.name.setSelected(true);
                 } else {
                     ScaleAnimation scaleAnimation = new ScaleAnimation(1.10f, 1.0f,
                             1.10f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
@@ -118,16 +117,18 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                     scaleAnimation.setDuration(150);
                     animationSet.setFillAfter(true);
                     view.startAnimation(animationSet);
+                    myViewHolder.name.setVisibility(View.INVISIBLE);
+                    myViewHolder.name.setSelected(false);
                 }
             }
         });
 
+        if(i==0) {
+            myViewHolder.rl_item.requestFocus();
+        }
         myViewHolder.rl_item.setOnKeyListener(this);
-
         myViewHolder.rl_item.setOnHoverListener(this);
-
         myViewHolder.rl_item.setOnLongClickListener(this);
-
     }
 
     @Override
@@ -144,7 +145,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
     public boolean onKey(View v, int keyCode, KeyEvent event) {
 
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 8
+        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 顶部焦点向上 "+position);
             enableFocus();
@@ -216,9 +217,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                 }
             });
             detailDialog.show();
-
         }
-
         return false;
     }
 
@@ -241,7 +240,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                     })
                     .setCancelable(false) // 使对话框不能通过点击外部区域关闭
                     .create();
-
             dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                 @Override
                 public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
@@ -252,11 +250,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                     return false; // 没有处理返回键事件，继续传递事件
                 }
             });
-
             dialog.show();
             return true;
         }
-
         AppDetailDialog detailDialog = new AppDetailDialog(mContext,R.style.DialogTheme);
         detailDialog.setData(info.getApplicationInfo());
         detailDialog.setOnClickCallBack(new AppDetailDialog.OnAppDetailCallBack() {
@@ -265,7 +261,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                 ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
                 activityManager.clearApplicationUserData(packageName,null);
             }
-
             @Override
             public void onUninstall(String packageName) {
                 try {
@@ -283,7 +278,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             }
         });
         detailDialog.show();
-
         return true;
     }
 
@@ -292,10 +286,13 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         ImageView icon;
         RelativeLayout rl_item;
 
+        RelativeLayout rl_apps;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.app_name);
             rl_item = itemView.findViewById(R.id.rl_item);
+            rl_apps = itemView.findViewById(R.id.rl_apps);
             icon = itemView.findViewById(R.id.app_icon);
         }
     }
@@ -317,6 +314,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         activity.htcosBinding.rlBluetooth.setFocusable(true);
         activity.htcosBinding.rlSettings.setFocusable(true);
         activity.htcosBinding.rlWallpapers.setFocusable(true);
+        activity.htcosBinding.rlSignalSource.setFocusable(true);
     }
 
     @Override
@@ -332,5 +330,22 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                 break;
         }
         return false;
+    }
+
+    public Drawable getAdaptiveIcon(String packageName) {
+        try {
+            // 获取 PackageManager 实例
+            PackageManager packageManager = mContext.getPackageManager();
+
+            // 获取应用的 ApplicationInfo
+            ApplicationInfo appInfo = packageManager.getApplicationInfo(packageName, 0);
+
+            // 获取应用的图标
+            Drawable icon = packageManager.getApplicationBanner(appInfo);
+            return icon;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null; // 处理找不到包名的异常
+        }
     }
 }

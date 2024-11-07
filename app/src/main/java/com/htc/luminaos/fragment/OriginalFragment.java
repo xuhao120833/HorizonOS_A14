@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,9 +23,13 @@ import android.widget.ImageView;
 import com.htc.luminaos.R;
 import com.htc.luminaos.activity.MainActivity;
 import com.htc.luminaos.databinding.ActivityMainHtcosBinding;
+import com.htc.luminaos.databinding.Originalfragment2Binding;
 import com.htc.luminaos.databinding.OriginalfragmentBinding;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.utils.DBUtils;
+import com.htc.luminaos.utils.LanguageUtil;
+
+import java.util.Hashtable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +47,9 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     private String mParam1;
     private String mParam2;
 
-    private OriginalfragmentBinding binding;
+    private Originalfragment2Binding binding;
+
+//    private Originalfragment2Binding binding2;
 
     private static String TAG = "OriginalFragment";
 
@@ -81,7 +88,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = OriginalfragmentBinding.inflate(inflater, container, false);
+        binding = Originalfragment2Binding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         //onClick
@@ -92,7 +99,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         binding.netflix.setOnClickListener(this);
         binding.youtube.setOnClickListener(this);
         binding.disney.setOnClickListener(this);
-        binding.max.setOnClickListener(this);
+//        binding.max.setOnClickListener(this);
         binding.primeVideo.setOnClickListener(this);
         binding.hulu.setOnClickListener(this);
 
@@ -104,7 +111,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         binding.netflix.setOnHoverListener(this);
         binding.youtube.setOnHoverListener(this);
         binding.disney.setOnHoverListener(this);
-        binding.max.setOnHoverListener(this);
+//        binding.max.setOnHoverListener(this);
         binding.primeVideo.setOnHoverListener(this);
         binding.hulu.setOnHoverListener(this);
 
@@ -116,7 +123,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         binding.netflix.setOnFocusChangeListener(this);
         binding.youtube.setOnFocusChangeListener(this);
         binding.disney.setOnFocusChangeListener(this);
-        binding.max.setOnFocusChangeListener(this);
+//        binding.max.setOnFocusChangeListener(this);
         binding.primeVideo.setOnFocusChangeListener(this);
         binding.hulu.setOnFocusChangeListener(this);
 
@@ -124,7 +131,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         binding.netflix.setOnKeyListener(this);
         binding.youtube.setOnKeyListener(this);
         binding.disney.setOnKeyListener(this);
-        binding.max.setOnKeyListener(this);
+//        binding.max.setOnKeyListener(this);
         binding.primeVideo.setOnKeyListener(this);
         binding.hulu.setOnKeyListener(this);
         binding.rlScreenCast.requestFocus();
@@ -143,7 +150,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         Log.d(TAG," onKey收到");
 
         if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus() || binding.youtube.hasFocus() || binding.disney.hasFocus()
-                                                    || binding.max.hasFocus() || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
+                                                    || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
                                                     && event.getAction()==KeyEvent.ACTION_DOWN) {
             Log.d(TAG," 底部焦点向下");
             disableFocus();//防止焦点跳变
@@ -166,6 +173,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
         activity.htcosBinding.rlBluetooth.setFocusable(false);
         activity.htcosBinding.rlSettings.setFocusable(false);
         activity.htcosBinding.rlWallpapers.setFocusable(false);
+        activity.htcosBinding.rlSignalSource.setFocusable(false);
     }
 
     @Override
@@ -191,7 +199,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
                 break;
             case R.id.rl_signal_source:
                 try {
-                    String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list3");
+                    String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list2");
                     if (listaction != null && !listaction.equals("")) { //读取配置
                         activity.goAction(listaction);
                     } else {// 默认跳转
@@ -261,20 +269,20 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
                     activity.requestChannelData();
                 }
                 break;
-            case R.id.max:
-                Log.d("xuhao", "打开max");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
-                action = DBUtils.getInstance(activity).getActionByTag("icon4");
-                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
-                    if (!AppUtils.startNewApp(activity, action)) {
-                        activity.appName = appname;
-                        activity.requestChannelData();
-                    }
-                } else if (!AppUtils.startNewApp(activity, "com.wbd.stream")) {
-                    activity.appName = "Max";
-                    activity.requestChannelData();
-                }
-                break;
+//            case R.id.max:
+//                Log.d("xuhao", "打开max");
+//                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
+//                action = DBUtils.getInstance(activity).getActionByTag("icon4");
+//                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+//                    if (!AppUtils.startNewApp(activity, action)) {
+//                        activity.appName = appname;
+//                        activity.requestChannelData();
+//                    }
+//                } else if (!AppUtils.startNewApp(activity, "com.wbd.stream")) {
+//                    activity.appName = "Max";
+//                    activity.requestChannelData();
+//                }
+//                break;
             case R.id.prime_video:
                 Log.d("xuhao", "打开prime_video");
                 appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
@@ -341,6 +349,47 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
             scaleAnimation.setDuration(150);
             animationSet.setFillAfter(true);
             v.startAnimation(animationSet);
+        }
+    }
+
+    public void setIconOrText() {
+
+        setListModules();
+
+
+    }
+
+    private void setListModules() {
+        Drawable drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list1");
+        if (drawable != null) {
+            binding.screenCast.setImageDrawable(drawable);
+            drawable = null;
+        }
+
+        drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list2");
+        if (drawable != null) {
+            binding.signalSource.setImageDrawable(drawable);
+            drawable = null;
+        }
+
+        Hashtable<String, String> mHashtable1 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list1");
+        Hashtable<String, String> mHashtable2 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list2");
+
+        Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
+
+        if (mHashtable1 != null) {
+            String text = mHashtable1.get(LanguageUtil.getCurrentLanguage());
+            Log.d(TAG, "xu当前语言 text eshareText" + text);
+            if (text != null && !text.isEmpty()) {
+                binding.screenCastTxt.setText(text);
+            }
+        }
+        if (mHashtable2 != null) {
+            String text = mHashtable2.get(LanguageUtil.getCurrentLanguage());
+            Log.d(TAG, "xu当前语言 text hdmiText" + text);
+            if (text != null && !text.isEmpty()) {
+                binding.signalSourceTxt.setText(text);
+            }
         }
     }
 }

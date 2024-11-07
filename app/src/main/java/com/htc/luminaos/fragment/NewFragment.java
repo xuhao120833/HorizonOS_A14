@@ -20,6 +20,7 @@ import com.htc.luminaos.databinding.FragmentNewBinding;
 import com.htc.luminaos.entry.AppInfoBean;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.widget.SpacesItemDecoration;
+import com.htc.luminaos.widget.SpacesItemDecoration2;
 
 import java.util.List;
 
@@ -100,10 +101,10 @@ public class NewFragment extends Fragment {
     }
 
     private void init() {
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(),8);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(),5);
         binding.appsRv.setLayoutManager(layoutManager);
-        binding.appsRv.addItemDecoration(new SpacesItemDecoration(0,
-                0,getResources().getDimensionPixelSize(R.dimen.y_14),getResources().getDimensionPixelSize(R.dimen.y_32)));
+        binding.appsRv.addItemDecoration(new SpacesItemDecoration2(SpacesItemDecoration2.px2dp(10.045F), SpacesItemDecoration2.px2dp(10.045F),
+                SpacesItemDecoration.px2dp(10F),0,SpacesItemDecoration2.px2dp(23.11F)));
         initData();
     }
 

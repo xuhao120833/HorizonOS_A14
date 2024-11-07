@@ -80,14 +80,13 @@
             android:layout_marginEnd="@dimen/x_20"
             android:layout_toStartOf="@+id/rl_usb_connect"
             android:background="@drawable/circle_bar_bg_custom"
-            android:clickable="true"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:clickable="true">
 
             <ImageView
                 android:id="@+id/battery"
                 android:layout_width="@dimen/x_53"
                 android:layout_height="@dimen/y_53"
-                android:clickable="true"
                 android:padding="@dimen/y_3"
                 android:src="@drawable/battery_4" />
         </RelativeLayout>
@@ -99,18 +98,39 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y_27"
             android:layout_marginEnd="@dimen/x_20"
-            android:layout_toStartOf="@+id/rl_wallpapers"
+            android:layout_toStartOf="@+id/rl_signal_source"
             android:background="@drawable/circle_bar_bg_custom"
-            android:clickable="true"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:clickable="true">
 
             <ImageView
                 android:id="@+id/usb_connect"
                 android:layout_width="@dimen/x_53"
                 android:layout_height="@dimen/y_53"
-                android:clickable="true"
                 android:padding="@dimen/y_3"
                 android:src="@drawable/usb_green" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_signal_source"
+            style="@style/focusStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            android:layout_toStartOf="@+id/rl_wallpapers"
+            android:background="@drawable/circle_bar_bg_custom"
+
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/signal_source"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/bar_signal" />
 
         </RelativeLayout>
 
@@ -129,7 +149,6 @@
                 android:id="@+id/wallpaper"
                 android:layout_width="@dimen/x_53"
                 android:layout_height="@dimen/y_53"
-                android:clickable="true"
                 android:padding="@dimen/y_3"
                 android:src="@drawable/htc_switch_bg" />
         </RelativeLayout>
@@ -149,7 +168,6 @@
                 android:id="@+id/settings"
                 android:layout_width="@dimen/x_53"
                 android:layout_height="@dimen/y_53"
-                android:clickable="true"
                 android:padding="@dimen/y_3"
                 android:src="@drawable/home_icon_set" />
         </RelativeLayout>
@@ -170,7 +188,6 @@
                 android:layout_width="@dimen/x_53"
                 android:layout_height="@dimen/y_53"
                 android:layout_centerInParent="true"
-                android:clickable="true"
                 android:padding="@dimen/y_2"
                 android:src="@drawable/bt_custom2" />
         </RelativeLayout>
@@ -190,7 +207,6 @@
                 android:id="@+id/home_wifi"
                 android:layout_width="@dimen/x_53"
                 android:layout_height="@dimen/y_53"
-                android:clickable="true"
                 android:padding="@dimen/y_3"
                 android:src="@drawable/wifi_custom_4" />
         </RelativeLayout>
