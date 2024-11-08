@@ -451,13 +451,11 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 //读取首页的配置文件，优先读取网络服务器配置，其次读本地配置。只读取一次，清除应用缓存可触发再次读取。
                 initDataApp();
                 short_list = loadHomeAppData();
-//                originalFragment.setIconOrText();
+                originalFragment.setIconOrText();
                 Log.d(TAG, " initDataCustom快捷图标 short_list " + short_list.size());
-//                handler.sendEmptyMessage(204);
             }
         }).start();
     }

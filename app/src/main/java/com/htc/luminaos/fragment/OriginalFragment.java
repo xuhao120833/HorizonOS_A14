@@ -36,7 +36,7 @@ import java.util.Hashtable;
  * Use the {@link OriginalFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OriginalFragment extends Fragment implements View.OnKeyListener , View.OnHoverListener , View.OnClickListener, View.OnFocusChangeListener{
+public class OriginalFragment extends Fragment implements View.OnKeyListener, View.OnHoverListener, View.OnClickListener, View.OnFocusChangeListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -147,12 +147,12 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-        Log.d(TAG," onKey收到");
+        Log.d(TAG, " onKey收到");
 
-        if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus() || binding.youtube.hasFocus() || binding.disney.hasFocus()
-                                                    || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
-                                                    && event.getAction()==KeyEvent.ACTION_DOWN) {
-            Log.d(TAG," 底部焦点向下");
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus() || binding.youtube.hasFocus() || binding.disney.hasFocus()
+                || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            Log.d(TAG, " 底部焦点向下");
             disableFocus();//防止焦点跳变
             ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
@@ -180,7 +180,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     public void onClick(View v) {
         String appname = null;
         String action = null;
-        MainActivity activity = (MainActivity)getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         switch (v.getId()) {
             case R.id.rl_screen_cast:
                 try {
@@ -350,40 +350,45 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     }
 
     public void setIconOrText() {
+        //第一行
         setListModules();
+        //第二行
+        setMainApp();
     }
 
     private void setListModules() {
-        Drawable drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list1");
-        if (drawable != null) {
-            binding.screenCast.setImageDrawable(drawable);
-            drawable = null;
-        }
-
-        drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list2");
-        if (drawable != null) {
-            binding.signalSource.setImageDrawable(drawable);
-            drawable = null;
-        }
-
-        Hashtable<String, String> mHashtable1 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list1");
-        Hashtable<String, String> mHashtable2 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list2");
-
-        Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
-
-        if (mHashtable1 != null) {
-            String text = mHashtable1.get(LanguageUtil.getCurrentLanguage());
-            Log.d(TAG, "xu当前语言 text eshareText" + text);
-            if (text != null && !text.isEmpty()) {
-                binding.screenCastTxt.setText(text);
+        getActivity().runOnUiThread(() -> {
+            Drawable drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list1");
+            if (drawable != null) {
+                binding.screenCast.setImageDrawable(drawable);
+                drawable = null;
             }
-        }
-        if (mHashtable2 != null) {
-            String text = mHashtable2.get(LanguageUtil.getCurrentLanguage());
-            Log.d(TAG, "xu当前语言 text hdmiText" + text);
-            if (text != null && !text.isEmpty()) {
-                binding.signalSourceTxt.setText(text);
+            drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list2");
+            if (drawable != null) {
+                binding.signalSource.setImageDrawable(drawable);
+                drawable = null;
             }
-        }
+            Hashtable<String, String> mHashtable1 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list1");
+            Hashtable<String, String> mHashtable2 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list2");
+            Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
+            if (mHashtable1 != null) {
+                String text = mHashtable1.get(LanguageUtil.getCurrentLanguage());
+                Log.d(TAG, "xu当前语言 text eshareText" + text);
+                if (text != null && !text.isEmpty()) {
+                    binding.screenCastTxt.setText(text);
+                }
+            }
+            if (mHashtable2 != null) {
+                String text = mHashtable2.get(LanguageUtil.getCurrentLanguage());
+                Log.d(TAG, "xu当前语言 text hdmiText" + text);
+                if (text != null && !text.isEmpty()) {
+                    binding.signalSourceTxt.setText(text);
+                }
+            }
+        });
+    }
+
+    private void setMainApp() {
+
     }
 }
