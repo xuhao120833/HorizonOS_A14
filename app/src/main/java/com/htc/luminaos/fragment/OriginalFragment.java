@@ -178,12 +178,9 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
 
     @Override
     public void onClick(View v) {
-
         String appname = null;
         String action = null;
-
         MainActivity activity = (MainActivity)getActivity();
-
         switch (v.getId()) {
             case R.id.rl_screen_cast:
                 try {
@@ -353,10 +350,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener , V
     }
 
     public void setIconOrText() {
-
         setListModules();
-
-
     }
 
     private void setListModules() {

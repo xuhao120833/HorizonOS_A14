@@ -130,9 +130,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             }
         });
 
-        if(i==0) {
-            myViewHolder.rl_item.requestFocus();
-        }
+//        if(i==0) {
+//            myViewHolder.rl_item.requestFocus();
+//        }
         myViewHolder.rl_item.setOnKeyListener(this);
         myViewHolder.rl_item.setOnHoverListener(this);
         myViewHolder.rl_item.setOnLongClickListener(this);
@@ -307,7 +307,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
             //给rl_apps设置圆角
             float cornerRadius;
-            cornerRadius = SpacesItemDecoration2.pxAdapter(context.getResources().getDimension(R.dimen.x_20));//优先考虑分辨率变化
+            cornerRadius = SpacesItemDecoration2.pxAdapter(30F);//优先考虑分辨率变化
 //            float cornerRadius = SpacesItemDecoration2.px2dp(13.33F);//优先考虑dpi变化
             rl_apps.setClipToOutline(true);
             final float finA = cornerRadius;

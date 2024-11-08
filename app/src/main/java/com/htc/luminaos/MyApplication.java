@@ -85,7 +85,6 @@ public class MyApplication extends Application {
 
     private void parseConfigFile() {
         String configContent;
-
         //优先读取oem分区，其次读取system分区
         if (new File("/oem/config.ini").exists()) {
             configContent = FileUtils.readFileContent("/oem/config.ini"); //这里的作用就是从shortcuts.config中一行一行的读取字符，然后将它们合并成一行字符串
@@ -96,17 +95,14 @@ public class MyApplication extends Application {
         }
         if (configContent == null || configContent.equals(""))
             return;
-
         Log.d(TAG, " 配置文件configContent " + configContent);
         try {
             Gson gson = new Gson();
             config = gson.fromJson(configContent, Config.class); //gson解析
-
 //            Log.d(TAG, " 配置文件apps " + config.apps.get(0).resident);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         //读取背景的默认图片
         SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -169,7 +165,6 @@ public class MyApplication extends Application {
     }
 
     private void initWallpaperData() {
-
         Utils.drawables.add(getResources().getDrawable(R.drawable.background_main));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background_custom));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background1));
@@ -178,14 +173,11 @@ public class MyApplication extends Application {
         Utils.drawables.add(getResources().getDrawable(R.drawable.background11));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background12));
         Utils.drawables.add(getResources().getDrawable(R.drawable.background13));
-
         new Thread(() -> copyMyWallpaper()).start();
-
     }
 
     private void copyMyWallpaper() {
         String[] imageExtensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp"};
-
         File directory = new File("/sdcard/.mywallpaper");
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
@@ -206,5 +198,4 @@ public class MyApplication extends Application {
         }
 
     }
-
 }

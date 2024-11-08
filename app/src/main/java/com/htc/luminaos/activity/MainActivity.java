@@ -453,7 +453,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             public void run() {
 
                 //读取首页的配置文件，优先读取网络服务器配置，其次读本地配置。只读取一次，清除应用缓存可触发再次读取。
-//                initDataApp();
+                initDataApp();
                 short_list = loadHomeAppData();
 //                originalFragment.setIconOrText();
                 Log.d(TAG, " initDataCustom快捷图标 short_list " + short_list.size());
@@ -1158,19 +1158,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     }
 
     private void setIconOrText() {
-
-        //1、MainApp
-//        setMainApp();
-
-        //2、ListModules
-//        setListModules();
-
-        //3、brandLogo
-//        setbrandLogo();
-
-        //4、DefaultBackground
         setDefaultBackground();
-
     }
 
     private void setMainApp() {

@@ -24,6 +24,7 @@
         android:layout_marginStart="@dimen/x_71"
         android:layout_marginTop="@dimen/y_42"
         android:layout_marginBottom="@dimen/y_42"
+        style="@style/unfocusStyle"
         android:background="@drawable/rounded_background3" />
 
 </RelativeLayout>
