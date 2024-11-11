@@ -255,7 +255,6 @@ public class AppUtils {
                 context.startActivity(intent);
                 return true;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package com.htc.luminaos.fragment;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,8 @@ import com.htc.luminaos.activity.MainActivity;
 import com.htc.luminaos.adapter.AppsAdapter;
 import com.htc.luminaos.databinding.FragmentNewBinding;
 import com.htc.luminaos.entry.AppInfoBean;
+import com.htc.luminaos.receiver.AppCallBack;
+import com.htc.luminaos.receiver.AppReceiver;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.utils.Utils;
 import com.htc.luminaos.widget.SpacesItemDecoration;
@@ -51,12 +55,39 @@ public class NewFragment extends Fragment {
 
     private static String TAG = "NewFragment";
 
+    //app
+    private IntentFilter appFilter = new IntentFilter();
+    private AppReceiver appReceiver = null;
+
+    AppCallBack appCallBack = new AppCallBack() {
+        @Override
+        public void appChange(String packageName) {
+            appInfoBeans = AppUtils.getApplicationMsg(getContext());
+            initData();
+        }
+
+        @Override
+        public void appUnInstall(String packageName) {
+            appInfoBeans = AppUtils.getApplicationMsg(getContext());
+            initData();
+        }
+
+        @Override
+        public void appInstall(String packageName) {
+            appInfoBeans = AppUtils.getApplicationMsg(getContext());
+            initData();
+        }
+    };
+
+
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            if (msg.what==1){
-                List<AppInfoBean> infoBeans =(List<AppInfoBean>)  msg.obj;
-                AppsAdapter appsAdapter = new AppsAdapter(getContext(),infoBeans,binding.appsRv,(MainActivity) getActivity());
+            if (msg.what == 1) {
+                List<AppInfoBean> infoBeans = (List<AppInfoBean>) msg.obj;
+                AppsAdapter appsAdapter = new AppsAdapter(getContext(), infoBeans, binding.appsRv, (MainActivity) getActivity());
+//                binding.appsRv.addItemDecoration(new SpacesItemDecoration2(SpacesItemDecoration2.pxAdapter(22.8F), SpacesItemDecoration2.pxAdapter(22.6F),
+//                        SpacesItemDecoration2.pxAdapter(22.5F), 0, SpacesItemDecoration2.pxAdapter(60F)));
                 binding.appsRv.setAdapter(appsAdapter);
                 binding.appsRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
@@ -84,7 +115,6 @@ public class NewFragment extends Fragment {
                     @Override
                     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
-
                         switch (newState) {
                             case RecyclerView.SCROLL_STATE_IDLE:
                                 judageFocus();
@@ -103,20 +133,21 @@ public class NewFragment extends Fragment {
             return false;
         }
     });
-    private void setInitialFocus() {
-        // 确保 RecyclerView 已经完成布局
-        RecyclerView.LayoutManager layoutManager = binding.appsRv.getLayoutManager();
-        Log.d(TAG," setInitialFocus layoutManager"+layoutManager);
-        if (layoutManager != null && layoutManager.getChildCount() > 1) {
-            // 获取倒数第二个可见的 item
-            View secondLastVisibleItem = layoutManager.getChildAt(layoutManager.getChildCount() - 2);
-            Log.d(TAG," setInitialFocus secondLastVisibleItem"
-                    +secondLastVisibleItem+" "+layoutManager.getPosition(secondLastVisibleItem));
-            if (secondLastVisibleItem != null && layoutManager.getPosition(secondLastVisibleItem)>14) {
-                secondLastVisibleItem.requestFocus(); // 设置焦点
-            }
-        }
-    }
+
+//    private void setInitialFocus() {
+//        // 确保 RecyclerView 已经完成布局
+//        RecyclerView.LayoutManager layoutManager = binding.appsRv.getLayoutManager();
+//        Log.d(TAG, " setInitialFocus layoutManager" + layoutManager);
+//        if (layoutManager != null && layoutManager.getChildCount() > 1) {
+//            // 获取倒数第二个可见的 item
+//            View secondLastVisibleItem = layoutManager.getChildAt(layoutManager.getChildCount() - 2);
+//            Log.d(TAG, " setInitialFocus secondLastVisibleItem"
+//                    + secondLastVisibleItem + " " + layoutManager.getPosition(secondLastVisibleItem));
+//            if (secondLastVisibleItem != null && layoutManager.getPosition(secondLastVisibleItem) > 14) {
+//                secondLastVisibleItem.requestFocus(); // 设置焦点
+//            }
+//        }
+//    }
 
     public NewFragment(List<AppInfoBean> appInfoBeans) {
         // Required empty public constructor
@@ -157,33 +188,48 @@ public class NewFragment extends Fragment {
         binding = FragmentNewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         init();
-//        enableFocus();
+        initReceiver();
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (appReceiver != null) {
+            getContext().unregisterReceiver(appReceiver);
+        }
+    }
+
     private void init() {
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(),5);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 5);
         binding.appsRv.setLayoutManager(layoutManager);
-        Log.d(TAG,"binding.appsRv.addItemDecoration "+this);
+        Log.d(TAG, "binding.appsRv.addItemDecoration " + this);
         binding.appsRv.addItemDecoration(new SpacesItemDecoration2(SpacesItemDecoration2.pxAdapter(22.8F), SpacesItemDecoration2.pxAdapter(22.6F),
-                SpacesItemDecoration2.pxAdapter(22.5F),0,SpacesItemDecoration2.pxAdapter(60F)));
+                SpacesItemDecoration2.pxAdapter(22.5F), 0, SpacesItemDecoration2.pxAdapter(60F)));
         initData();
     }
 
-    private void initData(){
+    private void initData() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(appInfoBeans == null) {
-                    appInfoBeans = AppUtils.getApplicationMsg(getContext());
-                }
+//                appInfoBeans = AppUtils.getApplicationMsg(getContext());
                 Message message = handler.obtainMessage();
-                message.what=1;
-                message.obj =appInfoBeans;
+                message.what = 1;
+                message.obj = appInfoBeans;
                 handler.sendMessage(message);
             }
         }).start();
-        initAppsBg();
+    }
+
+    private void initReceiver() {
+        //app
+        appFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        appFilter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        appFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        appFilter.addDataScheme("package");
+        appReceiver = new AppReceiver(appCallBack);
+        getContext().registerReceiver(appReceiver, appFilter);
     }
 
     private void enableFocus() {
@@ -194,21 +240,6 @@ public class NewFragment extends Fragment {
         activity.htcosBinding.rlBluetooth.setFocusable(true);
         activity.htcosBinding.rlSettings.setFocusable(true);
         activity.htcosBinding.rlWallpapers.setFocusable(true);
-    }
-
-    private void initAppsBg() {
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_1));
-        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_2));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_3));
-        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_4));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_5));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_6));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_7));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_8));
-        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_9));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_10));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_11));
-//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_12));
     }
 
     private void judageFocus() {

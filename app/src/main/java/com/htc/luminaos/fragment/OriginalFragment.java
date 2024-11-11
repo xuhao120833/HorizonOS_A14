@@ -28,6 +28,7 @@ import com.htc.luminaos.databinding.OriginalfragmentBinding;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.utils.DBUtils;
 import com.htc.luminaos.utils.LanguageUtil;
+import com.htc.luminaos.utils.Utils;
 
 import java.util.Hashtable;
 
@@ -146,21 +147,18 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
         Log.d(TAG, " onKey收到");
-
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus() || binding.youtube.hasFocus() || binding.disney.hasFocus()
                 || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 底部焦点向下");
             disableFocus();//防止焦点跳变
             ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
                     .replace(R.id.fragment_container, MainActivity.newFragment)
                     .commit();
-
             return true;
-
         }
         return false;
     }
@@ -282,8 +280,8 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 //                break;
             case R.id.prime_video:
                 Log.d("xuhao", "打开prime_video");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
-                action = DBUtils.getInstance(activity).getActionByTag("icon5");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
+                action = DBUtils.getInstance(activity).getActionByTag("icon4");
                 if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
                     if (!AppUtils.startNewApp(activity, action)) {
                         activity.appName = appname;
@@ -296,14 +294,15 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 break;
             case R.id.hulu:
                 Log.d("xuhao", "打开hulu");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon6");
-                action = DBUtils.getInstance(activity).getActionByTag("icon6");
+                appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
+                action = DBUtils.getInstance(activity).getActionByTag("icon5");
                 if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
                     if (!AppUtils.startNewApp(activity, action)) {
                         activity.appName = appname;
                         activity.requestChannelData();
                     }
-                } else if (!AppUtils.startNewApp(activity, "jp.happyon.android")) {
+                } else if (!AppUtils.startNewApp(activity, "com.hulu.plus")) {
+                    Log.d("xuhao", "打开hulu失败");
                     activity.appName = "Hulu";
                     activity.requestChannelData();
                 }
@@ -391,4 +390,5 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     private void setMainApp() {
 
     }
+
 }

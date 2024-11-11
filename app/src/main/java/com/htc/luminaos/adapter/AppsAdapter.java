@@ -89,6 +89,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             myViewHolder.rl_apps.setBackground(icon);
         } else {
             myViewHolder.rl_apps.setBackground(icon);
+            myViewHolder.icon.setImageDrawable(null);
         }
         myViewHolder.name.setText(info.getAppname());
         myViewHolder.rl_item.setOnClickListener(new View.OnClickListener() {
@@ -150,17 +151,16 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 顶部焦点向上 "+position);
             enableFocus();
             ((MainActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
                     .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
                     .replace(R.id.fragment_container, MainActivity.originalFragment)
                     .commit();
-
             return true;
         }
 

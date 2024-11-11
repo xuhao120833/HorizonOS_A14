@@ -227,6 +227,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                             // 设置首页的配置图标
                             try {
                                 newFragment = new NewFragment(appInfoBeans);
+                                initAppsBg();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1562,6 +1563,21 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initAppsBg() {
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_1));
+        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_2));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_3));
+        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_4));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_5));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_6));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_7));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_8));
+        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_9));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_10));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_11));
+//        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_12));
     }
 
 }
