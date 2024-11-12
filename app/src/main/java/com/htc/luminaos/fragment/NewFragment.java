@@ -85,7 +85,7 @@ public class NewFragment extends Fragment {
         public boolean handleMessage(@NonNull Message msg) {
             if (msg.what == 1) {
                 List<AppInfoBean> infoBeans = (List<AppInfoBean>) msg.obj;
-                AppsAdapter appsAdapter = new AppsAdapter(getContext(), infoBeans, binding.appsRv, (MainActivity) getActivity());
+                AppsAdapter appsAdapter = new AppsAdapter(getContext(), infoBeans, binding.appsRv,  getActivity());
 //                binding.appsRv.addItemDecoration(new SpacesItemDecoration2(SpacesItemDecoration2.pxAdapter(22.8F), SpacesItemDecoration2.pxAdapter(22.6F),
 //                        SpacesItemDecoration2.pxAdapter(22.5F), 0, SpacesItemDecoration2.pxAdapter(60F)));
                 binding.appsRv.setAdapter(appsAdapter);
@@ -200,6 +200,16 @@ public class NewFragment extends Fragment {
         }
     }
 
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        Log.d(TAG," 执行onHiddenChanged "+hidden);
+//        if (!hidden) {
+//            // Fragment 切换到显示状态时的操作
+//
+//        }
+//    }
+
     private void init() {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 5);
         binding.appsRv.setLayoutManager(layoutManager);
@@ -256,7 +266,7 @@ public class NewFragment extends Fragment {
                 }
             }
             // 如果没有子项有焦点，让倒数第二个子项获取焦点
-            if (!hasFocus && childCount >= 2) {
+            if (!hasFocus && childCount >= 2&& getView().isAttachedToWindow()) {
                 View secondLastVisibleItem = layoutManager.getChildAt(childCount - 2);
                 if (secondLastVisibleItem != null) {
                     secondLastVisibleItem.requestFocus();

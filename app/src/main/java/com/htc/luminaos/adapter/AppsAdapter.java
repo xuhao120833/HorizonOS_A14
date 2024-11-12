@@ -1,5 +1,6 @@
 package com.htc.luminaos.adapter;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,6 +12,8 @@ import android.graphics.Outline;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,6 +44,7 @@ import java.util.List;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -56,9 +60,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
     private PackageManager mPm;
     private String TAG = "AppsAdapter";
 
-    private MainActivity activity=null;
+    private FragmentActivity activity=null;
 
-    public AppsAdapter(Context mContext, List<AppInfoBean> infoBeans, RecyclerView recyclerView,MainActivity activity) {
+    public AppsAdapter(Context mContext, List<AppInfoBean> infoBeans, RecyclerView recyclerView, FragmentActivity activity) {
         this.mContext = mContext;
         this.infoBeans = infoBeans;
         this.recyclerView = recyclerView;
@@ -155,11 +159,35 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 顶部焦点向上 "+position);
-            enableFocus();
-            ((MainActivity) mContext).getSupportFragmentManager().beginTransaction()
+//            v.clearFocus();
+//            enableFocus();
+//            View currentFocus = activity.getCurrentFocus();
+//            if (currentFocus != null) {
+//                currentFocus.clearFocus();
+//            }
+//            MainActivity.newFragment.getView().setVisibility(View.INVISIBLE);
+            activity.getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
-                    .replace(R.id.fragment_container, MainActivity.originalFragment)
+                    .hide(MainActivity.newFragment)
+                    .show(MainActivity.originalFragment)
+                    .runOnCommit(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 在 commit 完成后执行的回调逻辑
+                            Log.d(" 完成后执行的回调逻辑 ", "Commit completed");
+                            // 在 0.5 秒后执行 e
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                if(!MainActivity.originalFragment.binding.rlScreenCast.hasFocus()) {
+                                    MainActivity.originalFragment.binding.rlScreenCast.requestFocus();
+                                }
+                                enableFocus();
+                            }, 500); // 500毫秒 = 0.5秒
+
+//                            MainActivity.originalFragment.binding.rlScreenCast.requestFocus();
+//                            enableFocus();
+                        }
+                    })
                     .commit();
             return true;
         }
@@ -333,13 +361,14 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
     }
 
     private void enableFocus() {
-        activity.htcosBinding.rlWifi.setFocusable(true);
-        activity.htcosBinding.rlUsbConnect.setFocusable(true);
-        activity.htcosBinding.rlBattery.setFocusable(true);
-        activity.htcosBinding.rlBluetooth.setFocusable(true);
-        activity.htcosBinding.rlSettings.setFocusable(true);
-        activity.htcosBinding.rlWallpapers.setFocusable(true);
-        activity.htcosBinding.rlSignalSource.setFocusable(true);
+        MainActivity mainActivity = (MainActivity)activity;
+        mainActivity.htcosBinding.rlWifi.setFocusable(true);
+        mainActivity.htcosBinding.rlUsbConnect.setFocusable(true);
+        mainActivity.htcosBinding.rlBattery.setFocusable(true);
+        mainActivity.htcosBinding.rlBluetooth.setFocusable(true);
+        mainActivity.htcosBinding.rlSettings.setFocusable(true);
+        mainActivity.htcosBinding.rlWallpapers.setFocusable(true);
+        mainActivity.htcosBinding.rlSignalSource.setFocusable(true);
     }
 
     @Override

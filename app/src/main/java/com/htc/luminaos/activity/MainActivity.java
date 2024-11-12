@@ -113,6 +113,8 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import okhttp3.Call;
@@ -180,6 +182,9 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     private List<AppInfoBean> appInfoBeans = null;
 
+    public FragmentManager fragmentManager = getSupportFragmentManager();
+    public FragmentTransaction transaction = fragmentManager.beginTransaction();
+
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -216,31 +221,15 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         try {
             htcosBinding = ActivityMainHtcosBinding.inflate(LayoutInflater.from(this));
             setContentView(htcosBinding.getRoot());
-            originalFragment = new OriginalFragment();
-            threadExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    appInfoBeans = AppUtils.getApplicationMsg(getApplicationContext());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 设置首页的配置图标
-                            try {
-                                newFragment = new NewFragment(appInfoBeans);
-                                initAppsBg();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            });
-            // 添加初始 Fragment
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, originalFragment)
-                    .commit();
             initViewCustom();
+//            initDataCustom();
+            originalFragment = new OriginalFragment();
+            // 添加初始 Fragment
+            transaction.add(R.id.fragment_container, originalFragment, "ORIGINAL_FRAGMENT_TAG");
+//                    .show(originalFragment)
+//                    .commit();
             initDataCustom();
+//            originalFragment.setIconOrText();
             initReceiver();
             wifiManager = (WifiManager) getSystemService(Service.WIFI_SERVICE);
 //            Log.d(TAG, " onCreate快捷图标 short_list " + short_list.size());
@@ -454,8 +443,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             public void run() {
                 //读取首页的配置文件，优先读取网络服务器配置，其次读本地配置。只读取一次，清除应用缓存可触发再次读取。
                 initDataApp();
-                short_list = loadHomeAppData();
-                originalFragment.setIconOrText();
                 Log.d(TAG, " initDataCustom快捷图标 short_list " + short_list.size());
             }
         }).start();
@@ -739,14 +726,14 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 //读取默认背景配置 这块提前放到MyApplication中
 //                readDefaultBackground(obj);
 
+                //读取filterApps屏蔽显示的APP
+                readFilterApps(obj);
+
                 //读取首页底部6个APP图标
                 readMain(obj);
 
-                //读取APP快捷图标
-                readShortcuts(obj, residentList, sharedPreferences);
-
-                //读取filterApps屏蔽显示的APP
-                readFilterApps(obj);
+                //读取APP快捷图标 HtcOs暂时不需要
+//                readShortcuts(obj, residentList, sharedPreferences);
 
                 //读取首页第一行四个功能区
                 readListModules(obj);
@@ -755,11 +742,10 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 //读取品牌图标 HtcOs暂时不需要
 //                readBrand(obj);
 
-                //是否显示时间
+                //是否显示时间 HtcOs暂时不需要
                 //readTime();
 
                 editor.putString("resident", residentList.toString());
-
                 editor.putInt("code", 1);
                 editor.apply();
                 is.close();
@@ -778,6 +764,16 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 // 设置首页的配置图标
                 try {
                     setIconOrText();
+                    Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " isAdded " + originalFragment.isAdded());
+//                    if (originalFragment != null) {
+//                        originalFragment.setIconOrText();
+//                    }
+                    initNewFragment();
+                    transaction.show(originalFragment).hide(newFragment)
+                            .commit();
+//                    if (originalFragment != null) {
+//                        originalFragment.setIconOrText();
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -874,8 +870,8 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     if (!DBUtils.getInstance(this).isExistData(
                             packageName)) {
                         long addCode = DBUtils.getInstance(this)
-                                .addFavorites(appName,packageName,drawable);
-                        Log.d(TAG, " Shortcuts 添加快捷数据库成功 "+appName+" "+packageName);
+                                .addFavorites(appName, packageName, drawable);
+                        Log.d(TAG, " Shortcuts 添加快捷数据库成功 " + appName + " " + packageName);
                     }
                 }
             }
@@ -893,6 +889,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 String[] packageNames = filterApps.split(";");
                 DBUtils.getInstance(this).insertFilterApps(packageNames);
             }
+            initNewFragment();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -926,6 +923,10 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     hashtable.clear();
                 }
             }
+//            Log.d(TAG, " readListModules originalFragment信息 " + originalFragment+" isAdded "+originalFragment.isAdded());
+//            if(originalFragment!=null){
+//                originalFragment.setIconOrText();
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1501,11 +1502,11 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        return true;
 
         int usbCount = countUsbDevices(getApplicationContext());
-        if(usbCount!=0) {
-            Log.d(TAG, "checkUsb  开机检测到U盘 "+Utils.usbDevicesNumber);
+        if (usbCount != 0) {
+            Log.d(TAG, "checkUsb  开机检测到U盘 " + Utils.usbDevicesNumber);
             customBinding.rlUsbConnect.setVisibility(View.VISIBLE);
-            Utils.usbDevicesNumber = usbCount*2;
-            Log.d(TAG, "checkUsb  开机检测到U盘 usbCount*2 "+Utils.usbDevicesNumber);
+            Utils.usbDevicesNumber = usbCount * 2;
+            Log.d(TAG, "checkUsb  开机检测到U盘 usbCount*2 " + Utils.usbDevicesNumber);
         } else {
             Log.d(TAG, "checkUsb  开机没有检测到U盘");
         }
@@ -1527,7 +1528,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 usbCount++;
             }
         }
-        Log.d(TAG, "checkUsb  开机检测到 "+usbCount+" 个U盘");
+        Log.d(TAG, "checkUsb  开机检测到 " + usbCount + " 个U盘");
         return usbCount;
     }
 
@@ -1578,6 +1579,23 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_10));
 //        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_11));
 //        Utils.appsBgDrawables.add(getResources().getDrawable(R.drawable.apps_rectangle_12));
+    }
+
+    private void initNewFragment() {
+        appInfoBeans = AppUtils.getApplicationMsg(getApplicationContext());
+        initAppsBg();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // 设置首页的配置图标
+                try {
+                    newFragment = new NewFragment(appInfoBeans);
+                    transaction.add(R.id.fragment_container, newFragment, "NEW_FRAGMENT_TAG");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

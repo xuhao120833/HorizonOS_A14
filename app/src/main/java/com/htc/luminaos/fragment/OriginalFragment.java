@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -48,7 +50,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     private String mParam1;
     private String mParam2;
 
-    private Originalfragment2Binding binding;
+    public Originalfragment2Binding binding;
 
 //    private Originalfragment2Binding binding2;
 
@@ -84,6 +86,16 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.post(() -> {
+            // 设置焦点的逻辑
+            binding.rlScreenCast.requestFocus();
+        });
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -135,7 +147,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 //        binding.max.setOnKeyListener(this);
         binding.primeVideo.setOnKeyListener(this);
         binding.hulu.setOnKeyListener(this);
-        binding.rlScreenCast.requestFocus();
+//        binding.rlScreenCast.requestFocus();
         return view;
     }
 
@@ -144,6 +156,28 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         super.onAttach(context);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, " 执行onResume");
+        setIconOrText();
+        binding.rlScreenCast.requestFocus();
+//        enableFocus();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d(TAG, " 执行onHiddenChanged " + hidden);
+        if (!hidden) {
+            // Fragment 切换到显示状态时的操作
+            // 设置焦点
+            if (!binding.rlScreenCast.hasFocus()) {
+                binding.rlScreenCast.requestFocus();
+            }
+
+        }
+    }
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -153,12 +187,27 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 底部焦点向下");
             disableFocus();//防止焦点跳变
-            ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-                    .replace(R.id.fragment_container, MainActivity.newFragment)
-                    .commit();
+//            if(MainActivity.newFragment.isAdded()) {
+            if (MainActivity.newFragment != null) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                        .hide(MainActivity.originalFragment)
+                        .show(MainActivity.newFragment)
+                        .commit();
+            } else {
+                Log.d(TAG, "newFragment 未初始化完成");
+            }
+//            }else {
+//                ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction()
+//                        .setReorderingAllowed(true)
+//                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+//                        .replace(R.id.fragment_container, MainActivity.newFragment)
+//                        .commit();
+//            }
             return true;
+        } else if (getActivity().getCurrentFocus() == null) {
+            binding.rlScreenCast.requestFocus();
         }
         return false;
     }
@@ -172,6 +221,17 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         activity.htcosBinding.rlSettings.setFocusable(false);
         activity.htcosBinding.rlWallpapers.setFocusable(false);
         activity.htcosBinding.rlSignalSource.setFocusable(false);
+    }
+
+    private void enableFocus() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.htcosBinding.rlWifi.setFocusable(true);
+        activity.htcosBinding.rlUsbConnect.setFocusable(true);
+        activity.htcosBinding.rlBattery.setFocusable(true);
+        activity.htcosBinding.rlBluetooth.setFocusable(true);
+        activity.htcosBinding.rlSettings.setFocusable(true);
+        activity.htcosBinding.rlWallpapers.setFocusable(true);
+        activity.htcosBinding.rlSignalSource.setFocusable(true);
     }
 
     @Override
@@ -356,39 +416,38 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     }
 
     private void setListModules() {
-        getActivity().runOnUiThread(() -> {
-            Drawable drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list1");
-            if (drawable != null) {
-                binding.screenCast.setImageDrawable(drawable);
-                drawable = null;
+//        getActivity().runOnUiThread(() -> {
+        Drawable drawable = DBUtils.getInstance(getContext()).getDrawableFromListModules("list1");
+        if (drawable != null) {
+            binding.screenCast.setImageDrawable(drawable);
+            drawable = null;
+        }
+        drawable = DBUtils.getInstance(getContext()).getDrawableFromListModules("list2");
+        if (drawable != null) {
+            binding.signalSource.setImageDrawable(drawable);
+            drawable = null;
+        }
+        Hashtable<String, String> mHashtable1 = DBUtils.getInstance(getContext()).getHashtableFromListModules("list1");
+        Hashtable<String, String> mHashtable2 = DBUtils.getInstance(getContext()).getHashtableFromListModules("list2");
+        Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
+        if (mHashtable1 != null) {
+            String text = mHashtable1.get(LanguageUtil.getCurrentLanguage());
+            Log.d(TAG, "xu当前语言 text eshareText" + text);
+            if (text != null && !text.isEmpty()) {
+                binding.screenCastTxt.setText(text);
             }
-            drawable = DBUtils.getInstance(getActivity()).getDrawableFromListModules("list2");
-            if (drawable != null) {
-                binding.signalSource.setImageDrawable(drawable);
-                drawable = null;
+        }
+        if (mHashtable2 != null) {
+            String text = mHashtable2.get(LanguageUtil.getCurrentLanguage());
+            Log.d(TAG, "xu当前语言 text hdmiText" + text);
+            if (text != null && !text.isEmpty()) {
+                binding.signalSourceTxt.setText(text);
             }
-            Hashtable<String, String> mHashtable1 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list1");
-            Hashtable<String, String> mHashtable2 = DBUtils.getInstance(getActivity()).getHashtableFromListModules("list2");
-            Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
-            if (mHashtable1 != null) {
-                String text = mHashtable1.get(LanguageUtil.getCurrentLanguage());
-                Log.d(TAG, "xu当前语言 text eshareText" + text);
-                if (text != null && !text.isEmpty()) {
-                    binding.screenCastTxt.setText(text);
-                }
-            }
-            if (mHashtable2 != null) {
-                String text = mHashtable2.get(LanguageUtil.getCurrentLanguage());
-                Log.d(TAG, "xu当前语言 text hdmiText" + text);
-                if (text != null && !text.isEmpty()) {
-                    binding.signalSourceTxt.setText(text);
-                }
-            }
-        });
+        }
+//        });
     }
 
     private void setMainApp() {
 
     }
-
 }
