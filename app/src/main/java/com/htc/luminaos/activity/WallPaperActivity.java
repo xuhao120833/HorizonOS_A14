@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -149,6 +150,16 @@ public class WallPaperActivity extends BaseActivity {
         initFocus();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onResume(){
+        super.onResume();
+//        getPath();
+//        wallPaperBinding.wallpaperRv.getAdapter().notifyDataSetChanged();
+//        initFocus();
+        Log.d(TAG," 执行onResume");
+    }
+
     private void initView() {
 //        wallPaperBinding.localItem.setOnClickListener(this);
 //        wallPaperBinding.usbItem.setOnClickListener(this);
@@ -184,7 +195,6 @@ public class WallPaperActivity extends BaseActivity {
                 RecyclerView.Adapter adapter = wallpaperRv.getAdapter();
                 if (adapter != null) {
                     int position = adapter.getItemCount() - 2; // 倒数第二个项的位置
-
 //                    // 滚动到倒数第二个项的位置
 //                    wallpaperRv.smoothScrollToPosition(position);
 //                    // 给 RecyclerView 的 Item 设置焦点
@@ -197,7 +207,6 @@ public class WallPaperActivity extends BaseActivity {
 //                            Log.e(TAG, "无法找到指定位置的 ViewHolder");
 //                        }
 //                    });
-
                     // 添加滚动监听器
                     wallpaperRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override

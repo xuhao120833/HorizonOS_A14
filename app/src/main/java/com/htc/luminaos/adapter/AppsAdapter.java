@@ -135,9 +135,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
             }
         });
 
-//        if(i==0) {
-//            myViewHolder.rl_item.requestFocus();
-//        }
+        if(i==0) {
+            myViewHolder.rl_item.requestFocus();
+        }
         myViewHolder.rl_item.setOnKeyListener(this);
         myViewHolder.rl_item.setOnHoverListener(this);
         myViewHolder.rl_item.setOnLongClickListener(this);

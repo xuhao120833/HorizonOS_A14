@@ -771,6 +771,8 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     initNewFragment();
                     transaction.show(originalFragment).hide(newFragment)
                             .commit();
+//                    transaction.show(originalFragment)
+//                            .commit();
 //                    if (originalFragment != null) {
 //                        originalFragment.setIconOrText();
 //                    }
@@ -889,7 +891,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 String[] packageNames = filterApps.split(";");
                 DBUtils.getInstance(this).insertFilterApps(packageNames);
             }
-            initNewFragment();
+//            initNewFragment();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1584,18 +1586,18 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     private void initNewFragment() {
         appInfoBeans = AppUtils.getApplicationMsg(getApplicationContext());
         initAppsBg();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // 设置首页的配置图标
-                try {
-                    newFragment = new NewFragment(appInfoBeans);
-                    transaction.add(R.id.fragment_container, newFragment, "NEW_FRAGMENT_TAG");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                // 设置首页的配置图标
+//                try {
+        newFragment = new NewFragment(appInfoBeans);
+        transaction.add(R.id.fragment_container, newFragment, "NEW_FRAGMENT_TAG");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
 }

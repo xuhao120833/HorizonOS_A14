@@ -161,7 +161,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         super.onResume();
         Log.d(TAG, " 执行onResume");
         setIconOrText();
-        binding.rlScreenCast.requestFocus();
+//        binding.rlScreenCast.requestFocus();
 //        enableFocus();
     }
 
