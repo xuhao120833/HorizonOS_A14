@@ -155,9 +155,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
+        Log.d(TAG, " 测试KeyCode "+keyCode);
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
-        if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5
-                && event.getAction() == KeyEvent.ACTION_DOWN) {
+        if ((keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5 && event.getAction() == KeyEvent.ACTION_DOWN)) {
             Log.d(TAG, " 顶部焦点向上 "+position);
             MainActivity mainActivity = (MainActivity)activity;
             activity.getSupportFragmentManager().beginTransaction()

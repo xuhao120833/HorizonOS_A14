@@ -181,8 +181,9 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Log.d(TAG, " onKey收到");
-        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus() || binding.youtube.hasFocus() || binding.disney.hasFocus()
+        Log.d(TAG, " onKey收到 " + keyCode);
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus()
+                || binding.youtube.hasFocus() || binding.disney.hasFocus()
                 || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 底部焦点向下");

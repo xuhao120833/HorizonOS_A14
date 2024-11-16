@@ -169,7 +169,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/x_25"
             android:background="@drawable/rounded_background2"
-            android:padding="@dimen/x_1"
+            android:padding="@dimen/x_3"
             android:scaleType="fitXY"
             android:src="@drawable/app_netflix_150">
 
@@ -185,7 +185,7 @@
             android:layout_marginTop="@dimen/x_40"
             android:layout_toEndOf="@+id/netflix"
             android:background="@drawable/rounded_background2"
-            android:padding="@dimen/x_1"
+            android:padding="@dimen/x_3"
             android:scaleType="fitXY"
             android:src="@drawable/app_youtube_150">
 
@@ -200,7 +200,7 @@
             android:layout_marginStart="@dimen/x_25"
             android:layout_toEndOf="@+id/youtube"
             android:background="@drawable/rounded_background2"
-            android:padding="@dimen/x_1"
+            android:padding="@dimen/x_3"
             android:scaleType="fitXY"
             android:src="@drawable/app_dixney_150">
 
@@ -215,7 +215,7 @@
             android:layout_marginStart="@dimen/x_25"
             android:layout_toEndOf="@+id/disney"
             android:background="@drawable/rounded_background2"
-            android:padding="@dimen/x_1"
+            android:padding="@dimen/x_3"
             android:scaleType="fitXY"
             android:src="@drawable/app_prime_150">
 
@@ -230,7 +230,7 @@
             android:layout_marginStart="@dimen/x_25"
             android:layout_toEndOf="@+id/prime_video"
             android:background="@drawable/rounded_background2"
-            android:padding="@dimen/x_1"
+            android:padding="@dimen/x_3"
             android:scaleType="fitXY"
             android:src="@drawable/app_hulu_150">
 

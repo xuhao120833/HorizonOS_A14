@@ -3,7 +3,7 @@
     <item android:state_focused="true" >
         <shape android:shape="rectangle">
             <solid android:color="#99000000"/> <!-- 60% 透明度的黑色 -->
-            <stroke android:color="@color/white" android:width="@dimen/x_2"/>
+            <stroke android:color="@color/white" android:width="@dimen/x_4"/>
             <corners android:radius="@dimen/x_13"/> <!-- 圆角半径 -->
         </shape>
     </item>

@@ -979,10 +979,41 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK)
+        Log.d(TAG," dispatchKeyEvent测试 "+event.getKeyCode() +" "+newFragment.isVisible());
+        int keyCode = event.getKeyCode();
+        if (keyCode == KeyEvent.KEYCODE_BACK) { //NewFragment BACK键返回 OriginalFragment
+            Log.d(TAG," dispatchKeyEvent测试 KEYCODE_BACK"+event.getKeyCode() +" newFragment.isVisible "+newFragment.isVisible());
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN && newFragment.isVisible()) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
+                        .show(originalFragment).hide(newFragment)
+                        .commit();
+                enableFocus();
+            }
             return true;
+        }
         return super.dispatchKeyEvent(event);
     }
+
+//    @Override
+//    protected void onUserLeaveHint() {
+//        super.onUserLeaveHint();
+//        Log.d(TAG," 用户按下Home键 ");
+//        if(newFragment == null) {
+//            return;
+//        }
+//        if (newFragment.isVisible()) {
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .setReorderingAllowed(true)
+//                    .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
+//                    .show(originalFragment).hide(newFragment)
+//                    .commit();
+//            enableFocus();
+//        }
+//    }
 
     private void updateBle() {
         boolean isConnected = BluetoothUtils.getInstance(this)
@@ -1584,4 +1615,15 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         newFragment = new NewFragment(appInfoBeans);
         transaction.add(R.id.fragment_container, newFragment, "NEW_FRAGMENT_TAG");
     }
+
+    private void enableFocus() {
+        htcosBinding.rlWifi.setFocusable(true);
+        htcosBinding.rlUsbConnect.setFocusable(true);
+        htcosBinding.rlBattery.setFocusable(true);
+        htcosBinding.rlBluetooth.setFocusable(true);
+        htcosBinding.rlSettings.setFocusable(true);
+        htcosBinding.rlWallpapers.setFocusable(true);
+        htcosBinding.rlSignalSource.setFocusable(true);
+    }
+
 }
