@@ -149,6 +149,10 @@ public class NewFragment extends Fragment {
 //        }
 //    }
 
+    public NewFragment() {
+        // Required empty public constructor
+    }
+
     public NewFragment(List<AppInfoBean> appInfoBeans) {
         // Required empty public constructor
         this.appInfoBeans = appInfoBeans;

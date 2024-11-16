@@ -176,14 +176,16 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     ExecutorService threadExecutor = Executors.newFixedThreadPool(5);
 
-    public static OriginalFragment originalFragment = null;
+    public OriginalFragment originalFragment = null;
 
-    public static NewFragment newFragment = null;
+    public NewFragment newFragment = null;
 
     private List<AppInfoBean> appInfoBeans = null;
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
     public FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+    Bundle savedInstanceState =null;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -218,21 +220,15 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
         try {
             htcosBinding = ActivityMainHtcosBinding.inflate(LayoutInflater.from(this));
             setContentView(htcosBinding.getRoot());
             initViewCustom();
-//            initDataCustom();
-            originalFragment = new OriginalFragment();
-            // 添加初始 Fragment
-            transaction.add(R.id.fragment_container, originalFragment, "ORIGINAL_FRAGMENT_TAG");
-//                    .show(originalFragment)
-//                    .commit();
             initDataCustom();
-//            originalFragment.setIconOrText();
             initReceiver();
             wifiManager = (WifiManager) getSystemService(Service.WIFI_SERVICE);
-//            Log.d(TAG, " onCreate快捷图标 short_list " + short_list.size());
+            Log.d(TAG, " onCreate ");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -677,7 +673,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         int code = sharedPreferences.getInt("code", 0);
         Log.d(TAG, " initDataApp读code值 " + code);
         if (code == 0) {  //保证配置文件只在最初读一次
-
             //1、优先连接服务器读取配置
 
             //2、服务器没有，就读本地
@@ -685,18 +680,14 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
             // 读取文件,优先读取oem分区
             File file = new File("/oem/shortcuts.config");
-
             if (!file.exists()) {
                 file = new File("/system/shortcuts.config");
             }
-
             if (!file.exists()) {
                 Log.d(TAG, " 配置文件不存在 ");
                 DBUtils.getInstance(this).deleteTable();
-
                 editor.putInt("code", 1);
                 editor.apply();
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -708,18 +699,14 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                         }
                     }
                 });
-
                 return false;
             }
-
             try {
                 FileInputStream is = new FileInputStream(file);
                 byte[] b = new byte[is.available()];
                 is.read(b);
                 String result = new String(b);
-
                 Log.d(TAG, " MainActivity读取到的配置文件 " + result); //这里把配置文件原封不动的读取出来，不做一整行处理
-
                 List<String> residentList = new ArrayList<>();
                 JSONObject obj = new JSONObject(result);
 
@@ -764,18 +751,26 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 // 设置首页的配置图标
                 try {
                     setIconOrText();
-                    Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " isAdded " + originalFragment.isAdded());
-//                    if (originalFragment != null) {
-//                        originalFragment.setIconOrText();
+                    Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
+//                    if (originalFragment == null) {
+//                        originalFragment = new OriginalFragment();
+//                        // 添加初始 Fragment
+//                        transaction.add(R.id.fragment_container, originalFragment, "ORIGINAL_FRAGMENT_TAG");
 //                    }
-                    initNewFragment();
+//                    if (newFragment == null) {
+//                        initNewFragment();
+//                    }
+                    if (savedInstanceState == null) {
+                        originalFragment = new OriginalFragment();
+                        // 添加初始 Fragment
+                        transaction.add(R.id.fragment_container, originalFragment, "ORIGINAL_FRAGMENT_TAG");
+                        initNewFragment();
+                    } else {
+                        originalFragment = (OriginalFragment) getSupportFragmentManager().findFragmentByTag("ORIGINAL_FRAGMENT_TAG");
+                        newFragment = (NewFragment) getSupportFragmentManager().findFragmentByTag("NEW_FRAGMENT_TAG");
+                    }
                     transaction.show(originalFragment).hide(newFragment)
                             .commit();
-//                    transaction.show(originalFragment)
-//                            .commit();
-//                    if (originalFragment != null) {
-//                        originalFragment.setIconOrText();
-//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1586,18 +1581,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     private void initNewFragment() {
         appInfoBeans = AppUtils.getApplicationMsg(getApplicationContext());
         initAppsBg();
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                // 设置首页的配置图标
-//                try {
         newFragment = new NewFragment(appInfoBeans);
         transaction.add(R.id.fragment_container, newFragment, "NEW_FRAGMENT_TAG");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
     }
-
 }

@@ -187,24 +187,17 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 底部焦点向下");
             disableFocus();//防止焦点跳变
-//            if(MainActivity.newFragment.isAdded()) {
-            if (MainActivity.newFragment != null) {
+            MainActivity activity = (MainActivity) getActivity();
+            if (activity.newFragment != null) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setReorderingAllowed(true)
                         .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-                        .hide(MainActivity.originalFragment)
-                        .show(MainActivity.newFragment)
+                        .hide(this)
+                        .show(activity.newFragment)
                         .commit();
             } else {
                 Log.d(TAG, "newFragment 未初始化完成");
             }
-//            }else {
-//                ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction()
-//                        .setReorderingAllowed(true)
-//                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-//                        .replace(R.id.fragment_container, MainActivity.newFragment)
-//                        .commit();
-//            }
             return true;
         } else if (getActivity().getCurrentFocus() == null) {
             binding.rlScreenCast.requestFocus();
@@ -448,6 +441,25 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     }
 
     private void setMainApp() {
-
+        Drawable drawable = DBUtils.getInstance(getContext()).getIconDataByTag("icon1");
+        if (drawable != null) {
+            binding.netflix.setImageDrawable(drawable);
+        }
+        drawable = DBUtils.getInstance(getContext()).getIconDataByTag("icon2");
+        if (drawable != null) {
+            binding.youtube.setImageDrawable(drawable);
+        }
+        drawable = DBUtils.getInstance(getContext()).getIconDataByTag("icon3");
+        if (drawable != null) {
+            binding.disney.setImageDrawable(drawable);
+        }
+        drawable = DBUtils.getInstance(getContext()).getIconDataByTag("icon4");
+        if (drawable != null) {
+            binding.primeVideo.setImageDrawable(drawable);
+        }
+        drawable = DBUtils.getInstance(getContext()).getIconDataByTag("icon5");
+        if (drawable != null) {
+            binding.hulu.setImageDrawable(drawable);
+        }
     }
 }

@@ -159,18 +159,12 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         if (keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, " 顶部焦点向上 "+position);
-//            v.clearFocus();
-//            enableFocus();
-//            View currentFocus = activity.getCurrentFocus();
-//            if (currentFocus != null) {
-//                currentFocus.clearFocus();
-//            }
-//            MainActivity.newFragment.getView().setVisibility(View.INVISIBLE);
+            MainActivity mainActivity = (MainActivity)activity;
             activity.getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
-                    .hide(MainActivity.newFragment)
-                    .show(MainActivity.originalFragment)
+                    .hide(mainActivity.newFragment)
+                    .show(mainActivity.originalFragment)
                     .runOnCommit(new Runnable() {
                         @Override
                         public void run() {
@@ -178,14 +172,11 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                             Log.d(" 完成后执行的回调逻辑 ", "Commit completed");
                             // 在 0.5 秒后执行 e
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                if(!MainActivity.originalFragment.binding.rlScreenCast.hasFocus()) {
-                                    MainActivity.originalFragment.binding.rlScreenCast.requestFocus();
+                                if(!mainActivity.originalFragment.binding.rlScreenCast.hasFocus()) {
+                                    mainActivity.originalFragment.binding.rlScreenCast.requestFocus();
                                 }
                                 enableFocus();
                             }, 500); // 500毫秒 = 0.5秒
-
-//                            MainActivity.originalFragment.binding.rlScreenCast.requestFocus();
-//                            enableFocus();
                         }
                     })
                     .commit();
@@ -194,9 +185,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
         if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
             Log.d(TAG, "卸载收到MENU按键");
-//            int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
             final AppInfoBean info = infoBeans.get(position);
-
             boolean[] result = AppUtils.checkIfSystemAppAndCanUninstall(mContext, info.getApplicationInfo().packageName);
             if (result[0] && !result[1]) {
                 AlertDialog dialog = new AlertDialog.Builder(mContext)
@@ -210,7 +199,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                         })
                         .setCancelable(false) // 使对话框不能通过点击外部区域关闭
                         .create();
-
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {

@@ -33,7 +33,7 @@
             android:ellipsize="marquee"
             android:gravity="center"
             android:singleLine="true"
-            android:text="Screen Cast"
+            android:text="@string/Eshare"
             android:textColor="#ffffff"
             android:textSize="@dimen/x_21">
 
@@ -70,7 +70,7 @@
             android:ellipsize="marquee"
             android:gravity="center"
             android:singleLine="true"
-            android:text="Signal Source"
+            android:text="@string/hdmi"
             android:textColor="#ffffff"
             android:textSize="@dimen/x_21">
 
@@ -107,7 +107,7 @@
             android:ellipsize="marquee"
             android:gravity="center"
             android:singleLine="true"
-            android:text="File Explorer"
+            android:text="@string/Filemanager"
             android:textColor="#ffffff"
             android:textSize="@dimen/x_21">
 
@@ -144,7 +144,7 @@
             android:ellipsize="marquee"
             android:gravity="center"
             android:singleLine="true"
-            android:text="APP Store"
+            android:text="@string/google"
             android:textColor="#ffffff"
             android:textSize="@dimen/x_21">
 

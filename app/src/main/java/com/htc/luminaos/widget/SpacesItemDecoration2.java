@@ -38,7 +38,7 @@ public class SpacesItemDecoration2 extends RecyclerView.ItemDecoration {
         this.bottom_space = bottom_space;
         this.first_row_top_space = first_row_top_space;
         Log.d(TAG, "SpacesItemDecoration2 right_space " + right_space + " left_space " + left_space
-                + " top_space " + top_space + " bottom_space " + bottom_space + " " + MainActivity.newFragment);
+                + " top_space " + top_space + " bottom_space " + bottom_space);
     }
 
 
