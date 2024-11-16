@@ -439,7 +439,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             public void run() {
                 //读取首页的配置文件，优先读取网络服务器配置，其次读本地配置。只读取一次，清除应用缓存可触发再次读取。
                 initDataApp();
-                Log.d(TAG, " initDataCustom快捷图标 short_list " + short_list.size());
+                Log.d(TAG, " initDataCustom ");
             }
         }).start();
     }
@@ -694,6 +694,18 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                         // 设置首页的配置图标
                         try {
                             setDefaultBackground();
+                            Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
+                            if (savedInstanceState == null) {
+                                originalFragment = new OriginalFragment();
+                                // 添加初始 Fragment
+                                transaction.add(R.id.fragment_container, originalFragment, "ORIGINAL_FRAGMENT_TAG");
+                                initNewFragment();
+                            } else {
+                                originalFragment = (OriginalFragment) getSupportFragmentManager().findFragmentByTag("ORIGINAL_FRAGMENT_TAG");
+                                newFragment = (NewFragment) getSupportFragmentManager().findFragmentByTag("NEW_FRAGMENT_TAG");
+                            }
+                            transaction.show(originalFragment).hide(newFragment)
+                                    .commit();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -750,16 +762,9 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             public void run() {
                 // 设置首页的配置图标
                 try {
-                    setIconOrText();
+//                    setIconOrText();
+                    setDefaultBackground();
                     Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
-//                    if (originalFragment == null) {
-//                        originalFragment = new OriginalFragment();
-//                        // 添加初始 Fragment
-//                        transaction.add(R.id.fragment_container, originalFragment, "ORIGINAL_FRAGMENT_TAG");
-//                    }
-//                    if (newFragment == null) {
-//                        initNewFragment();
-//                    }
                     if (savedInstanceState == null) {
                         originalFragment = new OriginalFragment();
                         // 添加初始 Fragment
@@ -979,18 +984,19 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        Log.d(TAG," dispatchKeyEvent测试 "+event.getKeyCode() +" "+newFragment.isVisible());
         int keyCode = event.getKeyCode();
         if (keyCode == KeyEvent.KEYCODE_BACK) { //NewFragment BACK键返回 OriginalFragment
-            Log.d(TAG," dispatchKeyEvent测试 KEYCODE_BACK"+event.getKeyCode() +" newFragment.isVisible "+newFragment.isVisible());
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN && newFragment.isVisible()) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setReorderingAllowed(true)
-                        .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
-                        .show(originalFragment).hide(newFragment)
-                        .commit();
-                enableFocus();
+            if(newFragment != null) {
+                Log.d(TAG, " dispatchKeyEvent测试 KEYCODE_BACK" + event.getKeyCode() + " newFragment.isVisible " + newFragment.isVisible());
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN && newFragment.isVisible()) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .setReorderingAllowed(true)
+                            .setCustomAnimations(R.anim.slide_in_reverse, R.anim.slide_out_reverse)
+                            .show(originalFragment).hide(newFragment)
+                            .commit();
+                    enableFocus();
+                }
             }
             return true;
         }

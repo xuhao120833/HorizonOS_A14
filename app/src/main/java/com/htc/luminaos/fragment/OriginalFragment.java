@@ -175,7 +175,6 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
             if (!binding.rlScreenCast.hasFocus()) {
                 binding.rlScreenCast.requestFocus();
             }
-
         }
     }
 
