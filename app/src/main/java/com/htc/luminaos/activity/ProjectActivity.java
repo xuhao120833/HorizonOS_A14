@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +26,8 @@ import com.htc.luminaos.MyApplication;
 import com.htc.luminaos.R;
 import com.htc.luminaos.databinding.ActivityProjectBinding;
 import com.htc.luminaos.databinding.ResetKeystoreLayoutBinding;
+import com.htc.luminaos.receiver.VaFocusCallBack;
+import com.htc.luminaos.receiver.VaFocusReceiver;
 import com.htc.luminaos.settings.utils.Constants;
 import com.htc.luminaos.utils.AppUtils;
 import com.htc.luminaos.utils.Contants;
@@ -46,7 +49,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ProjectActivity extends BaseActivity implements View.OnKeyListener {
+public class ProjectActivity extends BaseActivity implements View.OnKeyListener, VaFocusCallBack {
 
     private ActivityProjectBinding projectBinding;
     private int cur_project_mode = 0;
@@ -76,6 +79,14 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
 
     Handler handler = new Handler();
 
+    IntentFilter filter;
+    VaFocusReceiver vaFocusReceiver;
+
+    public int[] lt_xy = new int[2];
+    public int[] rt_xy = new int[2];
+    public int[] lb_xy = new int[2];
+    public int[] rb_xy = new int[2];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +94,15 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
         setContentView(projectBinding.getRoot());
         initView();
         initData();
+        filter = new IntentFilter("intent.htc.vafocus");
+        vaFocusReceiver = new VaFocusReceiver(this);
+        registerReceiver(vaFocusReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(vaFocusReceiver);
     }
 
     private void initView() {
@@ -131,15 +151,15 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
                     int calibratedTips = R.string.no_caalibrated;
                     int i = 0;
                     i = Constants.CheckCalibrated(AwTvSystemManager.getInstance(getApplicationContext()).getSecureStorageKey("vafocusCam").trim());
-                    if (i!=1 && i!=3){
-                        i=checkNewBDDATA();
+                    if (i != 1 && i != 3) {
+                        i = checkNewBDDATA();
                     }
                     calibratedTips = getStringId(i);
                     int finalCalibratedTips = calibratedTips;
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(v.getContext(), getString(R.string.auto_four_corner_hint)+";"+getString(finalCalibratedTips), Toast.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(), getString(R.string.auto_four_corner_hint) + ";" + getString(finalCalibratedTips), Toast.LENGTH_LONG).show();
                         }
                     }, 2000); // 2000毫秒 = 2秒
                 } else {
@@ -162,8 +182,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
         projectBinding.digitalZoomRight.setOnClickListener(this);
 
         projectBinding.rlDisplaySettings.setVisibility(MyApplication.config.displaySetting ? View.VISIBLE : View.GONE);
-        projectBinding.rlColorMode.setVisibility(MyApplication.config.brightAndColor? View.VISIBLE : View.GONE);
-        projectBinding.rlAudioMode.setVisibility(MyApplication.config.AudioMode?View.VISIBLE:View.GONE);
+        projectBinding.rlColorMode.setVisibility(MyApplication.config.brightAndColor ? View.VISIBLE : View.GONE);
+        projectBinding.rlAudioMode.setVisibility(MyApplication.config.AudioMode ? View.VISIBLE : View.GONE);
         projectBinding.rlProjectMode.setVisibility(MyApplication.config.projectMode ? View.VISIBLE : View.GONE);
         projectBinding.rlDeviceMode2.setVisibility(MyApplication.config.deviceMode ? View.VISIBLE : View.GONE);
         projectBinding.rlDigitalZoom.setVisibility(MyApplication.config.wholeZoom ? View.VISIBLE : View.GONE);
@@ -586,7 +606,11 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
         t = max_value - t;
         r = max_value - r;
         b = max_value - b;
-        changeform(l, t, r, b);
+//        changeform(l, t, r, b);
+
+        if (!SystemProperties.get("persist.sys.camok", "0").equals("1") || getAuto()) {
+            changeform(l, t, r, b);
+        } else updateZoom(max_value - l);
     }
 
     public void changeform(int l, int t, int right, int bottom) {
@@ -607,6 +631,32 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
             sendKeystoneBroadcast();
         } else {
             KeystoneUtils.UpdateKeystoneZOOM(true);
+        }
+    }
+
+    public void updateZoom(int zoom) {
+        lt_xy = KeystoneUtils.getKeystoneHtcLeftAndTopXY();
+        rt_xy = KeystoneUtils.getKeystoneHtcRightAndTopXY();
+        lb_xy = KeystoneUtils.getKeystoneHtcLeftAndBottomXY();
+        rb_xy = KeystoneUtils.getKeystoneHtcRightAndBottomXY();
+        int[] px4 = new int[4];
+        int[] py4 = new int[4];
+        px4[0] = Integer.parseInt(df.format((lt_xy[0] * KeystoneUtils.lcd_w) / 1000));
+        py4[0] = Integer.parseInt(df.format(((1000 - lt_xy[1]) * KeystoneUtils.lcd_h) / 1000));
+        px4[1] = Integer.parseInt(df.format(((1000 - rt_xy[0]) * KeystoneUtils.lcd_w) / 1000));
+        py4[1] = Integer.parseInt(df.format(((1000 - rt_xy[1]) * KeystoneUtils.lcd_h) / 1000));
+        px4[2] = Integer.parseInt(df.format((lb_xy[0] * KeystoneUtils.lcd_w) / 1000));
+        py4[2] = Integer.parseInt(df.format((lb_xy[1] * KeystoneUtils.lcd_h) / 1000));
+        px4[3] = Integer.parseInt(df.format(((1000 - rb_xy[0]) * KeystoneUtils.lcd_w) / 1000));
+        py4[3] = Integer.parseInt(df.format((rb_xy[1] * KeystoneUtils.lcd_h) / 1000));
+        DecimalFormat df = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.CHINA));
+        float a = Float.parseFloat(df.format((max_value - zoom * 2) * 0.01).replace(",", "."));
+        Log.d("hzj", "float  a =" + a);
+        int old_ratio = KeystoneUtils.readGlobalSettings(this, "zoom_scale_old", 0);
+        int ratio = KeystoneUtils.readGlobalSettings(this, "zoom_scale", 0);
+        int[] tpData = scUtils.getpxRatioxy(px4, py4, old_ratio, ratio, a, KeystoneUtils.lcd_w, KeystoneUtils.lcd_h);
+        if (tpData != null && tpData[8] == 1) {
+            KeystoneUtils.optKeystoneFun(tpData);
         }
     }
 
@@ -763,22 +813,22 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
     }
 
     //新的标定数据校验
-    private int checkNewBDDATA(){
-        int ret1,ret2,ret3,ret4;
+    private int checkNewBDDATA() {
+        int ret1, ret2, ret3, ret4;
         ret1 = scUtils.checkbddata(AwTvSystemManager.getInstance(getApplicationContext()).getSecureStorageKey("PoCamX"));
         ret2 = scUtils.checkbddata(AwTvSystemManager.getInstance(getApplicationContext()).getSecureStorageKey("PoCamY"));
         ret3 = scUtils.checkbddata(AwTvSystemManager.getInstance(getApplicationContext()).getSecureStorageKey("JbCamX"));
         ret4 = scUtils.checkbddata(AwTvSystemManager.getInstance(getApplicationContext()).getSecureStorageKey("JbCamY"));
-        if (ret1==1 && ret2==1 && ret3==1 && ret4==1)
+        if (ret1 == 1 && ret2 == 1 && ret3 == 1 && ret4 == 1)
             return 1;
-        else if (ret1==0 && ret2==0 && ret3==0 && ret4==0)
+        else if (ret1 == 0 && ret2 == 0 && ret3 == 0 && ret4 == 0)
             return 0;
 
         return -1;
     }
 
-    private  int getStringId(int i){
-        switch (i){
+    private int getStringId(int i) {
+        switch (i) {
             case 1:
                 return R.string.calibrated;
             case 2:
@@ -790,5 +840,14 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener 
             default:
                 return R.string.no_caalibrated;
         }
+    }
+
+    @Override
+    public void vaFocusChange() {
+        Log.d(TAG," vaFocusChange "+All);
+        All = 0;
+        projectBinding.digitalZoomTv.setText("0");
+        projectBinding.digitalZoomRight.setVisibility(View.VISIBLE);
+        projectBinding.digitalZoomLeft.setVisibility(View.GONE);
     }
 }
