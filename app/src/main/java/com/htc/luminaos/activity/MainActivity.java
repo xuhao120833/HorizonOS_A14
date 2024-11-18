@@ -1032,13 +1032,13 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     }
 
     private void updateTime() {
-//        String builder = TimeUtils.getCurrentDate() +
-//                " | " +
-//                TimeUtils
-//                        .getCurrentTime(this);
+        String builder = TimeUtils.getCurrentTime(this) +
+                "|";
 //        mainBinding.timeTv.setText(builder);
-
-        htcosBinding.time.setText(TimeUtils.getCurrentTime(this));
+        Log.d(TAG," updateTime时间更新 "+TimeUtils.getCurrentTime(this)+" builder "+builder);
+        htcosBinding.time.setText(builder);
+        htcosBinding.calendar.setText(TimeUtils.getCurrentDate());
+        htcosBinding.week.setText(TimeUtils.getShortWeekDay());
     }
 
 

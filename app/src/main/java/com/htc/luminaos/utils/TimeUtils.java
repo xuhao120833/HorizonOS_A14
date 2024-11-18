@@ -161,5 +161,10 @@ public class TimeUtils {
 				context.getContentResolver(),
 				Settings.System.DATE_FORMAT);
 	}
+
+	public static String getShortWeekDay() {
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE.", Locale.ENGLISH);
+		return sdf.format(new Date());
+	}
 	
 }
