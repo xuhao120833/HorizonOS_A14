@@ -11,10 +11,10 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 1,
-      "versionName": "2411181035",
+      "versionCode": 3,
+      "versionName": "2411181150",
       "enabled": true,
-      "outputFile": "HorizonOS_QZ-V1-2411181035-release.apk"
+      "outputFile": "HorizonOS_QZ-V3-2411181150-release.apk"
     }
   ]
 }
