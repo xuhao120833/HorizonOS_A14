@@ -1,4 +1,4 @@
-package com.htc.luminaos;
+package com.htc.horizonos;
 
 import org.junit.Test;
 

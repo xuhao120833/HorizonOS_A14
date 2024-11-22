@@ -4,17 +4,17 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.htc.luminaos",
+  "applicationId": "com.htc.horizonos",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 3,
-      "versionName": "2411181150",
+      "versionCode": 1,
+      "versionName": "2411181428",
       "enabled": true,
-      "outputFile": "HorizonOS_QZ-V3-2411181150-release.apk"
+      "outputFile": "HorizonOS_QZ-V1-2411181428-release.apk"
     }
   ]
 }

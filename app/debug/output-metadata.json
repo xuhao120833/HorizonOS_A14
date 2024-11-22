@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.htc.luminaos",
+  "applicationId": "com.htc.horizonos",
   "variantName": "debug",
   "elements": [
     {
