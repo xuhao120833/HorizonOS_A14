@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @author  作者：zgr
- * @version 创建时间：2016年11月4日 下午12:06:19
+ * @author  作者：xuhao
+ * @version 创建时间：2024年11月4日 下午12:06:19
  * 类说明
  */
 public class TimeUtils {
