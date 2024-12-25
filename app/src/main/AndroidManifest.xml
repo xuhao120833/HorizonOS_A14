@@ -44,6 +44,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+		<activity
+            android:name=".activity.WifiIpSetActivity"
+            android:exported="false" />
         <receiver
             android:name=".receiver.VaFocusReceiver"
             android:enabled="true"

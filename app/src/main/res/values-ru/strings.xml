@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Сохранено</string>
     <string name="isconnected">(Подключено)</string>
     <string name="wifi_disabled_password_failure">Проблема с аутентификацией</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Автоматическая трапециевидная коррекция</string>
     <string name="auto_keystone_on">Сначала отключите автоматическую трапециевидную коррекцию</string>
     <string name="auto_four_corner_on">Сначала отключите автоматическую четырехугольную коррекцию</string>
-    <string name="power_mode_1">Режим ожидания</string>
-    <string name="power_mode_2">Режим выключения</string>
+    <string name="power_mode_1">Устройство в режиме ожидания при включении</string>
+    <string name="power_mode_2">Устройство включается при включении</string>
     <string name="boot_source_1">Нет</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Статический</string>
     <string name="ip_settings">Настройки IP</string>
+    <string name="ip_mode">Режим IP</string>
     <string name="ip_address">IP-адрес</string>
     <string name="subnet_mask">Маска подсети</string>
     <string name="gateway">Шлюз</string>
@@ -274,5 +275,8 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Масштаб экрана</string>
+    <string name="account">Аккаунт</string>
+    <string name="wallpper_load">Загрузка фоновых ресурсов...</string>
+    <string name="choose_source">Выбрать источник сигнала</string>
 </resources>
 

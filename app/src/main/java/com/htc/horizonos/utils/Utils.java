@@ -1,8 +1,13 @@
 package com.htc.horizonos.utils;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.htc.horizonos.R;
+import com.htc.horizonos.entry.SpecialApps;
+import com.htc.horizonos.settings.utils.T;
 
 import java.util.ArrayList;
 
@@ -22,5 +27,49 @@ public class Utils {
     public static ArrayList<Drawable> appsBgDrawables = new ArrayList<>();
 
     public static final int REQUEST_CODE_PICK_IMAGE = 1;
+    //一个全局的特定IP APP信息
+    public static SpecialApps specialApps = null;
+
+    public static int[] drawablesId = {
+            R.drawable.background_main,
+            R.drawable.background14,
+            R.drawable.background1,
+            R.drawable.background5,
+            R.drawable.htcos_default_bg,
+            R.drawable.background11,
+            R.drawable.background12,
+            R.drawable.background13,
+    };
+
+    //实际启动信源用到的名称 HDMI1,HDMI2,CVBS1
+    public static String[] sourceList = null;
+
+    //用来显示的名称 HDMI,HDMI2,AV
+    public static String[] sourceListTitle = null;
+
+    /**
+     * 打印 Intent 的 Extras 信息
+     *
+     * @param intent 需要打印的 Intent
+     * @param tag    用于日志的 TAG
+     */
+    public static void logIntentExtras(Intent intent, String tag) {
+        if (intent == null) {
+            Log.d(tag, "logIntentExtras Intent is null");
+            return;
+        }
+
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            Log.d(tag, "logIntentExtras Intent extras:");
+            for (String key : extras.keySet()) {
+                Object value = extras.get(key);
+                Log.d(tag, "[" + key + "] = " + value);
+            }
+        } else {
+            Log.d(tag, "logIntentExtras No extras in the Intent");
+        }
+    }
 
 }
+

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">저장됨</string>
     <string name="isconnected">(연결됨)</string>
     <string name="wifi_disabled_password_failure">인증에 문제가 발생했습니다</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">자동 키스톤 보정</string>
     <string name="auto_keystone_on">자동 키스톤 보정을 먼저 끄세요</string>
     <string name="auto_four_corner_on">자동 4코너 보정을 먼저 끄세요</string>
-    <string name="power_mode_1">대기 모드</string>
-    <string name="power_mode_2">전원 끄기 모드</string>
+    <string name="power_mode_1">기기 전원 켜짐 대기</string>
+    <string name="power_mode_2">기기 전원 켜짐</string>
     <string name="boot_source_1">없음</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">정적</string>
     <string name="ip_settings">IP 설정</string>
+    <string name="ip_mode">IP 모드</string>
     <string name="ip_address">IP 주소</string>
     <string name="subnet_mask">서브넷 마스크</string>
     <string name="gateway">게이트웨이</string>
@@ -274,4 +275,7 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">화면 확대</string>
+    <string name="account">계정</string>
+    <string name="wallpper_load">배경 리소스를 로드하는 중...</string>
+    <string name="choose_source">신호원을 선택</string>
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">HorizonOS</string>
+	<string name="app_name">LuminaOS</string>
 	<string name="wifi_remembered">已保存</string>
 	<string name="isconnected">(已連接)</string>
 	<string name="wifi_disabled_password_failure">身份驗證出現問題</string>
@@ -156,8 +156,8 @@
 	<string name="auto_keystone">自動梯形矯正</string>
 	<string name="auto_keystone_on">請先關閉自動梯形矯正</string>
 	<string name="auto_four_corner_on">請先關閉自動四角矯正</string>
-	<string name="power_mode_1">待機模式</string>
-	<string name="power_mode_2">關機模式</string>
+	<string name="power_mode_1">設備上電待機</string>
+	<string name="power_mode_2">設備上電開機</string>
 	<string name="boot_source_1">無</string>
 	<string name="boot_source_2">HDMI</string>
 	<string name="boot_source_3">AV</string>
@@ -191,7 +191,8 @@
 	<string name="refresh_network">刷新網絡</string>
 	<string name="dhcp">DHCP</string>
 	<string name="static_ip">靜態</string>
-	<string name="ip_settings">IP設定</string>
+	<string name="ip_settings">IP 設定</string>
+	<string name="ip_mode">IP 模式</string>
 	<string name="ip_address">IP 地址</string>
 	<string name="subnet_mask">子網掩碼</string>
 	<string name="gateway">網關</string>
@@ -274,4 +275,7 @@
 	<string name="_16_10">16:10</string>
 	<string name="_4_3">4:3</string>
 	<string name="screen_zoom">畫面縮放</string>
+	<string name="account">帳戶</string>
+	<string name="wallpper_load">背景資源加載中...</string>
+	<string name="choose_source">選擇信號源</string>
 </resources>

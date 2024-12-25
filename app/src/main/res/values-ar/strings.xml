@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">تم الحفظ</string>
     <string name="isconnected">(متصل)</string>
     <string name="wifi_disabled_password_failure">حدثت مشكلة في التحقق من الهوية</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">تصحيح الانحراف التلقائي</string>
     <string name="auto_keystone_on">يرجى إيقاف التصحيح التلقائي أولاً</string>
     <string name="auto_four_corner_on">يرجى إيقاف التصحيح التلقائي لأربع زوايا أولاً</string>
-    <string name="power_mode_1">وضع الاستعداد</string>
-    <string name="power_mode_2">وضع الإيقاف</string>
+    <string name="power_mode_1">الجهاز في وضع الاستعداد عند التشغيل</string>
+    <string name="power_mode_2">الجهاز يعمل عند التشغيل</string>
     <string name="boot_source_1">بدون</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">ثابت</string>
     <string name="ip_settings">إعدادات IP</string>
+    <string name="ip_mode">وضعية IP</string>
     <string name="ip_address">عنوان IP</string>
     <string name="subnet_mask">قناع الشبكة الفرعية</string>
     <string name="gateway">البوابة</string>
@@ -274,6 +275,9 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">تكبير الشاشة</string>
+    <string name="account">حساب</string>
+    <string name="wallpper_load">يتم تحميل موارد الخلفية...</string>
+    <string name="choose_source">اختيار مصدر الإشارة</string>
 </resources>
 
 

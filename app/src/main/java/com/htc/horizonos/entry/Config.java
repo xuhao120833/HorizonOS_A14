@@ -33,6 +33,10 @@ public class Config {
     public boolean saturation = true;
     public boolean sharpness = true;
 
+	//电源模式 上电开机 上电待机，默认关闭
+    public boolean powerMode = false;
+    //其它设置 谷歌账号切换，默认打开
+    public boolean account = true;
     public int brightnessDefault = 50;
     public int contrastDefault = 50;
     public int hueDefault = 50;
@@ -44,6 +48,14 @@ public class Config {
     public boolean blue = false;
     public boolean displayVoiceMode = false;
 
+	//上电信源
+    public boolean bootSource = true;
+
+    public  String sourceList ="HDMI1";
+    public  String sourceListTitle ="HDMI";
+
+    //wifi DHCP、静态IP切换
+    public boolean wifiIpSettings = true;
 
     //自动梯形矫正
     public boolean autoKeystone = true;

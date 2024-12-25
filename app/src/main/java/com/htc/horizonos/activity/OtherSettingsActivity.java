@@ -9,12 +9,16 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.htc.horizonos.MyApplication;
 import com.htc.horizonos.R;
 import com.htc.horizonos.databinding.ActivityOtherSettingsBinding;
 import com.htc.horizonos.service.TimeOffService;
 import com.htc.horizonos.utils.Contants;
 import com.htc.horizonos.utils.ShareUtil;
+import com.htc.horizonos.utils.Utils;
 import com.htc.horizonos.widget.FactoryResetDialog;
+import com.softwinner.tv.AwTvSystemManager;
+import com.softwinner.tv.common.AwTvSystemTypes;
 
 public class OtherSettingsActivity extends BaseActivity implements View.OnKeyListener {
 
@@ -32,12 +36,10 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
     String[] boot_source_name;
     String[] boot_source_value;
     private int boot_source_index = 0;
-
-    String[] power_mode_name;
-    String[] power_mode_value;
-    private int power_mode_index = 0;
     private String TAG = "OtherSettingsActivity";
-
+    private AwTvSystemManager mAwTvSystemManager;
+    String[] powerModes;
+    int curPowerMode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +53,48 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
     private void initView(){
         otherSettingsBinding.rlButtonSound.setOnClickListener(this);
         otherSettingsBinding.buttonSoundSwitch.setOnClickListener(this);
-
+//        otherSettingsBinding.rlAudioMode.setOnClickListener(this);
         otherSettingsBinding.rlResetFactory.setOnClickListener(this);
         otherSettingsBinding.rlScreenSaver.setOnClickListener(this);
         otherSettingsBinding.rlTimerOff.setOnClickListener(this);
+        otherSettingsBinding.rlBootInput.setOnClickListener(this);
+        otherSettingsBinding.rlPowerMode.setOnClickListener(this);
+        otherSettingsBinding.rlPowerMode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    otherSettingsBinding.powerModeTv.setSelected(true);
+                }else {
+                    otherSettingsBinding.powerModeTv.setSelected(false);
+                }
+            }
+        });
+        otherSettingsBinding.rlAccount.setOnClickListener(this);
+        otherSettingsBinding.rlDeveloper.setOnClickListener(this);
+
+        otherSettingsBinding.rlButtonSound.setOnHoverListener(this);
+        otherSettingsBinding.buttonSoundSwitch.setOnHoverListener(this);
+//        otherSettingsBinding.rlAudioMode.setOnHoverListener(this);
+        otherSettingsBinding.rlResetFactory.setOnHoverListener(this);
+        otherSettingsBinding.rlScreenSaver.setOnHoverListener(this);
+        otherSettingsBinding.rlTimerOff.setOnHoverListener(this);
+        otherSettingsBinding.rlBootInput.setOnHoverListener(this);
+        otherSettingsBinding.rlPowerMode.setOnHoverListener(this);
+        otherSettingsBinding.rlAccount.setOnHoverListener(this);
+        otherSettingsBinding.rlDeveloper.setOnHoverListener(this);
 
         otherSettingsBinding.rlScreenSaver.setOnKeyListener(this);
         otherSettingsBinding.rlTimerOff.setOnKeyListener(this);
-
         otherSettingsBinding.rlBootInput.setOnKeyListener(this);
-        otherSettingsBinding.rlBootInput.setOnClickListener(this);
-
         otherSettingsBinding.rlPowerMode.setOnKeyListener(this);
-        otherSettingsBinding.rlPowerMode.setOnClickListener(this);
 
-        otherSettingsBinding.rlDeveloper.setOnClickListener(this);
         otherSettingsBinding.rlBootInput.requestFocus();
         otherSettingsBinding.rlBootInput.requestFocusFromTouch();
+
+//        otherSettingsBinding.rlAudioMode.setVisibility(MyApplication.config.AudioMode?View.VISIBLE:View.GONE);
+        otherSettingsBinding.rlPowerMode.setVisibility(MyApplication.config.powerMode?View.VISIBLE:View.GONE);
+        otherSettingsBinding.rlAccount.setVisibility(MyApplication.config.account?View.VISIBLE:View.GONE);
+        otherSettingsBinding.rlBootInput.setVisibility(MyApplication.config.bootSource?View.VISIBLE:View.GONE);
 
         if ((boolean)ShareUtil.get(this,Contants.KEY_DEVELOPER_MODE,false)){
             otherSettingsBinding.rlDeveloper.setVisibility(View.VISIBLE);
@@ -92,9 +119,25 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
         }else {
             otherSettingsBinding.timerOffTv.setText(time_off_title[cur_time_off_index]);
         }*/
+        mAwTvSystemManager = AwTvSystemManager.getInstance(this);
+        powerModes = getResources().getStringArray(R.array.power_mode_name);
+        curPowerMode = mAwTvSystemManager.getPowerOnMode()== AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_DIRECT?1:0;
+        otherSettingsBinding.powerModeTv.setText(powerModes[curPowerMode]);
 
-        boot_source_name =  getResources().getStringArray(R.array.boot_source_name);
-        boot_source_value = getResources().getStringArray(R.array.boot_source_value);
+        if(Utils.sourceList.length>1){ //兼容多信源的情况
+            boot_source_name = new String[Utils.sourceListTitle.length + 1];
+            boot_source_name[0] = getResources().getString(R.string.boot_source_1);
+            System.arraycopy(Utils.sourceListTitle, 0, boot_source_name, 1, Utils.sourceListTitle.length);
+
+            boot_source_value = new String[Utils.sourceList.length + 1];
+            boot_source_value[0] = "LOCAL";
+            System.arraycopy(Utils.sourceList, 0, boot_source_value, 1, Utils.sourceList.length);
+//            boot_source_name = Utils.sourceListTitle;
+//            boot_source_value = Utils.sourceList;
+        }else {
+            boot_source_name = getResources().getStringArray(R.array.boot_source_name);
+            boot_source_value = getResources().getStringArray(R.array.boot_source_value);
+        }
         String source_value = get_power_signal();
         for (int i=0;i<boot_source_value.length;i++){
             if (source_value.equals(boot_source_value[i])) {
@@ -103,10 +146,6 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
             }
         }
         otherSettingsBinding.bootInputTv.setText(boot_source_name[boot_source_index]);
-
-        power_mode_name =  getResources().getStringArray(R.array.power_mode_name);
-        power_mode_value = getResources().getStringArray(R.array.power_mode_value);
-        otherSettingsBinding.powerModeTv.setText(power_mode_name[power_mode_index]);
     }
 
     private String get_power_signal(){
@@ -158,6 +197,9 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                 otherSettingsBinding.buttonSoundSwitch.setChecked(!otherSettingsBinding.buttonSoundSwitch.isChecked());
                 setButtonSound(otherSettingsBinding.buttonSoundSwitch.isChecked());
                 break;
+//            case R.id.rl_audio_mode:
+//                startNewActivity(AudioModeActivity.class);
+//                break;
             case R.id.rl_reset_factory:
                 FactoryResetDialog factoryResetDialog = new FactoryResetDialog(this,R.style.DialogTheme);
                 factoryResetDialog.show();
@@ -187,12 +229,19 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                 set_power_signal(boot_source_value[boot_source_index]);
                 break;
             case R.id.rl_power_mode:
-                if (power_mode_index==power_mode_name.length-1)
-                    power_mode_index =0;
-                else
-                    power_mode_index++;
-
-                otherSettingsBinding.powerModeTv.setText(power_mode_name[power_mode_index]);
+                curPowerMode = curPowerMode==1?0:1;
+                otherSettingsBinding.powerModeTv.setText(powerModes[curPowerMode]);
+                mAwTvSystemManager.setPowerOnMode(curPowerMode==1?
+                        AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_DIRECT: AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_STANDBY);
+                break;
+            case R.id.rl_account:
+//                Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.d(TAG,"打开Google账号切换界面");
+//                startActivity(intent);
+                Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
+                intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, new String[]{"com.google"});
+                startActivity(intent);
                 break;
             case R.id.rl_developer:
                 startNewActivity(DeveloperModeActivity.class);
@@ -217,7 +266,11 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
             return true;
         }
 
-        if (keyCode==KeyEvent.KEYCODE_DPAD_LEFT && event.getAction() ==KeyEvent.ACTION_UP){
+        if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT )) {
+            return true;
+        }
+
+        if (keyCode==KeyEvent.KEYCODE_DPAD_LEFT && event.getAction() ==KeyEvent.ACTION_DOWN){
             switch (v.getId()){
                 case R.id.rl_screen_saver:
                     if (cur_screen_saver_index==0)
@@ -225,7 +278,8 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                     else
                         cur_screen_saver_index--;
                     updateScreenSaver(cur_screen_saver_index);
-                    break;
+//                    break;
+                    return true;
                 case R.id.rl_timer_off:
                     if (cur_time_off_index==0)
                         cur_time_off_index =time_off_title.length-1;
@@ -233,8 +287,8 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                         cur_time_off_index--;
 
                     setTimeOff(cur_time_off_index);
-                    break;
-
+//                    break;
+                    return true;
                 case R.id.rl_boot_input:
                     if (boot_source_index==0)
                         boot_source_index =boot_source_name.length-1;
@@ -243,17 +297,16 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
 
                     otherSettingsBinding.bootInputTv.setText(boot_source_name[boot_source_index]);
                     set_power_signal(boot_source_value[boot_source_index]);
-                    break;
+//                    break;
+                    return true;
                 case R.id.rl_power_mode:
-                    if (power_mode_index==0)
-                        power_mode_index =power_mode_name.length-1;
-                    else
-                        power_mode_index--;
-
-                    otherSettingsBinding.powerModeTv.setText(power_mode_name[power_mode_index]);
-                    break;
+                    curPowerMode = curPowerMode==1?0:1;
+                    otherSettingsBinding.powerModeTv.setText(powerModes[curPowerMode]);
+                    mAwTvSystemManager.setPowerOnMode(curPowerMode==1?
+                            AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_DIRECT: AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_STANDBY);
+                    return true;
             }
-        }else if (keyCode==KeyEvent.KEYCODE_DPAD_RIGHT && event.getAction() ==KeyEvent.ACTION_UP){
+        }else if (keyCode==KeyEvent.KEYCODE_DPAD_RIGHT && event.getAction() ==KeyEvent.ACTION_DOWN){
             switch (v.getId()){
                 case R.id.rl_screen_saver:
                     if (cur_screen_saver_index==screen_saver_title.length-1)
@@ -261,7 +314,8 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                     else
                         cur_screen_saver_index++;
                     updateScreenSaver(cur_screen_saver_index);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_timer_off:
                     if (cur_time_off_index==time_off_title.length-1)
                         cur_time_off_index =0;
@@ -269,7 +323,8 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                         cur_time_off_index++;
 
                     setTimeOff(cur_time_off_index);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_boot_input:
                     if (boot_source_index==boot_source_name.length-1)
                         boot_source_index =0;
@@ -278,15 +333,14 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
 
                     otherSettingsBinding.bootInputTv.setText(boot_source_name[boot_source_index]);
                     set_power_signal(boot_source_value[boot_source_index]);
-                    break;
+//                    break;
+                    return true;
                 case R.id.rl_power_mode:
-                    if (power_mode_index==power_mode_name.length-1)
-                        power_mode_index =0;
-                    else
-                        power_mode_index++;
-
-                    otherSettingsBinding.powerModeTv.setText(power_mode_name[power_mode_index]);
-                    break;
+                    curPowerMode = curPowerMode==1?0:1;
+                    otherSettingsBinding.powerModeTv.setText(powerModes[curPowerMode]);
+                    mAwTvSystemManager.setPowerOnMode(curPowerMode==1?
+                            AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_DIRECT: AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_STANDBY);
+                    return true;
             }
         }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Opgeslagen</string>
     <string name="isconnected">(Verbonden)</string>
     <string name="wifi_disabled_password_failure">Verificatieprobleem</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Automatische trapeziumcorrectie</string>
     <string name="auto_keystone_on">Schakel eerst automatische trapeziumcorrectie uit</string>
     <string name="auto_four_corner_on">Schakel eerst automatische vierpuntscorrectie uit</string>
-    <string name="power_mode_1">Stand-bymodus</string>
-    <string name="power_mode_2">Uitschakelmodus</string>
+    <string name="power_mode_1">Apparaat in stand-by bij inschakelen</string>
+    <string name="power_mode_2">Apparaat wordt ingeschakeld bij inschakelen</string>
     <string name="boot_source_1">Geen</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Statisch</string>
     <string name="ip_settings">IP-instellingen</string>
+    <string name="ip_mode">IP-modus</string>
     <string name="ip_address">IP-adres</string>
     <string name="subnet_mask">Subnetmasker</string>
     <string name="gateway">Gateway</string>
@@ -274,4 +275,7 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Schermzoom</string>
+    <string name="account">Account</string>
+    <string name="wallpper_load">Achtergrondbronnen worden geladen...</string>
+    <string name="choose_source">Signaalbron selecteren</string>
 </resources>

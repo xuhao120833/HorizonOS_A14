@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Збережено</string>
     <string name="isconnected">(Підключено)</string>
     <string name="wifi_disabled_password_failure">Помилка аутентифікації</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Автоматична корекція трапеції</string>
     <string name="auto_keystone_on">Будь ласка, спочатку вимкніть автоматичну корекцію трапеції</string>
     <string name="auto_four_corner_on">Будь ласка, спочатку вимкніть автоматичну корекцію чотирьох кутів</string>
-    <string name="power_mode_1">Режим очікування</string>
-    <string name="power_mode_2">Режим вимкнення</string>
+    <string name="power_mode_1">Пристрій у режимі очікування при ввімкненні</string>
+    <string name="power_mode_2">Пристрій увімкнеться при ввімкненні</string>
     <string name="boot_source_1">Немає</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Статичний</string>
     <string name="ip_settings">Налаштування IP</string>
+    <string name="ip_mode">Режим IP</string>
     <string name="ip_address">IP-адреса</string>
     <string name="subnet_mask">Маска підмережі</string>
     <string name="gateway">Шлюз</string>
@@ -274,5 +275,8 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Масштабування екрана</string>
+    <string name="account">Обліковий запис</string>
+    <string name="wallpper_load">Завантаження фонових ресурсів...</string>
+    <string name="choose_source">Вибрати джерело сигналу</string>
 </resources>
 

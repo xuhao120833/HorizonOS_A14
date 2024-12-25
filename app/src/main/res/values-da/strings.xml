@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Gemmes</string>
     <string name="isconnected">(Forbundet)</string>
     <string name="wifi_disabled_password_failure">Der opstod et problem med godkendelsen</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Automatisk trapezkorrektion</string>
     <string name="auto_keystone_on">Luk venligst automatisk trapezkorrektion</string>
     <string name="auto_four_corner_on">Luk venligst automatisk firkantkorrektion</string>
-    <string name="power_mode_1">Standby-tilstand</string>
-    <string name="power_mode_2">Slukket tilstand</string>
+    <string name="power_mode_1">Enheden er i standby ved opstart</string>
+    <string name="power_mode_2">Enheden tændes ved opstart</string>
     <string name="boot_source_1">Ingen</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Statisk</string>
     <string name="ip_settings">IP-indstillinger</string>
+    <string name="ip_mode">IP-tilstand</string>
     <string name="ip_address">IP-adresse</string>
     <string name="subnet_mask">Subnetmaske</string>
     <string name="gateway">Gateway</string>
@@ -274,5 +275,8 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Skærmzoom</string>
+    <string name="account">konto</string>
+    <string name="wallpper_load">Baggrundsressourcer indlæses...</string>
+    <string name="choose_source">Vælg signalkilde</string>
 </resources>
 

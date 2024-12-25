@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Disimpan</string>
     <string name="isconnected">(Sambung)</string>
     <string name="wifi_disabled_password_failure">Masalah pengesahan</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Pembetulan Keystone Automatik</string>
     <string name="auto_keystone_on">Sila tutup pembetulan keystone automatik dahulu</string>
     <string name="auto_four_corner_on">Sila tutup pembetulan empat sudut automatik dahulu</string>
-    <string name="power_mode_1">Mod Siaga</string>
-    <string name="power_mode_2">Mod Tutup</string>
+    <string name="power_mode_1">Peranti dalam mod sedia semasa dihidupkan</string>
+    <string name="power_mode_2">Peranti dihidupkan apabila dihidupkan</string>
     <string name="boot_source_1">Tiada</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Statik</string>
     <string name="ip_settings">Tetapan IP</string>
+    <string name="ip_mode">Modus IP</string>
     <string name="ip_address">Alamat IP</string>
     <string name="subnet_mask">Subnet Mask</string>
     <string name="gateway">Gerbang</string>
@@ -274,4 +275,7 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Zum skrin</string>
+    <string name="account">Akaun</string>
+    <string name="wallpper_load">Memuat sumber latar belakang...</string>
+    <string name="choose_source">Pilih sumber isyarat</string>
 </resources>

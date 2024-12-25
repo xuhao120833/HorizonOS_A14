@@ -2,10 +2,12 @@ package com.htc.horizonos.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -36,7 +38,7 @@ import java.util.TimeZone;
 public class DateTimeActivity extends BaseActivity implements View.OnKeyListener {
 
     private ActivityDateTimeBinding dateTimeBinding;
-    private NumberPicker np_year, np_month, np_day,np_hour,np_minute;
+    private NumberPicker np_year, np_month, np_day, np_hour, np_minute;
     private int maxDay;
 
     long cur_time = 0;
@@ -55,7 +57,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
 
     }
 
-    private void initView(){
+    private void initView() {
         dateTimeBinding.rlAuto.setOnClickListener(this);
         dateTimeBinding.autoSwitch.setOnClickListener(this);
 
@@ -64,10 +66,17 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         dateTimeBinding.rlTimezone.setOnClickListener(this);
         dateTimeBinding.rlTimeFormat.setOnClickListener(this);
 
+        dateTimeBinding.rlAuto.setOnHoverListener(this);
+        dateTimeBinding.autoSwitch.setOnHoverListener(this);
+        dateTimeBinding.rlDate.setOnHoverListener(this);
+        dateTimeBinding.rlTime.setOnHoverListener(this);
+        dateTimeBinding.rlTimezone.setOnHoverListener(this);
+        dateTimeBinding.rlTimeFormat.setOnHoverListener(this);
+
         dateTimeBinding.rlTimeFormat.setOnKeyListener(this);
     }
 
-    private void initData(){
+    private void initData() {
         dateTimeBinding.autoSwitch.setChecked(getAutoTime());
         dateTimeBinding.timeZoneTv.setText(getTimeZoneText());
         dateTimeBinding.dateTv.setText(TimeUtils.getCurrentDate());
@@ -75,7 +84,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         updateFormat();
     }
 
-    private void initReceiver(){
+    private void initReceiver() {
         timeFilter = new IntentFilter();
         timeReceiver = new MyTimeReceiver(new MyTimeCallBack() {
 
@@ -104,8 +113,8 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         StringBuilder sb = new StringBuilder();
 
         sb.append(
-                formatOffset(tz.getRawOffset()
-                        + (daylight ? tz.getDSTSavings() : 0))).append(", ")
+                        formatOffset(tz.getRawOffset()
+                                + (daylight ? tz.getDSTSavings() : 0))).append(", ")
                 .append(tz.getDisplayName(daylight, TimeZone.LONG));
         return sb.toString();
     }
@@ -140,23 +149,23 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.rl_auto:
             case R.id.auto_switch:
                 dateTimeBinding.autoSwitch.setChecked(!dateTimeBinding.autoSwitch.isChecked());
                 setAutoTime(dateTimeBinding.autoSwitch.isChecked());
                 break;
             case R.id.rl_date:
-                if (dateTimeBinding.autoSwitch.isChecked()){
-                    ToastUtil.showShortToast(this,getString(R.string.auto_time_hint));
+                if (dateTimeBinding.autoSwitch.isChecked()) {
+                    ToastUtil.showShortToast(this, getString(R.string.auto_time_hint));
                     break;
                 }
 
                 showDateDialog();
                 break;
             case R.id.rl_time:
-                if (dateTimeBinding.autoSwitch.isChecked()){
-                    ToastUtil.showShortToast(this,getString(R.string.auto_time_hint));
+                if (dateTimeBinding.autoSwitch.isChecked()) {
+                    ToastUtil.showShortToast(this, getString(R.string.auto_time_hint));
                     break;
                 }
 
@@ -168,7 +177,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
 //                    break;
 //                }
 
-                TimezoneDialog timezoneDialog = new TimezoneDialog(DateTimeActivity.this,R.style.DialogTheme);
+                TimezoneDialog timezoneDialog = new TimezoneDialog(DateTimeActivity.this, R.style.DialogTheme);
                 timezoneDialog.show();
                 break;
             case R.id.rl_time_format:
@@ -178,7 +187,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         }
     }
 
-    private void updateFormat(){
+    private void updateFormat() {
         if (DateFormat.is24HourFormat(this)) {
             dateTimeBinding.timeFormatTv.setText(getString(R.string.hour24));
             dateTimeBinding.timeFormat.setText(getString(R.string.time_format_24));
@@ -199,27 +208,28 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
     }
 
 
-    private boolean getAutoTime(){
-        return Settings.Global.getInt(getContentResolver(),"auto_time",0)==1;
+    private boolean getAutoTime() {
+        return Settings.Global.getInt(getContentResolver(), "auto_time", 0) == 1;
     }
 
-    private void setAutoTime(boolean auto){
-        Settings.Global.putInt(getContentResolver(),"auto_time",auto?1:0);
+    private void setAutoTime(boolean auto) {
+        Settings.Global.putInt(getContentResolver(), "auto_time", auto ? 1 : 0);
     }
 
     Dialog dialog_date;
+
     public void showDateDialog() {
-        dialog_date = new Dialog(this,R.style.DialogTheme);
+        dialog_date = new Dialog(this, R.style.DialogTheme);
         View mView = View.inflate(this, R.layout.date_dialog, null);
-        np_year =  mView.findViewById(R.id.np_year);
-        np_month =  mView.findViewById(R.id.np_month);
-        np_day =  mView.findViewById(R.id.np_day);
+        np_year = mView.findViewById(R.id.np_year);
+        np_month = mView.findViewById(R.id.np_month);
+        np_day = mView.findViewById(R.id.np_day);
         TextView enter = mView.findViewById(R.id.enter);
         TextView cancel = mView.findViewById(R.id.cancel);
         //获取当前日期
         Calendar c = Calendar.getInstance();
-        final int year =  c.get(Calendar.YEAR);
-        final int month = c.get(Calendar.MONTH)+1;//月份是从0开始算的
+        final int year = c.get(Calendar.YEAR);
+        final int month = c.get(Calendar.MONTH) + 1;//月份是从0开始算的
         final int day = c.get(Calendar.DAY_OF_MONTH);
 
         np_year.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -245,11 +255,11 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         np_year.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.i("NumberPicker","oldVal-----"+oldVal+"-----newVal-----"+newVal);
+                Log.i("NumberPicker", "oldVal-----" + oldVal + "-----newVal-----" + newVal);
                 //平年闰年判断
-                if(newVal%4==0){
-                    maxDay=29;
-                }else {
+                if (newVal % 4 == 0) {
+                    maxDay = 29;
+                } else {
                     maxDay = 28;
                 }
                 //设置天数的最大值
@@ -261,14 +271,14 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         np_month.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.i("NumberPicker","oldVal-----"+oldVal+"-----newVal-----"+newVal);
+                Log.i("NumberPicker", "oldVal-----" + oldVal + "-----newVal-----" + newVal);
                 //月份判断
-                switch (newVal){
+                switch (newVal) {
                     case 2:
-                        if(np_year.getValue()%4==0){
-                            maxDay=29;
-                        }else{
-                            maxDay=28;
+                        if (np_year.getValue() % 4 == 0) {
+                            maxDay = 29;
+                        } else {
+                            maxDay = 28;
                         }
                         break;
                     case 1:
@@ -278,10 +288,10 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
                     case 8:
                     case 10:
                     case 12:
-                        maxDay=31;
+                        maxDay = 31;
                         break;
                     default:
-                        maxDay=30;
+                        maxDay = 30;
                         break;
                 }
                 //设置天数的最大值
@@ -312,7 +322,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         dialog_date.setContentView(mView);
 
         Window window = dialog_date.getWindow();
-        if (window!=null){
+        if (window != null) {
             window.setWindowAnimations(R.style.right_in_right_out_anim);
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             //设置dialog在界面中的属性
@@ -332,21 +342,22 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
     }
 
     Dialog dialog_time;
+
     public void showTimeDialog() {
-        dialog_time = new Dialog(this,R.style.DialogTheme);
+        dialog_time = new Dialog(this, R.style.DialogTheme);
         View mView = View.inflate(this, R.layout.time_dialog, null);
-        np_hour =  mView.findViewById(R.id.np_hour);
-        np_minute =  mView.findViewById(R.id.np_minute);
+        np_hour = mView.findViewById(R.id.np_hour);
+        np_minute = mView.findViewById(R.id.np_minute);
         TextView enter = mView.findViewById(R.id.enter);
         TextView cancel = mView.findViewById(R.id.cancel);
 
         //获取当前时间
         Calendar c = Calendar.getInstance();
         final int hour;
-        if (DateFormat.is24HourFormat(this)){
-            hour =  c.get(Calendar.HOUR_OF_DAY);
-        }else {
-            hour =  c.get(Calendar.HOUR);
+        if (DateFormat.is24HourFormat(this)) {
+            hour = c.get(Calendar.HOUR_OF_DAY);
+        } else {
+            hour = c.get(Calendar.HOUR);
         }
         final int minute = c.get(Calendar.MINUTE);
 
@@ -370,9 +381,9 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
                 int hour = np_hour.getValue();
                 int minute = np_minute.getValue();
                 Calendar a = Calendar.getInstance();
-                if (DateFormat.is24HourFormat(DateTimeActivity.this)){
+                if (DateFormat.is24HourFormat(DateTimeActivity.this)) {
                     a.set(Calendar.HOUR_OF_DAY, hour);
-                }else {
+                } else {
                     a.set(Calendar.HOUR, hour);
                 }
                 a.set(Calendar.MINUTE, minute);
@@ -388,7 +399,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         });
         dialog_time.setContentView(mView);
         Window window = dialog_time.getWindow();
-        if (window!=null){
+        if (window != null) {
             window.setWindowAnimations(R.style.right_in_right_out_anim);
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             //设置dialog在界面中的属性
@@ -411,7 +422,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
 
     @Override
     protected void onDestroy() {
-        if (timeReceiver!=null){
+        if (timeReceiver != null) {
             unregisterReceiver(timeReceiver);
         }
         super.onDestroy();
@@ -420,24 +431,33 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-        if ((event.getKeyCode()==KeyEvent.KEYCODE_DPAD_LEFT ||event.getKeyCode()==KeyEvent.KEYCODE_DPAD_RIGHT)
-                && (System.currentTimeMillis()-cur_time<150)){
+        if ((event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT)
+                && (System.currentTimeMillis() - cur_time < 150)) {
             return true;
         }
 
-        if (keyCode==KeyEvent.KEYCODE_DPAD_LEFT && event.getAction() ==KeyEvent.ACTION_UP){
-            switch (v.getId()){
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && event.getAction() == KeyEvent.ACTION_UP) {
+            switch (v.getId()) {
                 case R.id.rl_time_format:
                     UpdateTimeDispaly(is24HourFormat);
                     initData();
+                    AudioManager audioManager = (AudioManager) v.getContext().getSystemService(Context.AUDIO_SERVICE);
+                    if (audioManager != null) {
+                        audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);
+                    }
+                    audioManager = null;
                     break;
-
             }
-        }else if (keyCode==KeyEvent.KEYCODE_DPAD_RIGHT && event.getAction() ==KeyEvent.ACTION_UP){
-            switch (v.getId()){
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && event.getAction() == KeyEvent.ACTION_UP) {
+            switch (v.getId()) {
                 case R.id.rl_time_format:
                     UpdateTimeDispaly(is24HourFormat);
                     initData();
+                    AudioManager audioManager = (AudioManager) v.getContext().getSystemService(Context.AUDIO_SERVICE);
+                    if (audioManager != null) {
+                        audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);
+                    }
+                    audioManager = null;
                     break;
             }
         }

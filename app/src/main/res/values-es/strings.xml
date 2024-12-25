@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">HorizonOS</string>
+	<string name="app_name">LuminaOS</string>
 	<string name="wifi_remembered">Guardado</string>
 	<string name="isconnected">(Conectado)</string>
 	<string name="wifi_disabled_password_failure">Problema de autenticación</string>
@@ -156,8 +156,8 @@
 	<string name="auto_keystone">Corrección automática de keystone</string>
 	<string name="auto_keystone_on">Por favor, apague primero la corrección automática de keystone</string>
 	<string name="auto_four_corner_on">Por favor, apague primero la corrección automática de cuatro esquinas</string>
-	<string name="power_mode_1">Modo de espera</string>
-	<string name="power_mode_2">Modo de apagado</string>
+	<string name="power_mode_1">El dispositivo en espera al encenderse</string>
+	<string name="power_mode_2">El dispositivo se enciende al encenderse</string>
 	<string name="boot_source_1">Ninguno</string>
 	<string name="boot_source_2">HDMI</string>
 	<string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
 	<string name="dhcp">DHCP</string>
 	<string name="static_ip">Estática</string>
 	<string name="ip_settings">Configuraciones de IP</string>
+	<string name="ip_mode">Modo IP</string>
 	<string name="ip_address">Dirección IP</string>
 	<string name="subnet_mask">Máscara de subred</string>
 	<string name="gateway">Puerta de enlace</string>
@@ -274,4 +275,7 @@
 	<string name="_16_10">16:10</string>
 	<string name="_4_3">4:3</string>
 	<string name="screen_zoom">Zoom de pantalla</string>
+	<string name="account">Cuenta</string>
+	<string name="wallpper_load">Cargando recursos de fondo...</string>
+	<string name="choose_source">Seleccionar fuente de señal</string>
 </resources>

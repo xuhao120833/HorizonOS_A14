@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Kaydedildi</string>
     <string name="isconnected">(Bağlı)</string>
     <string name="wifi_disabled_password_failure">Kimlik doğrulama hatası</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Otomatik Trapez Düzeltme</string>
     <string name="auto_keystone_on">Lütfen önce otomatik trapez düzeltmeyi kapatın</string>
     <string name="auto_four_corner_on">Lütfen önce otomatik dört köşe düzeltmeyi kapatın</string>
-    <string name="power_mode_1">Bekleme Modu</string>
-    <string name="power_mode_2">Kapatma Modu</string>
+    <string name="power_mode_1">Cihaz açıldığında bekleme modunda</string>
+    <string name="power_mode_2">Cihaz açıldığında çalışır</string>
     <string name="boot_source_1">Yok</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Statik</string>
     <string name="ip_settings">IP Ayarları</string>
+    <string name="ip_mode">IP Modu</string>
     <string name="ip_address">IP Adresi</string>
     <string name="subnet_mask">Alt Ağ Maskesi</string>
     <string name="gateway">Ağ Geçidi</string>
@@ -274,5 +275,8 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Ekran yakınlaştırma</string>
+    <string name="account">Hesap</string>
+    <string name="wallpper_load">Arka plan kaynakları yükleniyor...</string>
+    <string name="choose_source">Sinyal kaynağını seç</string>
 </resources>
 

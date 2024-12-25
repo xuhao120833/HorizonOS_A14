@@ -10,14 +10,30 @@
     tools:context=".activity.MainActivity">
 
 <!--    第一排-->
+    <FrameLayout
+        android:layout_width="@dimen/x_350"
+        android:layout_height="@dimen/y_133"
+        android:layout_marginStart="@dimen/x_57">
 
-    <ImageView
-        android:id="@+id/brand"
-        android:layout_width="@dimen/x_271"
-        android:layout_height="@dimen/y_36"
-        android:layout_marginStart="@dimen/x_57"
-        android:layout_marginTop="@dimen/y_49"
-        android:src="@drawable/brand" />
+        <ImageView
+            android:id="@+id/brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/brand" />
+
+    </FrameLayout>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/brand"-->
+<!--        android:layout_width="@dimen/x_271"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="@dimen/x_57"-->
+<!--        android:layout_marginTop="@dimen/y_49"-->
+<!--        android:scaleType="fitStart"-->
+<!--        android:src="@drawable/ceshibrand2" />-->
 
     <FrameLayout
         android:id="@+id/time_frame"
@@ -25,12 +41,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/y_20"
         >
-
         <TextView
             android:id="@+id/time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:text="11:01"
             android:textColor="#ffffff"
             android:textSize="@dimen/y_64"
@@ -66,7 +81,6 @@
             android:layout_width="@dimen/x_53"
             android:layout_height="@dimen/y_53"
             android:padding="@dimen/y_3"
-            android:clickable="true"
             android:src="@drawable/battery_4" />
     </RelativeLayout>
 
@@ -80,16 +94,34 @@
         android:clickable="true"
         android:visibility="gone"
         android:background="@drawable/circle_bar_bg_custom"
-        android:layout_toStartOf="@+id/rl_wallpapers">
+        android:layout_toStartOf="@+id/rl_clear_memory">
 
         <ImageView
             android:id="@+id/usb_connect"
             android:layout_width="@dimen/x_53"
             android:layout_height="@dimen/y_53"
             android:padding="@dimen/y_3"
-            android:clickable="true"
             android:src="@drawable/usb_green" />
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_clear_memory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y_40"
+        android:layout_marginEnd="@dimen/x_20"
+        style="@style/focusStyle"
+        android:clickable="true"
+        android:background="@drawable/circle_bar_bg_custom"
+        android:layout_toStartOf="@+id/rl_wallpapers">
+
+        <ImageView
+            android:id="@+id/clear_memory"
+            android:layout_width="@dimen/x_53"
+            android:layout_height="@dimen/y_53"
+            android:padding="@dimen/y_3"
+            android:src="@drawable/bar_clean" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -108,7 +140,6 @@
             android:layout_width="@dimen/x_53"
             android:layout_height="@dimen/y_53"
             android:padding="@dimen/y_3"
-            android:clickable="true"
             android:src="@drawable/wapper_custom" />
     </RelativeLayout>
 
@@ -121,16 +152,35 @@
         style="@style/focusStyle"
         android:clickable="true"
         android:background="@drawable/circle_bar_bg_custom"
-        android:layout_toStartOf="@+id/rl_wifi">
+        android:layout_toStartOf="@+id/rl_ethernet">
 
         <ImageView
             android:id="@+id/home_bluetooth"
             android:layout_width="@dimen/x_53"
             android:layout_height="@dimen/y_53"
             android:padding="@dimen/y_2"
-            android:clickable="true"
             android:layout_centerInParent="true"
             android:src="@drawable/bt_custom2" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_ethernet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y_40"
+        android:layout_marginEnd="@dimen/x_20"
+        style="@style/focusStyle"
+        android:clickable="true"
+        android:visibility="gone"
+        android:background="@drawable/circle_bar_bg_custom"
+        android:layout_toStartOf="@+id/rl_wifi">
+
+        <ImageView
+            android:id="@+id/home_ethernet"
+            android:layout_width="@dimen/x_53"
+            android:layout_height="@dimen/y_53"
+            android:padding="@dimen/y_2"
+            android:src="@drawable/bar_ethernet_green" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -149,7 +199,6 @@
             android:layout_width="@dimen/x_53"
             android:layout_height="@dimen/y_53"
             android:padding="@dimen/y_3"
-            android:clickable="true"
             android:src="@drawable/wifi_custom_4" />
     </RelativeLayout>
 

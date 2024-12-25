@@ -1,5 +1,7 @@
 package com.htc.horizonos.activity;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -347,6 +349,10 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
         if (event.getAction() == KeyEvent.ACTION_DOWN)
             cur_time = System.currentTimeMillis();
 
+        if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT )) {
+            return true;
+        }
+        AudioManager audioManager = (AudioManager) v.getContext().getSystemService(Context.AUDIO_SERVICE);
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (v.getId()) {
                 case R.id.rl_picture_mode:
@@ -359,6 +365,11 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                     //awTvDisplayManager.setPictureModeByName(enumPictureModes[curPosition]);
                     updatePictureMode();
                     activityPictureModeBinding.pictureModeTv.setText(picture_mode_choices[curPosition]);
+                    if (audioManager != null) {
+                        audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);
+                    }
+                    audioManager =null;
+//                    return true;
                     break;
                 case R.id.rl_color_temp:
                     if (mColorTemp == 0) {
@@ -367,6 +378,11 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mColorTemp -= 1;
                     }
                     updateColorTemp(mColorTemp);
+                    if (audioManager != null) {
+                        audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);
+                    }
+                    audioManager =null;
+//                    return true;
                     break;
                 case R.id.rl_brightness:
                     if (brightness_system == 1)
@@ -377,7 +393,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         brightness_system = 1;
                     }
                     updateBrightnessSystem(true);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_contrast:
                     if (mCurContrast == 1)
                         break;
@@ -386,7 +403,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                     if (mCurContrast < 1)
                         mCurContrast = 1;
                     updateContrast(true);
-                    break;
+//                    break;
+                    return true;
                 case R.id.rl_hue:
                     if (mCurHue == 1)
                         break;
@@ -396,7 +414,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mCurHue = 1;
 
                     updateHue(true);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_saturation:
                     Log.d(TAG, "饱和度 向左");
                     if (mCurSaturation == 1) {
@@ -409,7 +428,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mCurSaturation = 1;
 
                     updateSaturation(true);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_sharpness:
                     if (mSharpness == 1)
                         break;
@@ -419,7 +439,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mSharpness = 1;
 
                     updateSharpness(true);
-                    break;
+                    return true;
+//                    break;
             }
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (v.getId()) {
@@ -430,6 +451,11 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mColorTemp += 1;
                     }
                     updateColorTemp(mColorTemp);
+                    if (audioManager != null) {
+                        audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);
+                    }
+                    audioManager =null;
+//                    return true;
                     break;
                 case R.id.rl_brightness:
                     if (brightness_system == 100)
@@ -440,8 +466,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         brightness_system = 100;
 
                     updateBrightnessSystem(true);
-
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_contrast:
                     if (mCurContrast == 100)
                         break;
@@ -451,7 +477,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mCurContrast = 100;
 
                     updateContrast(true);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_hue:
                     if (mCurHue == 100)
                         break;
@@ -461,7 +488,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mCurHue = 100;
 
                     updateHue(true);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_saturation:
                     if (mCurSaturation == 100)
                         break;
@@ -471,7 +499,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mCurSaturation = 100;
 
                     updateSaturation(true);
-                    break;
+                    return true;
+//                    break;
                 case R.id.rl_sharpness:
                     Log.d(TAG, "锐度 向右");
                     if (mSharpness == 100) {
@@ -484,7 +513,8 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                         mSharpness = 100;
 
                     updateSharpness(true);
-                    break;
+                    return true;
+//                    break;
 
                 case R.id.rl_picture_mode:
                     if (curPosition == picture_mode_values.length - 1) {
@@ -495,6 +525,11 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                     pqControl.setPictureMode(picture_mode_values[curPosition]);
                     updatePictureMode();
                     activityPictureModeBinding.pictureModeTv.setText(picture_mode_choices[curPosition]);
+                    if (audioManager != null) {
+                        audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);
+                    }
+                    audioManager =null;
+//                    return true;
                     break;
             }
         }

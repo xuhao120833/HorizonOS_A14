@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Saved</string>
     <string name="isconnected">(Connected)</string>
     <string name="wifi_disabled_password_failure">Authentication problem</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Static</string>
     <string name="ip_settings">IP Settings</string>
+    <string name="ip_mode">IP Mode</string>
     <string name="ip_address">IP Address</string>
     <string name="subnet_mask">Subnet Mask</string>
     <string name="gateway">Gateway</string>
@@ -274,4 +275,7 @@
     <string name="_16_10">16:10</string>
     <string name="_4_3">4:3</string>
     <string name="screen_zoom">Screen Zoom</string>
+    <string name="account">Account</string>
+    <string name="wallpper_load">Background resources loading...</string>
+    <string name="choose_source">Select Signal Source</string>
 </resources>

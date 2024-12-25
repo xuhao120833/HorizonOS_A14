@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">HorizonOS</string>
+	<string name="app_name">LuminaOS</string>
 	<string name="wifi_remembered">Gespeichert</string>
 	<string name="isconnected">(Verbunden)</string>
 	<string name="wifi_disabled_password_failure">Authentifizierungsfehler</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Automatische Trapezkorrektur</string>
     <string name="auto_keystone_on">Bitte zuerst die automatische Trapezkorrektur deaktivieren</string>
     <string name="auto_four_corner_on">Bitte zuerst die automatische Vier-Ecken-Korrektur deaktivieren</string>
-    <string name="power_mode_1">Standby-Modus</string>
-    <string name="power_mode_2">Ausschaltmodus</string>
+	<string name="power_mode_1">Gerät im Standby beim Einschalten</string>
+	<string name="power_mode_2">Gerät schaltet sich beim Einschalten ein</string>
     <string name="boot_source_1">Keine</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Statisch</string>
     <string name="ip_settings">IP-Einstellungen</string>
+	<string name="ip_mode">IP-Modus</string>
     <string name="ip_address">IP-Adresse</string>
     <string name="subnet_mask">Subnetzmaske</string>
     <string name="gateway">Gateway</string>
@@ -274,5 +275,8 @@
 	<string name="_16_10">16:10</string>
 	<string name="_4_3">4:3</string>
 	<string name="screen_zoom">Bildschirmzoom</string>
+	<string name="account">Konto</string>
+	<string name="wallpper_load">Hintergrundressourcen werden geladen...</string>
+	<string name="choose_source">Signalquelle auswählen</string>
 </resources>
 

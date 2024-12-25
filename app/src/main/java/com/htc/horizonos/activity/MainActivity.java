@@ -3,6 +3,7 @@ package com.htc.horizonos.activity;
 import static com.htc.horizonos.utils.BlurImageView.MAX_BITMAP_SIZE;
 import static com.htc.horizonos.utils.BlurImageView.narrowBitmap;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
@@ -17,6 +18,9 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -162,8 +166,11 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     private AppReceiver appReceiver = null;
     private WifiManager wifiManager = null;
+    private StorageManager storageManager = null;
 
     ExecutorService threadExecutor = Executors.newFixedThreadPool(5);
+    private List<StorageVolume> localDevicesList;
+    private ConnectivityManager connectivityManager;
 
     public OriginalFragment originalFragment = null;
 
@@ -175,6 +182,9 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     public FragmentTransaction transaction = fragmentManager.beginTransaction();
 
     Bundle savedInstanceState =null;
+    private ConnectivityManager.NetworkCallback networkCallback;
+
+    private boolean isEther = false;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -200,8 +210,17 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                         startAppFormChannel();
                     }
                     break;
+                case 0:
+                    if (htcosBinding.rlEthernet.getVisibility() == View.VISIBLE) {
+                        htcosBinding.rlEthernet.setVisibility(View.GONE);
+                    }
+                    break;
+                case 1:
+                    if (htcosBinding.rlEthernet.getVisibility() == View.GONE) {
+                        htcosBinding.rlEthernet.setVisibility(View.VISIBLE);
+                    }
+                    break;
             }
-
             return false;
         }
     });
@@ -213,10 +232,14 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         try {
             htcosBinding = ActivityMainHtcosBinding.inflate(LayoutInflater.from(this));
             setContentView(htcosBinding.getRoot());
+            setDefaultBackgroundById();
             initViewCustom();
             initDataCustom();
             initReceiver();
             wifiManager = (WifiManager) getSystemService(Service.WIFI_SERVICE);
+            storageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
+            localDevicesList = new ArrayList<StorageVolume>();
+            devicesPathAdd();
             Log.d(TAG, " onCreate ");
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,6 +293,10 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         htcosBinding.rlSignalSource.setOnClickListener(this);
         htcosBinding.rlSignalSource.setOnHoverListener(this);
         htcosBinding.rlSignalSource.setOnFocusChangeListener(this);
+        //清除缓存
+        htcosBinding.rlClearMemory.setOnClickListener(this);
+        htcosBinding.rlClearMemory.setOnHoverListener(this);
+        htcosBinding.rlClearMemory.setOnFocusChangeListener(this);
 
     }
 
@@ -625,6 +652,9 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     e.printStackTrace();
                 }
                 break;
+            case R.id.rl_clear_memory:
+                goAction("com.htc.clearmemory/com.htc.clearmemory.MainActivity");
+                break;
         }
     }
 
@@ -682,7 +712,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     public void run() {
                         // 设置首页的配置图标
                         try {
-                            setDefaultBackground();
+//                            setDefaultBackground();
                             Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
                             if (savedInstanceState == null) {
                                 originalFragment = new OriginalFragment();
@@ -1619,6 +1649,111 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         htcosBinding.rlSettings.setFocusable(true);
         htcosBinding.rlWallpapers.setFocusable(true);
         htcosBinding.rlSignalSource.setFocusable(true);
+    }
+
+    private void devicesPathAdd() {
+        if (storageManager == null) {
+            Log.e(TAG, "devicesPathAdd manager is null return error!");
+            return;
+        }
+        localDevicesList = storageManager.getStorageVolumes();
+        Log.d(TAG, " 检测到devicesPathAdd " + localDevicesList.size());
+        StorageVolume storageVolume;
+        for (int i = 0; i < localDevicesList.size(); i++) {
+            storageVolume = localDevicesList.get(i);
+//            Log.d(TAG," 检测到storageVolume.getPath() "+storageVolume.getPath()+" "+Environment.getExternalStorageDirectory().getPath());
+            if (!storageVolume.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
+                if (storageVolume.getId().startsWith("public:179")) {
+                    /* 获取SD卡设备路径列表 */
+                    Log.d(TAG, " 检测到SD卡 " + storageVolume.getPath());
+                } else if (storageVolume.getId().startsWith("public:8")) {
+                    /* 获取USB设备路径列表 */
+                    Utils.hasUsbDevice = true;
+                    Utils.usbDevicesNumber += 2;
+                    if (customBinding.rlUsbConnect.getVisibility() == View.GONE) {
+                        customBinding.rlUsbConnect.setVisibility(View.VISIBLE);
+                    }
+                    Log.d(TAG, " 检测到USB设备 " + storageVolume.getPath() + " Utils.hasUsbDevice " + Utils.hasUsbDevice
+                            + " Utils.usbDevicesNumber " + Utils.usbDevicesNumber);
+                } else if (storageVolume.getPath().contains("sata")) {
+                    /* 获取sata设备路径列表 */
+                    Log.d(TAG, " 检测到sata设备 " + storageVolume.getPath());
+                }
+            }
+        }
+    }
+
+    /**
+     * android 11 检测以太网连接
+     *
+     * @param context
+     * @return
+     */
+    @SuppressLint("MissingPermission")
+    public boolean isEthernetConnect(Context context) {
+        try {
+            connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager != null) {
+                // 以太网已连接
+                // 以太网已断开
+                networkCallback = new ConnectivityManager.NetworkCallback() {
+                    @Override
+                    public void onAvailable(Network network) {
+                        super.onAvailable(network);
+                        // 以太网已连接
+                        isEther = true;
+                        handler.sendEmptyMessage(1);
+//                    Message msg = new Message();
+//                    msg.what = ETHERNET_HANDLE;
+//                    msg.arg1 = 1;
+//                    mHandler.sendMessage(msg);
+                    }
+
+                    @Override
+                    public void onLost(Network network) {
+                        super.onLost(network);
+                        // 以太网已断开
+                        isEther = false;
+                        handler.sendEmptyMessage(0);
+//                    Message msg2 = new Message();
+//                    msg2.what = ETHERNET_HANDLE;
+//                    msg2.arg1 = 0;
+//                    mHandler.sendMessage(msg2);
+                    }
+                };
+                NetworkRequest request = new NetworkRequest.Builder()
+                        .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+                        .build();
+                connectivityManager.registerNetworkCallback(request, networkCallback);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isEther;
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setDefaultBackgroundById() {
+        //如果用户自主修改了背景，那么重启之后不再设置默认背景start
+        SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
+        int selectBg = sharedPreferences.getInt(Contants.SelectWallpaperLocal, -1);
+        if (selectBg != -1) {
+            Log.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
+            return;
+        }
+        //背景控制end
+        String defaultbg = sharedPreferences.getString(Contants.DefaultBg, "1");
+        Log.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
+        int number = Integer.parseInt(defaultbg);
+        Log.d(TAG, " setDefaultBackground number " + number);
+        if (number > Utils.drawablesId.length) {
+            Log.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
+            return;
+        }
+        setWallPaper(Utils.drawablesId[number - 1]);
+        Drawable drawable = getResources().getDrawable(Utils.drawablesId[number - 1]);
+        MyApplication.mainDrawable = (BitmapDrawable) drawable;
+        setDefaultBg(drawable);
     }
 
 }

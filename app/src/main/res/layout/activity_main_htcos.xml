@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y_27"
             android:layout_marginEnd="@dimen/x_20"
-            android:layout_toStartOf="@+id/rl_wallpapers"
+            android:layout_toStartOf="@+id/rl_clear_memory"
             android:background="@drawable/circle_bar_bg_custom"
             android:visibility="gone"
             android:clickable="true">
@@ -131,6 +131,25 @@
                 android:padding="@dimen/y_3"
                 android:src="@drawable/bar_signal" />
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_clear_memory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            style="@style/focusStyle"
+            android:clickable="true"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:layout_toStartOf="@+id/rl_wallpapers">
+
+            <ImageView
+                android:id="@+id/clear_memory"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/bar_clean" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -178,7 +197,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y_27"
             android:layout_marginEnd="@dimen/x_20"
-            android:layout_toStartOf="@+id/rl_wifi"
+            android:layout_toStartOf="@+id/rl_ethernet"
             android:background="@drawable/circle_bar_bg_custom"
             android:clickable="true">
 
@@ -189,6 +208,26 @@
                 android:layout_centerInParent="true"
                 android:padding="@dimen/y_2"
                 android:src="@drawable/bt_custom2" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_ethernet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y_27"
+            android:layout_marginEnd="@dimen/x_20"
+            style="@style/focusStyle"
+            android:clickable="true"
+            android:visibility="gone"
+            android:background="@drawable/circle_bar_bg_custom"
+            android:layout_toStartOf="@+id/rl_wifi">
+
+            <ImageView
+                android:id="@+id/home_ethernet"
+                android:layout_width="@dimen/x_53"
+                android:layout_height="@dimen/y_53"
+                android:padding="@dimen/y_3"
+                android:src="@drawable/bar_ethernet_green" />
         </RelativeLayout>
 
         <RelativeLayout

@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.baidu.mobstat.StatService;
 import com.google.gson.Gson;
 import com.htc.horizonos.entry.Config;
@@ -37,6 +39,11 @@ public class MyApplication extends Application {
     public static Config config = new Config();
     public static BitmapDrawable mainDrawable = null;
     public static BitmapDrawable otherDrawable = null;
+    private MutableLiveData<Boolean> isDataInitialized = new MutableLiveData<>(false);
+
+    public MutableLiveData<Boolean> getIsDataInitialized() {
+        return isDataInitialized; // 只暴露不可变的 LiveData
+    }
 
 
     @Override
@@ -101,6 +108,9 @@ public class MyApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Utils.sourceList = config.sourceList.split(",");
+        Utils.sourceListTitle = config.sourceListTitle.split(",");
+        Log.d(TAG, "Utils.sourceList  sourceListTitle " + Utils.sourceList.length + " " + Utils.sourceListTitle.length);
         //读取背景的默认图片
         SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -163,15 +173,20 @@ public class MyApplication extends Application {
     }
 
     private void initWallpaperData() {
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background_main));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background14));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background1));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background5));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.htcos_default_bg));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background11));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background12));
-        Utils.drawables.add(getResources().getDrawable(R.drawable.background13));
-        new Thread(() -> copyMyWallpaper()).start();
+        new Thread(() -> {
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background_main));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background14));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background1));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background5));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.htcos_default_bg));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background11));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background12));
+            Utils.drawables.add(getResources().getDrawable(R.drawable.background13));
+            copyMyWallpaper();
+            // 数据加载完成后更新 LiveData
+            Log.d(TAG, "执行完initWallpaperData");
+            isDataInitialized.postValue(true);//UI线程用setValue
+        }).start();
     }
 
     private void copyMyWallpaper() {

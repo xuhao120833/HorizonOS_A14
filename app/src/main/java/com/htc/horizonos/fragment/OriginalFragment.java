@@ -1,6 +1,9 @@
 package com.htc.horizonos.fragment;
 
+import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -9,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,6 +21,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.htc.horizonos.R;
 import com.htc.horizonos.activity.MainActivity;
@@ -26,6 +32,7 @@ import com.htc.horizonos.databinding.OriginalfragmentBinding;
 import com.htc.horizonos.utils.AppUtils;
 import com.htc.horizonos.utils.DBUtils;
 import com.htc.horizonos.utils.LanguageUtil;
+import com.htc.horizonos.utils.Utils;
 
 import java.util.Hashtable;
 
@@ -209,6 +216,8 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         activity.htcosBinding.rlSettings.setFocusable(false);
         activity.htcosBinding.rlWallpapers.setFocusable(false);
         activity.htcosBinding.rlSignalSource.setFocusable(false);
+        activity.htcosBinding.rlClearMemory.setFocusable(false);
+        activity.htcosBinding.rlEthernet.setFocusable(false);
     }
 
     private void enableFocus() {
@@ -246,7 +255,12 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                     if (listaction != null && !listaction.equals("")) { //读取配置
                         activity.goAction(listaction);
                     } else {// 默认跳转
-                        activity.startSource("HDMI1");
+                        if (Utils.sourceList.length > 1) { //支持多信源
+                            showSourceDialog();
+                        } else {
+                            // 默认跳转
+                            startSource("HDMI1");
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -456,5 +470,75 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         if (drawable != null) {
             binding.hulu.setImageDrawable(drawable);
         }
+    }
+
+    //正常背景
+    public void showSourceDialog() {
+        // 创建一个 Dialog 对象
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_source2); // 使用自定义布局
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); // 宽度为屏幕宽度，高度自适应内容
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent); // 设置黑色背景
+        dialog.getWindow().setGravity(Gravity.CENTER); // 设置在屏幕中央显示
+        // 获取 LinearLayout 来动态添加选项
+        LinearLayout layout = dialog.findViewById(R.id.source_layout);
+//        // 设置 Lottie 动画视图
+//        LottieAnimationView lottieBackground = dialog.findViewById(R.id.lottie_background);
+        for (int i = 0; i < Utils.sourceListTitle.length + 1; i++) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            // 将 XML 布局文件转换为 View 对象
+            LinearLayout source_item = (LinearLayout) inflater.inflate(R.layout.source_item, null);
+            TextView source_title = (TextView) source_item.findViewById(R.id.source_title);
+            if (i == 0) {
+                source_title.setText(getResources().getString(R.string.choose_source));
+                source_title.setTextColor(getResources().getColor(R.color.black));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        (int) getResources().getDimension(R.dimen.x_400),
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, (int) getResources().getDimension(R.dimen.x_30),
+                        0, (int) getResources().getDimension(R.dimen.x_30));
+                source_item.setLayoutParams(params);
+                source_item.setFocusable(false);
+                source_item.setFocusableInTouchMode(false);
+                layout.addView(source_item);
+                source_title.setSelected(true);
+            } else {
+                String title = Utils.sourceListTitle[i-1];
+                // 获取 LayoutInflater 对象
+                source_title.setText(title);
+                // 设置上下外边距
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        (int) getResources().getDimension(R.dimen.x_400),
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 0,
+                        0, (int) getResources().getDimension(R.dimen.x_30));
+                source_item.setLayoutParams(params);
+                source_item.setBackgroundResource(R.drawable.source_bg_custom);
+                int finalI = i;
+                source_item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startSource(Utils.sourceList[finalI-1]);
+                    }
+                });
+                source_item.setOnHoverListener(this);
+                // 将每一行的 LinearLayout 加入到主布局
+                layout.addView(source_item);
+            }
+        }
+        // 显示 Dialog
+        dialog.show();
+    }
+
+    private void startSource(String sourceName) {
+        Log.d(TAG, " startSource启动信源 " + sourceName);
+        Intent intent_hdmi = new Intent();
+        intent_hdmi.setComponent(new ComponentName("com.softwinner.awlivetv", "com.softwinner.awlivetv.MainActivity"));
+        intent_hdmi.putExtra("input_source", sourceName);
+        intent_hdmi.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent_hdmi.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent_hdmi);
     }
 }

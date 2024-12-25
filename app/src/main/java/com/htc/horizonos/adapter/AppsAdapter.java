@@ -351,6 +351,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         mainActivity.htcosBinding.rlSettings.setFocusable(true);
         mainActivity.htcosBinding.rlWallpapers.setFocusable(true);
         mainActivity.htcosBinding.rlSignalSource.setFocusable(true);
+        mainActivity.htcosBinding.rlClearMemory.setFocusable(true);
+        mainActivity.htcosBinding.rlEthernet.setFocusable(true);
     }
 
     @Override
