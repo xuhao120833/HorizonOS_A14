@@ -185,6 +185,8 @@
             android:textSize="@dimen/x_27"
             android:text="GTM-05:00，美国东部时间"
             android:duplicateParentState="true"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             />
 
         <View
