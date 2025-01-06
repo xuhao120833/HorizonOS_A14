@@ -5,8 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.TimeZoneNames;
+import android.icu.util.ULocale;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -27,12 +30,19 @@ import com.htc.horizonos.R;
 import com.htc.horizonos.databinding.ActivityDateTimeBinding;
 import com.htc.horizonos.receiver.MyTimeCallBack;
 import com.htc.horizonos.receiver.MyTimeReceiver;
+import com.htc.horizonos.utils.Contants;
 import com.htc.horizonos.utils.TimeUtils;
 import com.htc.horizonos.utils.ToastUtil;
+import com.htc.horizonos.utils.Utils;
 import com.htc.horizonos.widget.TimezoneDialog;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -110,20 +120,44 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
      * @return
      */
     private String getTimeZoneText() {
+        Utils.list = getZones();
         TimeZone tz = Calendar.getInstance().getTimeZone();
         String timeZoneId = tz.getID();
         Log.d(TAG, " getTimeZoneText timeZoneId" + timeZoneId);
         boolean daylight = tz.inDaylightTime(new Date());
         Locale locale = Locale.getDefault();
         // 根据语言环境获取显示名称
-        String displayName = tz.getDisplayName(false, TimeZone.LONG, locale);
-        StringBuilder builder = new StringBuilder();
+//        String displayName = tz.getDisplayName(false, TimeZone.LONG, locale);
+//        String displayName = getICUTimeZoneDisplayName(tz.getID(), locale);
+        String displayName = searchDisplayName(Utils.list,timeZoneId);
+                StringBuilder builder = new StringBuilder();
 
-        builder.append(
-                        formatOffset(tz.getRawOffset()
-                                + (daylight ? tz.getDSTSavings() : 0))).append(", ")
+        builder.append(formatOffset(tz.getRawOffset() + (daylight ? tz.getDSTSavings() : 0)))
+                .append(", ")
                 .append(displayName);
         return builder.toString();
+    }
+
+    private String searchDisplayName(ArrayList<HashMap> list,String timeZoneId) {
+        Log.d(TAG," TimeZone.getDefault().getID() "+TimeZone.getDefault().getID());
+        for (int i = 0; i < list.size(); i++) {
+            HashMap map = list.get(i);
+            Log.d(TAG," map.get(Contants.KEY_ID) "+map.get(Contants.KEY_ID));
+            if (map.get(Contants.KEY_ID).equals(timeZoneId)) {
+                return map.get(Contants.KEY_DISPLAYNAME).toString();
+            }
+        }
+        return null;
+    }
+
+    public String getICUTimeZoneDisplayName(String timeZoneId, Locale locale) {
+        TimeZoneNames names = TimeZoneNames.getInstance(ULocale.forLocale(locale));
+        String displayName = names.getDisplayName(
+                timeZoneId,
+                TimeZoneNames.NameType.LONG_STANDARD,
+                System.currentTimeMillis()
+        );
+        return displayName != null ? displayName : timeZoneId;
     }
 
     private char[] formatOffset(int off) {
@@ -466,4 +500,82 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         }
         return false;
     }
+
+    // parse timezones.xml to get timezone info
+    private ArrayList<HashMap> getZones() {
+        ArrayList<HashMap> myData = new ArrayList<HashMap>();
+        long date = Calendar.getInstance().getTimeInMillis();
+        try {
+            XmlResourceParser xrp = getResources().getXml(R.xml.timezones);
+            while (xrp.next() != XmlResourceParser.START_TAG)
+                continue;
+            xrp.next();
+            while (xrp.getEventType() != XmlResourceParser.END_TAG) {
+                while (xrp.getEventType() != XmlResourceParser.START_TAG) {
+                    if (xrp.getEventType() == XmlResourceParser.END_DOCUMENT) {
+                        return myData;
+                    }
+                    xrp.next();
+                }
+                if (xrp.getName().equals("timezone")) {
+                    String id = xrp.getAttributeValue(0);
+                    String displayName = xrp.nextText();
+                    addItem(myData, id, displayName, date);
+//                    Log.d(TAG," getZones "+id+" "+displayName);
+                }
+                while (xrp.getEventType() != XmlResourceParser.END_TAG) {
+                    xrp.next();
+                }
+                xrp.next();
+            }
+            xrp.close();
+        } catch (XmlPullParserException xppe) {
+            // LOGD("Ill-formatted timezones.xml file");
+        } catch (java.io.IOException ioe) {
+            // LOGD("Unable to read timezones.xml file");
+        }
+
+        return myData;
+    }
+
+    protected void addItem(List<HashMap> myData, String id, String displayName,
+                           long date) {
+        HashMap map = new HashMap();
+        map.put(Contants.KEY_ID, id);
+        map.put(Contants.KEY_DISPLAYNAME, displayName);
+        TimeZone tz = TimeZone.getTimeZone(id);
+        int offset = tz.getOffset(date);
+        int p = Math.abs(offset);
+        StringBuilder name = new StringBuilder();
+        name.append("GMT");
+
+        if (offset < 0) {
+            name.append('-');
+        } else {
+            name.append('+');
+        }
+
+        name.append(p / (Contants.HOURS_1));
+        name.append(':');
+
+        int min = p / 60000;
+        min %= 60;
+
+        if (min < 10) {
+            name.append('0');
+        }
+        name.append(min);
+
+        map.put(Contants.KEY_GMT, name.toString());
+        map.put(Contants.KEY_OFFSET, offset);
+
+//        if (id.equals(TimeZone.getDefault().getID())) {
+//            Log.d(TAG," addItem id "+id);
+//            mDefault = myData.size()-1;
+//        }
+
+        myData.add(map);
+    }
+
+
 }
