@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HorizonOS</string>
+    <string name="app_name">LuminaOS</string>
     <string name="wifi_remembered">Tersimpan</string>
     <string name="isconnected">(Tersambung)</string>
     <string name="wifi_disabled_password_failure">Masalah otentikasi</string>
@@ -156,8 +156,8 @@
     <string name="auto_keystone">Koreksi keystone otomatis</string>
     <string name="auto_keystone_on">Harap matikan koreksi keystone otomatis terlebih dahulu</string>
     <string name="auto_four_corner_on">Harap matikan koreksi empat sudut otomatis terlebih dahulu</string>
-    <string name="power_mode_1">Mode siaga</string>
-    <string name="power_mode_2">Mode mati</string>
+    <string name="power_mode_1">Perangkat dalam siaga saat dinyalakan</string>
+    <string name="power_mode_2">Perangkat menyala saat dinyalakan</string>
     <string name="boot_source_1">Tidak ada</string>
     <string name="boot_source_2">HDMI</string>
     <string name="boot_source_3">AV</string>
@@ -192,6 +192,7 @@
     <string name="dhcp">DHCP</string>
     <string name="static_ip">Statik</string>
     <string name="ip_settings">Pengaturan IP</string>
+    <string name="ip_mode">Mode IP</string>
     <string name="ip_address">Alamat IP</string>
     <string name="subnet_mask">Subnet mask</string>
     <string name="gateway">Gateway</string>
@@ -264,4 +265,23 @@
     <string name="hue">Nada warna</string>
     <string name="saturation">Saturasi</string>
     <string name="sharpness">Ketajaman</string>
+    <string name="Standard">Standar</string>
+    <string name="Music">Musik</string>
+    <string name="Movie">Film</string>
+    <string name="News">Berita</string>
+    <string name="Audio_Mode">Mode Audio</string>
+    <string name="Audio_Settings">Pengaturan Audio</string>
+    <string name="_16_9">16:9</string>
+    <string name="_16_10">16:10</string>
+    <string name="_4_3">4:3</string>
+    <string name="screen_zoom">Perbesaran layar</string>
+    <string name="account">Akun</string>
+    <string name="wallpper_load">Memuat sumber daya latar belakang...</string>
+    <string name="choose_source">Pilih sumber sinyal</string>
+    <string name="follow_me">Ikuti langkah-langkah berikut:</string>
+    <string name="init_angle_tip1">1. Letakkan mesin secara horizontal di atas meja, dan pastikan gambar tegak lurus dengan dinding atau layar.</string>
+    <string name="init_angle_tip2">2. Sesuaikan sudut atas dan bawah mesin untuk memastikan gambar yang diproyeksikan adalah persegi panjang standar.</string>
+    <string name="init_angle_tip3">3. Klik mulai.</string>
+    <string name="init_angle_tip4">Kalibrasi selesai, keluar otomatis.</string>
+    <string name="start">Mulai</string>
 </resources>
