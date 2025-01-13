@@ -55,7 +55,8 @@ public class BaseMainActivity extends AppCompatActivity implements View.OnClickL
         } else {
             ViewGroup relativeLayout = findViewById(R.id.rl_main);
             if (relativeLayout != null) {
-                relativeLayout.setBackground(Utils.drawables.get(0));
+//                relativeLayout.setBackground(Utils.drawables.get(0));
+                relativeLayout.setBackground((Drawable) Utils.drawables.get(0));
             }
         }
     }
