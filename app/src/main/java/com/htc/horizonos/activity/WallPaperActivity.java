@@ -295,12 +295,6 @@ public class WallPaperActivity extends BaseActivity {
                 @Override
                 public void run() {
                     CopyDrawableToSd(drawable);
-//                    CopyResIdToSd(BlurImageView.BoxBlurFilter(WallPaperActivity.this, resId));
-//                    if (new File(Contants.WALLPAPER_MAIN).exists())
-//                        MyApplication.mainDrawable = new BitmapDrawable(BitmapFactory.decodeFile(Contants.WALLPAPER_MAIN));
-//                    if (new File(Contants.WALLPAPER_OTHER).exists())
-//                        MyApplication.otherDrawable = new BitmapDrawable(BitmapFactory.decodeFile(Contants.WALLPAPER_OTHER));
-//                    handler.sendEmptyMessage(Contants.DISSMISS_DIALOG);
                 }
             });
         }
@@ -375,7 +369,8 @@ public class WallPaperActivity extends BaseActivity {
         File dir = new File(Contants.WALLPAPER_DIR);
         if (!dir.exists()) dir.mkdirs();
         File file1 = new File(Contants.WALLPAPER_MAIN);
-//        if (file1.exists()) file1.delete();
+        if (file1.exists())
+            file1.delete();
         try (FileOutputStream fileOutputStream = new FileOutputStream(file1)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream); // 可根据需要更改格式
             fileOutputStream.flush();

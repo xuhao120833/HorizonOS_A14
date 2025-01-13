@@ -1,26 +1,43 @@
 package com.htc.horizonos.utils;
 
 /**
- * @author  作者：zgr
- * @version 创建时间：2017年7月3日 下午5:50:51
- * 类说明 判断网络是否可用
+ * @author 作者：xuhao
+ * 类说明：和网络相关的工具类
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.EthernetManager;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.RouteInfo;
+import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.IpConfiguration;
 import android.net.LinkAddress;
 import android.net.NetworkInfo;
+import android.net.NetworkUtils;
 import android.net.StaticIpConfiguration;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
-import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import com.htc.horizonos.bean.StaticIpConfig;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NetWorkUtils {
@@ -40,7 +57,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 判断是否有网络连接
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -59,7 +76,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 判断WIFI网络是否可用
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -78,7 +95,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 判断MOBILE网络是否可用
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -97,7 +114,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 获取当前网络连接的类型信息
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -116,7 +133,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 获取当前的网络状态 ：没有网络0：WIFI网络1：3G网络2：2G网络3
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -264,10 +281,14 @@ public class NetWorkUtils {
 			WifiConfiguration wifiConfig = getWifiConfiguration(mContext, mWifiManager.getConnectionInfo().getSSID());
 			try {
 				if (staticIpConfig.isDhcp()) {
-					switchToDHCP(mContext,wifiConfig);
-				}else {
-					setStaticIpConfig(mContext,wifiConfig,staticIpConfig.getIp(),staticIpConfig.getGateWay()
-							,staticIpConfig.getDns1(),staticIpConfig.getDns2(),24);
+					switchToDHCP(mContext, wifiConfig);
+				} else {
+					Log.d(TAG, "staticIpConfig.getIp() " + staticIpConfig.getIp());
+					if (staticIpConfig.getIp() == null || staticIpConfig.getIp().isEmpty()) {
+						return false;
+					}
+					setStaticIpConfig(mContext, wifiConfig, staticIpConfig.getIp(), staticIpConfig.getGateWay()
+							, staticIpConfig.getDns1(), staticIpConfig.getDns2(), 24);
 				}
 				disconnectWiFi();
 			} catch (Exception e) {
@@ -291,7 +312,7 @@ public class NetWorkUtils {
 	 * @param prefixLength    子网前缀长度（通常为 24）
 	 * @return 是否设置成功
 	 */
-	public  boolean setStaticIpConfig(
+	public boolean setStaticIpConfig(
 			Context context,
 			WifiConfiguration wifiConfig,
 			String ipAddress,
@@ -311,8 +332,10 @@ public class NetWorkUtils {
 			}
 
 			// 直接设置静态 IP 配置
-			wifiConfig.setStaticIpConfiguration(staticIpConfig);
+
+//			wifiConfig.setStaticIpConfiguration(staticIpConfig);
 			wifiConfig.setIpAssignment(IpConfiguration.IpAssignment.STATIC);
+			wifiConfig.setStaticIpConfiguration(staticIpConfig);
 
 			// 更新网络配置
 			int networkId = mWifiManager.updateNetwork(wifiConfig);
@@ -348,7 +371,6 @@ public class NetWorkUtils {
 			if (networkId == -1) {
 				return false;
 			}
-
 			// 连接到配置的网络
 			return wifiManager.enableNetwork(networkId, true);
 		} catch (Exception e) {
@@ -356,4 +378,98 @@ public class NetWorkUtils {
 			return false;
 		}
 	}
+
+	public static MyNetworkInfo getWiredNetworkInfo(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivityManager == null) {
+			return null;
+		}
+
+		Network[] networks = connectivityManager.getAllNetworks();
+		for (Network network : networks) {
+			NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+			if (capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+				LinkProperties linkProperties = connectivityManager.getLinkProperties(network);
+				if (linkProperties != null) {
+					String ipv4Address = null;
+					String gateway = null;
+					String subnetMask = null;
+					List<String> dnsServers = new ArrayList<>();
+					String macAddress = null; // MAC 地址
+
+					// Get IPv4 Address
+					for (LinkAddress linkAddress : linkProperties.getLinkAddresses()) {
+						InetAddress address = linkAddress.getAddress();
+						if (address instanceof Inet4Address) {
+							ipv4Address = address.getHostAddress();
+							break;
+						}
+					}
+
+					// Get Gateway
+					for (RouteInfo route : linkProperties.getRoutes()) {
+						if (route.getGateway() instanceof Inet4Address) {
+							gateway = route.getGateway().getHostAddress();
+							break;
+						}
+					}
+
+					// Get DNS Servers
+					for (InetAddress dns : linkProperties.getDnsServers()) {
+						if (dns instanceof Inet4Address) {
+							dnsServers.add(dns.getHostAddress());
+						}
+					}
+
+					// Calculate Subnet Mask (simple method)
+					if (!linkProperties.getLinkAddresses().isEmpty()) {
+						int prefixLength = linkProperties.getLinkAddresses().get(0).getPrefixLength();
+						subnetMask = prefixLengthToSubnetMask(prefixLength);
+					}
+
+					// 获取 MAC 地址（仅适用于有线网络）
+					NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+					String mac = networkInfo.getExtraInfo();
+
+					return new MyNetworkInfo(ipv4Address, gateway, subnetMask, dnsServers,mac);
+				}
+			}
+		}
+		return null;
+	}
+
+	@SuppressLint("DefaultLocale")
+	private static String prefixLengthToSubnetMask(int prefixLength) {
+		int mask = 0xffffffff << (32 - prefixLength);
+		return String.format("%d.%d.%d.%d",
+				(mask >> 24) & 0xff,
+				(mask >> 16) & 0xff,
+				(mask >> 8) & 0xff,
+				mask & 0xff);
+	}
+
+	public static class MyNetworkInfo {
+		public String ipv4Address;
+		public String gateway;
+		public String subnetMask;
+		public List<String> dnsServers;
+		public String mac;
+
+		public MyNetworkInfo(String ipv4Address, String gateway, String subnetMask, List<String> dnsServers,String mac) {
+			this.ipv4Address = ipv4Address;
+			this.gateway = gateway;
+			this.subnetMask = subnetMask;
+			this.dnsServers = dnsServers;
+			this.mac = mac;
+		}
+
+		@Override
+		public String toString() {
+			return "IPv4 Address: " + ipv4Address + "\n" +
+					"Gateway: " + gateway + "\n" +
+					"Subnet Mask: " + subnetMask + "\n" +
+					"DNS Servers: " + dnsServers;
+		}
+	}
+
 }
