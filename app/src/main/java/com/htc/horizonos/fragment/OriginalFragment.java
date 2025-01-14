@@ -150,6 +150,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         binding.primeVideo.setOnKeyListener(this);
         binding.hulu.setOnKeyListener(this);
 //        binding.rlScreenCast.requestFocus();
+
         return view;
     }
 
@@ -163,6 +164,10 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         super.onResume();
         Log.d(TAG, " 执行onResume");
         setIconOrText();
+        binding.screenCastTxt.setSelected(true);
+        binding.signalSourceTxt.setSelected(true);
+        binding.fileExplorerTxt.setSelected(true);
+        binding.appStoreTxt.setSelected(true);
 //        binding.rlScreenCast.requestFocus();
 //        enableFocus();
     }
