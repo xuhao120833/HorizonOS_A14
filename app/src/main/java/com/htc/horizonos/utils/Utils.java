@@ -17,6 +17,9 @@ public class Utils {
 
     public static boolean hasUsbDevice = false;
 
+    //用户是否启用自定义背景目录功能的标志位
+    public static boolean customBackground = false;
+
     //首页默认背景resId,无配置默认-1
     public static int mainBgResId = -1;
 
