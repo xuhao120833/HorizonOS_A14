@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LuminaOS</string>
+    <string name="app_name">HorizonOS</string>
     <string name="wifi_remembered">נשמר</string>
     <string name="isconnected">(מחובר)</string>
     <string name="wifi_disabled_password_failure">אירעה בעיה באימות</string>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmoonOS</string>
+    <string name="app_name">HorizonOS</string>
     <string name="wifi_remembered">Đã lưu</string>
     <string name="isconnected">(Đã kết nối)</string>
     <string name="wifi_disabled_password_failure">Có vấn đề với xác thực</string>
