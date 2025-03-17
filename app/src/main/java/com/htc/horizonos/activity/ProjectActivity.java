@@ -788,6 +788,7 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
     private void sendKeystoneBroadcast() {
         Intent intent = new Intent("android.intent.hotack_keystone");
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.putExtra("ratio", 1);
         sendBroadcast(intent);
     }
 
