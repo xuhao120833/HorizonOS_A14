@@ -284,6 +284,9 @@
     <string name="init_angle_tip3">3. Kattintson a kezdésre.</string>
     <string name="init_angle_tip4">A korrekció befejeződött, automatikusan kilép.</string>
     <string name="start">Kezdés</string>
+    <string name="bluetooth_receive_request">Elfogadja a bejövő fájlt?</string>
+    <string name="bluetooth_start_receive">Adatok fogadása elkezdése</string>
+    <string name="accept">Elfogad</string>
 </resources>
 
 
