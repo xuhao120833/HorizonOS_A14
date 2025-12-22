@@ -625,37 +625,30 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rl_wallpapers:
-                startNewActivity(WallPaperActivity.class);
-                break;
-            case R.id.rl_settings:
-                startNewActivity(MainSettingActivity.class);
-                break;
-            case R.id.rl_wifi:
-                startNewActivity(WifiActivity.class);
-                break;
-            case R.id.rl_bluetooth:
-                startNewActivity(BluetoothActivity.class);
-                break;
-            case R.id.rl_usb_connect:
-                AppUtils.startNewApp(MainActivity.this, "com.hisilicon.explorer");
-                break;
-            case R.id.rl_signal_source:
-                try {
-                    String listaction = DBUtils.getInstance(getApplicationContext()).getActionFromListModules("list2");
-                    if (listaction != null && !listaction.equals("")) { //读取配置
-                        goAction(listaction);
-                    } else {// 默认跳转
-                        startSource("HDMI1");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        int id = v.getId();
+        if (id == R.id.rl_wallpapers) {
+            startNewActivity(WallPaperActivity.class);
+        } else if (id == R.id.rl_settings) {
+            startNewActivity(MainSettingActivity.class);
+        } else if (id == R.id.rl_wifi) {
+            startNewActivity(WifiActivity.class);
+        } else if (id == R.id.rl_bluetooth) {
+            startNewActivity(BluetoothActivity.class);
+        } else if (id == R.id.rl_usb_connect) {
+            AppUtils.startNewApp(MainActivity.this, "com.hisilicon.explorer");
+        } else if (id == R.id.rl_signal_source) {
+            try {
+                String listaction = DBUtils.getInstance(getApplicationContext()).getActionFromListModules("list2");
+                if (listaction != null && !listaction.equals("")) { //读取配置
+                    goAction(listaction);
+                } else {// 默认跳转
+                    startSource("HDMI1");
                 }
-                break;
-            case R.id.rl_clear_memory:
-                goAction("com.htc.clearmemory/com.htc.clearmemory.MainActivity");
-                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.rl_clear_memory) {
+            goAction("com.htc.clearmemory/com.htc.clearmemory.MainActivity");
         }
     }
 

@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.htc.horizonos.R;
+import com.htc.horizonos.activity.WifiActivity;
 import com.htc.horizonos.utils.LinkWifi;
 import com.htc.horizonos.widget.CustomConfigDisConnectDialog;
 import com.htc.horizonos.widget.CustomConfigSuccessDialog;
@@ -216,6 +217,8 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
             final int netID = linkWifi.IsExsits(wifiinfo.SSID).networkId;
             // 如果目前连接了此网络
             if (wifiManager.getConnectionInfo().getNetworkId() == netID) {
+                if (WifiActivity.inferConnectInfoLogin(mContext))
+                    return;
 
                 CustomConfigSuccessDialog configSuccessDialog = new CustomConfigSuccessDialog(
                         mContext, R.style.DialogTheme);

@@ -111,7 +111,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
     protected void onResume() {
         Log.d(TAG,"执行onResume ProjectActivity");
         super.onResume();
-        All = KeystoneUtils.readGlobalSettings(this, KeystoneUtils.ZOOM_VALUE, 0);
+//        All = KeystoneUtils.readGlobalSettings(this, KeystoneUtils.ZOOM_VALUE, 0);
+        All = KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_VALUE,0);
         updateZoomView();
     }
 
@@ -290,7 +291,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
                 break;
         }
 
-        All = KeystoneUtils.readGlobalSettings(this, KeystoneUtils.ZOOM_VALUE, 0);
+//        All = KeystoneUtils.readGlobalSettings(this, KeystoneUtils.ZOOM_VALUE, 0);
+        All = KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_VALUE,0);
         updateZoomView();
         initAuto();
         initBstacle();
@@ -303,7 +305,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
     }
 
     private void updateSzoomTv() {
-        zoom_scale = KeystoneUtils.readGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,0);
+//        zoom_scale = KeystoneUtils.readGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,0);
+        zoom_scale = KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE,0);
         switch (zoom_scale) {
             case 0:
                 projectBinding.screenZoomeTv.setText(screen_zoom[0]);
@@ -358,68 +361,51 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rl_color_mode:
-                startNewActivity(PictureModeActivity.class);
-                break;
-            case R.id.rl_audio_mode:
-                startNewActivity(AudioModeActivity.class);
-                break;
-            case R.id.rl_power_mode:
-                old_project_mode = cur_project_mode;
-                if (cur_project_mode == project_name.size() - 1)
-                    cur_project_mode = 0;
-                else
-                    cur_project_mode++;
+        int id = v.getId();
+        if (id == R.id.rl_color_mode) {
+            startNewActivity(PictureModeActivity.class);
+        } else if (id == R.id.rl_audio_mode) {
+            startNewActivity(AudioModeActivity.class);
+        } else if (id == R.id.rl_power_mode) {
+            old_project_mode = cur_project_mode;
+            if (cur_project_mode == project_name.size() - 1)
+                cur_project_mode = 0;
+            else
+                cur_project_mode++;
 
-                updateProjectMode();
-                break;
-            case R.id.rl_manual_keystone:
-                if (getAuto() && projectBinding.rlAutoKeystone.getVisibility() == View.VISIBLE) {
-                    ToastUtil.showShortToast(this, getString(R.string.auto_keystone_on));
-                    break;
-                } else if (get_AutoFourCorner() && projectBinding.rlAutoFourCorner.getVisibility() == View.VISIBLE) {
-                    ToastUtil.showShortToast(this, getString(R.string.auto_four_corner_on));
-                    break;
-                }
-                startNewActivity(CorrectionActivity.class);
-                break;
-            case R.id.rl_reset_keystone:
-                if (getAuto() && projectBinding.rlAutoKeystone.getVisibility() == View.VISIBLE) {
-                    ToastUtil.showShortToast(this, getString(R.string.auto_keystone_on));
-                    break;
-                } else if (get_AutoFourCorner() && projectBinding.rlAutoFourCorner.getVisibility() == View.VISIBLE) {
-                    ToastUtil.showShortToast(this, getString(R.string.auto_four_corner_on));
-                    break;
-                }
-                ShowResetKeystoreDialog();
-                break;
-            case R.id.rl_auto_keystone:
-            case R.id.auto_keystone_switch:
-                setAuto();
-                break;
-            case R.id.rl_auto_focus:
-            case R.id.auto_focus_switch:
-                set_auto_focus(!get_auto_focus());
-                projectBinding.autoFocusSwitch.setChecked(get_auto_focus());
-                break;
-            case R.id.rl_auto_four_corner:
-            case R.id.auto_four_corner_switch:
-                setAutoFourCorner();
-                break;
-            case R.id.rl_screen_recognition:
-            case R.id.screen_recognition_switch:
-                setMbRecognize();
-                break;
-            case R.id.rl_intelligent_obstacle:
-            case R.id.intelligent_obstacle_switch:
-                setBstacle();
-                break;
-            case R.id.rl_calibration:
-                AppUtils.startNewApp(this, "com.hysd.vafocus", "com.hysd.vafocus.VajzActivity");
-                break;
-            case R.id.rl_init_angle:
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+            updateProjectMode();
+        } else if (id == R.id.rl_manual_keystone) {
+            if (getAuto() && projectBinding.rlAutoKeystone.getVisibility() == View.VISIBLE) {
+                ToastUtil.showShortToast(this, getString(R.string.auto_keystone_on));
+                return;
+            } else if (get_AutoFourCorner() && projectBinding.rlAutoFourCorner.getVisibility() == View.VISIBLE) {
+                ToastUtil.showShortToast(this, getString(R.string.auto_four_corner_on));
+                return;
+            }
+            startNewActivity(CorrectionActivity.class);
+        } else if (id == R.id.rl_reset_keystone) {
+            if (getAuto() && projectBinding.rlAutoKeystone.getVisibility() == View.VISIBLE) {
+                ToastUtil.showShortToast(this, getString(R.string.auto_keystone_on));
+                return;
+            } else if (get_AutoFourCorner() && projectBinding.rlAutoFourCorner.getVisibility() == View.VISIBLE) {
+                ToastUtil.showShortToast(this, getString(R.string.auto_four_corner_on));
+                return;
+            }
+            ShowResetKeystoreDialog();
+        } else if (id == R.id.rl_auto_keystone || id == R.id.auto_keystone_switch) {
+            setAuto();
+        } else if (id == R.id.rl_auto_focus || id == R.id.auto_focus_switch) {
+            set_auto_focus(!get_auto_focus());
+            projectBinding.autoFocusSwitch.setChecked(get_auto_focus());
+        } else if (id == R.id.rl_auto_four_corner || id == R.id.auto_four_corner_switch) {
+            setAutoFourCorner();
+        } else if (id == R.id.rl_screen_recognition || id == R.id.screen_recognition_switch) {
+            setMbRecognize();
+        } else if (id == R.id.rl_intelligent_obstacle || id == R.id.intelligent_obstacle_switch) {
+            setBstacle();
+        } else if (id == R.id.rl_calibration) {
+            AppUtils.startNewApp(this, "com.hysd.vafocus", "com.hysd.vafocus.VajzActivity");
+        } else if (id == R.id.rl_init_angle) {//                AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 //                builder.setTitle(getString(R.string.hint));
 //                builder.setMessage(getString(R.string.defaultcorrectionhint));
 //                builder.setPositiveButton(getString(R.string.enter), new DialogInterface.OnClickListener() {
@@ -430,81 +416,75 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
 //                });
 //                builder.setNegativeButton(getString(R.string.cancel), null);
 //                builder.show();
-                InitAngleDialog initAngleDialog = new InitAngleDialog(this, R.style.DialogTheme);
-                initAngleDialog.show();
-                break;
-            case R.id.rl_project_mode:
-                old_project_mode = cur_project_mode;
-                Log.d(TAG, "onClick向右切换安装模式");
-                if (cur_project_mode == project_name.size() - 1)
-                    cur_project_mode = 0;
-                else
-                    cur_project_mode++;
-                updateProjectMode();
-                break;
-            case R.id.rl_device_mode2:
-                Log.d(TAG, "onClick向右切换设备模式");
-                cur_device_Mode++;
-                if (cur_device_Mode > 2) {
-                    cur_device_Mode = 0;
-                }
-                updateText(cur_device_Mode);
-                ReflectUtil.invokeSet_brightness_level(cur_device_Mode);
-                break;
-            case R.id.rl_digital_zoom:
-                if (All >= ZOOM_MAX)
-                    break;
-                All++;
-                set_screen_zoom(All, All, All, All);
-                updateZoomView();
-                break;
-            case R.id.digital_zoom_left:
-                if (All <= 0)
-                    break;
-                All--;
-                set_screen_zoom(All, All, All, All);
-                updateZoomView();
-                break;
-            case R.id.digital_zoom_right:
-                if (All >= ZOOM_MAX)
-                    break;
-                All++;
-                set_screen_zoom(All, All, All, All);
-                updateZoomView();
-                break;
-            case R.id.rl_screen_zoom:
-                zoom_scale++;
-                if(zoom_scale>2)
-                    zoom_scale = 0;
-                if (!SystemProperties.get("persist.sys.camok","0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto",false))
-                    set_screen_zoom(zoom_value,zoom_value,zoom_value,zoom_value,zoom_scale);
-                else
-                    updateScaleZoom(zoom_scale);
-                KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
-                updateSzoomTv();
-                break;
-            case R.id.screen_zoom_left:
-                zoom_scale--;
-                if(zoom_scale<0)
-                    zoom_scale = 2;
-                if (!SystemProperties.get("persist.sys.camok","0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto",false))
-                    set_screen_zoom(zoom_value,zoom_value,zoom_value,zoom_value,zoom_scale);
-                else
-                    updateScaleZoom(zoom_scale);
-                KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
-                updateSzoomTv();
-                break;
-            case R.id.screen_zoom_right:
-                zoom_scale++;
-                if(zoom_scale>2)
-                    zoom_scale = 0;
-                if (!SystemProperties.get("persist.sys.camok","0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto",false))
-                    set_screen_zoom(zoom_value,zoom_value,zoom_value,zoom_value,zoom_scale);
-                else
-                    updateScaleZoom(zoom_scale);
-                KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
-                updateSzoomTv();
-                break;
+            InitAngleDialog initAngleDialog = new InitAngleDialog(this, R.style.DialogTheme);
+            initAngleDialog.show();
+        } else if (id == R.id.rl_project_mode) {
+            old_project_mode = cur_project_mode;
+            Log.d(TAG, "onClick向右切换安装模式");
+            if (cur_project_mode == project_name.size() - 1)
+                cur_project_mode = 0;
+            else
+                cur_project_mode++;
+            updateProjectMode();
+        } else if (id == R.id.rl_device_mode2) {
+            Log.d(TAG, "onClick向右切换设备模式");
+            cur_device_Mode++;
+            if (cur_device_Mode > 2) {
+                cur_device_Mode = 0;
+            }
+            updateText(cur_device_Mode);
+            ReflectUtil.invokeSet_brightness_level(cur_device_Mode);
+        } else if (id == R.id.rl_digital_zoom) {
+            if (All >= ZOOM_MAX)
+                return;
+            All++;
+            set_screen_zoom(All, All, All, All);
+            updateZoomView();
+        } else if (id == R.id.digital_zoom_left) {
+            if (All <= 0)
+                return;
+            All--;
+            set_screen_zoom(All, All, All, All);
+            updateZoomView();
+        } else if (id == R.id.digital_zoom_right) {
+            if (All >= ZOOM_MAX)
+                return;
+            All++;
+            set_screen_zoom(All, All, All, All);
+            updateZoomView();
+        } else if (id == R.id.rl_screen_zoom) {
+            zoom_scale++;
+            if (zoom_scale > 2)
+                zoom_scale = 0;
+            if (!SystemProperties.get("persist.sys.camok", "0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto", false))
+                set_screen_zoom(zoom_value, zoom_value, zoom_value, zoom_value, zoom_scale);
+            else
+                updateScaleZoom(zoom_scale);
+//                KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
+            KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE, zoom_scale);
+            updateSzoomTv();
+        } else if (id == R.id.screen_zoom_left) {
+            zoom_scale--;
+            if (zoom_scale < 0)
+                zoom_scale = 2;
+            if (!SystemProperties.get("persist.sys.camok", "0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto", false))
+                set_screen_zoom(zoom_value, zoom_value, zoom_value, zoom_value, zoom_scale);
+            else
+                updateScaleZoom(zoom_scale);
+//                KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
+            KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE, zoom_scale);
+            updateSzoomTv();
+        } else if (id == R.id.screen_zoom_right) {
+            zoom_scale++;
+            if (zoom_scale > 2)
+                zoom_scale = 0;
+            if (!SystemProperties.get("persist.sys.camok", "0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto", false))
+                set_screen_zoom(zoom_value, zoom_value, zoom_value, zoom_value, zoom_scale);
+            else
+                updateScaleZoom(zoom_scale);
+//                KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
+            KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE, zoom_scale);
+            updateSzoomTv();
         }
     }
 
@@ -538,121 +518,119 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-            switch (v.getId()) {
-                case R.id.rl_project_mode:
-                    Log.d(TAG, "向左切换安装模式");
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
-                    old_project_mode = cur_project_mode;
-                    if (cur_project_mode == 0)
-                        cur_project_mode = project_name.size() - 1;
-                    else
-                        cur_project_mode--;
+            int id = v.getId();
+            if (id == R.id.rl_project_mode) {
+                Log.d(TAG, "向左切换安装模式");
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
+                old_project_mode = cur_project_mode;
+                if (cur_project_mode == 0)
+                    cur_project_mode = project_name.size() - 1;
+                else
+                    cur_project_mode--;
 
-                    updateProjectMode();
+                updateProjectMode();
 //                    break;
-                    return true;
-                case R.id.rl_digital_zoom:
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
+                return true;
+            } else if (id == R.id.rl_digital_zoom) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
 
-                    if (All <= 0)
-                        break;
+                if (All <= 0)
+                    return false;
 
-                    All--;
-                    set_screen_zoom(All, All, All, All);
-                    updateZoomView();
+                All--;
+                set_screen_zoom(All, All, All, All);
+                updateZoomView();
 //                    break;
-                    return true;
-                case R.id.rl_screen_zoom:
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
-                    zoom_scale--;
-                    if(zoom_scale<0)
-                        zoom_scale = 2;
-                    if (!SystemProperties.get("persist.sys.camok","0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto",false))
-                        set_screen_zoom(zoom_value,zoom_value,zoom_value,zoom_value,zoom_scale);
-                    else
-                        updateScaleZoom(zoom_scale);
-                    KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
-                    updateSzoomTv();
+                return true;
+            } else if (id == R.id.rl_screen_zoom) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
+                zoom_scale--;
+                if (zoom_scale < 0)
+                    zoom_scale = 2;
+                if (!SystemProperties.get("persist.sys.camok", "0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto", false))
+                    set_screen_zoom(zoom_value, zoom_value, zoom_value, zoom_value, zoom_scale);
+                else
+                    updateScaleZoom(zoom_scale);
+//                    KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
+                KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE, zoom_scale);
+                updateSzoomTv();
 //                    break;
-                    return true;
-                case R.id.rl_horizontal_correct:
-                    break;
-                case R.id.rl_vertical_correct:
-                    break;
-                case R.id.rl_device_mode2:
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
-                    Log.d(TAG, "向左切换设备模式");
-                    cur_device_Mode--;
-                    if (cur_device_Mode < 0) {
-                        cur_device_Mode = 2;
-                    }
-                    updateText(cur_device_Mode);
-                    ReflectUtil.invokeSet_brightness_level(cur_device_Mode);
+                return true;
+            } else if (id == R.id.rl_horizontal_correct) {
+            } else if (id == R.id.rl_vertical_correct) {
+            } else if (id == R.id.rl_device_mode2) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
+                Log.d(TAG, "向左切换设备模式");
+                cur_device_Mode--;
+                if (cur_device_Mode < 0) {
+                    cur_device_Mode = 2;
+                }
+                updateText(cur_device_Mode);
+                ReflectUtil.invokeSet_brightness_level(cur_device_Mode);
 //                    break;
-                    return true;
+                return true;
             }
 
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            switch (v.getId()) {
-                case R.id.rl_project_mode:
-                    Log.d(TAG, "向右切换安装模式");
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
-                    old_project_mode = cur_project_mode;
-                    if (cur_project_mode == project_name.size() - 1)
-                        cur_project_mode = 0;
-                    else
-                        cur_project_mode++;
+            int id = v.getId();
+            if (id == R.id.rl_project_mode) {
+                Log.d(TAG, "向右切换安装模式");
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
+                old_project_mode = cur_project_mode;
+                if (cur_project_mode == project_name.size() - 1)
+                    cur_project_mode = 0;
+                else
+                    cur_project_mode++;
 
-                    updateProjectMode();
+                updateProjectMode();
 //                    break;
-                    return true;
-                case R.id.rl_digital_zoom:
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
+                return true;
+            } else if (id == R.id.rl_digital_zoom) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
 
-                    if (All >= ZOOM_MAX)
-                        break;
+                if (All >= ZOOM_MAX)
+                    return false;
 
-                    All++;
-                    set_screen_zoom(All, All, All, All);
-                    updateZoomView();
+                All++;
+                set_screen_zoom(All, All, All, All);
+                updateZoomView();
 //                    break;
-                    return true;
-                case R.id.rl_screen_zoom:
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
-                    zoom_scale++;
-                    if(zoom_scale>2)
-                        zoom_scale = 0;
-                    if (!SystemProperties.get("persist.sys.camok","0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto",false))
-                        set_screen_zoom(zoom_value,zoom_value,zoom_value,zoom_value,zoom_scale);
-                    else
-                        updateScaleZoom(zoom_scale);
-                    KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
-                    updateSzoomTv();
+                return true;
+            } else if (id == R.id.rl_screen_zoom) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
+                zoom_scale++;
+                if (zoom_scale > 2)
+                    zoom_scale = 0;
+                if (!SystemProperties.get("persist.sys.camok", "0").equals("1") || SystemProperties.getBoolean("persist.sys.tpryauto", false))
+                    set_screen_zoom(zoom_value, zoom_value, zoom_value, zoom_value, zoom_scale);
+                else
+                    updateScaleZoom(zoom_scale);
+//                    KeystoneUtils.writeGlobalSettings(this,KeystoneUtils.ZOOM_SCALE,zoom_scale);
+                KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE, zoom_scale);
+                updateSzoomTv();
 //                    break;
-                    return true;
-                case R.id.rl_horizontal_correct:
-                    break;
-                case R.id.rl_vertical_correct:
-                    break;
-                case R.id.rl_device_mode2:
-                    if (event.getAction() != KeyEvent.ACTION_DOWN)
-                        break;
-                    Log.d(TAG, "向右切换设备模式");
-                    cur_device_Mode++;
-                    if (cur_device_Mode > 2) {
-                        cur_device_Mode = 0;
-                    }
-                    updateText(cur_device_Mode);
-                    ReflectUtil.invokeSet_brightness_level(cur_device_Mode);
+                return true;
+            } else if (id == R.id.rl_horizontal_correct) {
+            } else if (id == R.id.rl_vertical_correct) {
+            } else if (id == R.id.rl_device_mode2) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN)
+                    return false;
+                Log.d(TAG, "向右切换设备模式");
+                cur_device_Mode++;
+                if (cur_device_Mode > 2) {
+                    cur_device_Mode = 0;
+                }
+                updateText(cur_device_Mode);
+                ReflectUtil.invokeSet_brightness_level(cur_device_Mode);
 //                    break;
-                    return true;
+                return true;
             }
         }
 
@@ -726,7 +704,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
 
 
     public void set_screen_zoom(int l, int t, int r, int b) {
-        KeystoneUtils.writeGlobalSettings(this, KeystoneUtils.ZOOM_VALUE, l);
+//        KeystoneUtils.writeGlobalSettings(this, KeystoneUtils.ZOOM_VALUE, l);
+        KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_VALUE,l);
         l = max_value - l;
         t = max_value - t;
         r = max_value - r;
@@ -777,8 +756,10 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         DecimalFormat df = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.CHINA));
         float a = Float.parseFloat(df.format((max_value - zoom * 2) * 0.01).replace(",", "."));
         Log.d("hzj", "float  a =" + a);
-        int old_ratio = KeystoneUtils.readGlobalSettings(this, "zoom_scale_old", 0);
-        int ratio = KeystoneUtils.readGlobalSettings(this, "zoom_scale", 0);
+//        int old_ratio = KeystoneUtils.readGlobalSettings(this, "zoom_scale_old", 0);
+        int old_ratio = KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE_OLD,0);
+//        int ratio = KeystoneUtils.readGlobalSettings(this, "zoom_scale", 0);
+        int ratio = KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE,0);
         int[] tpData = scUtils.getpxRatioxy(px4, py4, old_ratio, ratio, a, KeystoneUtils.lcd_w, KeystoneUtils.lcd_h);
         if (tpData != null && tpData[8] == 1) {
             KeystoneUtils.optKeystoneFun(tpData);
@@ -924,7 +905,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
             @Override
             public void onClick(View v) {
                 KeystoneUtils.resetKeystone();
-                KeystoneUtils.writeGlobalSettings(getApplicationContext(), KeystoneUtils.ZOOM_VALUE, 0);
+//                KeystoneUtils.writeGlobalSettings(getApplicationContext(), KeystoneUtils.ZOOM_VALUE, 0);
+                KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_VALUE,0);
                 All = 0;
                 updateZoomView();
                 dialoge.dismiss();
@@ -1020,8 +1002,10 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         py4[3] =Integer.parseInt(df.format((rb_xy[1] * KeystoneUtils.lcd_h)/1000));
         LogUtils.d("px4 = "+ Arrays.toString(px4) +"  py4 = "+ Arrays.toString(py4));
         DecimalFormat df = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.CHINA));
-        float a = Float.parseFloat(df.format((100- KeystoneUtils.readGlobalSettings(this,"zoom_value",0)*2)*0.01).replace(",","."));
-        int oldScale = KeystoneUtils.readGlobalSettings(this,"zoom_scale_old",0);
+//        float a = Float.parseFloat(df.format((100- KeystoneUtils.readGlobalSettings(this,"zoom_value",0)*2)*0.01).replace(",","."));
+        float a = Float.parseFloat(df.format((100- KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_VALUE,0)*2)*0.01).replace(",","."));
+//        int oldScale = KeystoneUtils.readGlobalSettings(this,"zoom_scale_old",0);
+        int oldScale = KeystoneUtils.readSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE_OLD,0);
         Log.d("hzj","a="+a+" oldScale="+oldScale+" scale="+scale);
         int[] tpData = scUtils.getpxRatioxy(px4, py4, oldScale,
                 scale, a, KeystoneUtils.lcd_w, KeystoneUtils.lcd_h);

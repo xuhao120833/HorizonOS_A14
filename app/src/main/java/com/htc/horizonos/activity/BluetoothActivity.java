@@ -114,20 +114,18 @@ public class BluetoothActivity extends BaseActivity implements BluetoothCallBcak
         });
     }
 
-    private void initData(){
-        if (bluetoothAdapter.isEnabled()){
+    private void initData() {
+        if (bluetoothAdapter.isEnabled()) {
             bluetoothBinding.bluetoothSwitch.setChecked(true);
             scanList.clear();
-            if (foundAdapter!=null)
+            if (foundAdapter != null)
                 foundAdapter.notifyDataSetChanged();
-
-            bluetoothAdapter.setScanMode(
-                    BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE, 0);
+            bluetoothAdapter.setScanMode(BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE);
             handler.removeCallbacks(discoveryRunnable);
-            handler.postDelayed(discoveryRunnable,3000);//蓝牙延迟搜索，不然蓝牙音箱的回链不上
+            handler.postDelayed(discoveryRunnable, 3000);//蓝牙延迟搜索，不然蓝牙音箱的回链不上
             updatePairList();
             updateView(true);
-        }else {
+        } else {
             handler.removeCallbacks(discoveryRunnable);
             bluetoothBinding.bluetoothSwitch.setChecked(false);
             updateView(false);
@@ -572,20 +570,16 @@ public class BluetoothActivity extends BaseActivity implements BluetoothCallBcak
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.rl_bluetooth_switch:
-            case R.id.bluetooth_switch:
-                bluetoothBinding.bluetoothSwitch.setChecked(!bluetoothBinding.bluetoothSwitch.isChecked());
-                break;
-            case R.id.rl_search_ble:
-                if (!bluetoothAdapter.isDiscovering()) {
-                    scanList.clear();
-                    bluetoothAdapter.startDiscovery();
-                    updatePairList();
-                    searchAnim(true);
-                }
-                break;
-
+        int id = v.getId();
+        if (id == R.id.rl_bluetooth_switch || id == R.id.bluetooth_switch) {
+            bluetoothBinding.bluetoothSwitch.setChecked(!bluetoothBinding.bluetoothSwitch.isChecked());
+        } else if (id == R.id.rl_search_ble) {
+            if (!bluetoothAdapter.isDiscovering()) {
+                scanList.clear();
+                bluetoothAdapter.startDiscovery();
+                updatePairList();
+                searchAnim(true);
+            }
         }
     }
 

@@ -68,7 +68,8 @@ public class InitAngleDialog extends BaseDialog implements View.OnClickListener 
             projectActivity.setAuto();
         }
         KeystoneUtils.resetKeystone();
-        KeystoneUtils.writeGlobalSettings(getContext(), KeystoneUtils.ZOOM_VALUE, 0);
+//        KeystoneUtils.writeGlobalSettings(getContext(), KeystoneUtils.ZOOM_VALUE, 0);
+        KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_VALUE,0);
         projectActivity.All = 0;
         projectActivity.updateZoomView();
     }
@@ -126,10 +127,8 @@ public class InitAngleDialog extends BaseDialog implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.start_init_angle:
-                initCorrectAngle();
-                break;
+        if (v.getId() == R.id.start_init_angle) {
+            initCorrectAngle();
         }
     }
 

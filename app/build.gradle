@@ -2,13 +2,14 @@ apply plugin: 'com.android.application'
 
 ext.build_number = "debug";
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    namespace 'com.htc.horizonos'
+    compileSdkVersion 34
+    buildToolsVersion "34.0.0"
 
     defaultConfig {
         applicationId "com.htc.horizonos"
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode releaseCode()
         versionName getVersionNames()
 
@@ -41,17 +42,17 @@ android {
 
     compileOptions {
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
 
     }
     ndkVersion '21.0.6113669'
 
     buildTypes {
         release {
-            minifyEnabled false  //混淆打开
-           // zipAlignEnabled true  //优化代码
-            //shrinkResources true  //优化资源
+            minifyEnabled  false  //true混淆打开
+            zipAlignEnabled true  //优化代码
+            shrinkResources false  //优化资源
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -62,7 +63,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 // 显示app名称+当前版本号
-                def fileName = "HorizonOS_QZ-V${getVersionNames()}"
+                def fileName = "HorizonOS_726_QZ-V${getVersionNames()}"
                 // 如果有渠道，显示渠道名""
                 if (variant.flavorName!=""){
                     fileName = fileName + "-${variant.flavorName}"
@@ -83,21 +84,21 @@ android {
 }
 
 static def getVersionNames() {
-    return "1.0.0"
+    return "1.0.01"
 }
 
 static def releaseTime() {
     return new Date().format("yyMMddHH", TimeZone.getTimeZone("GMT+8"));
 }
 static def releaseCode() {
-    return Integer.parseInt(releaseTime());
+    return Integer.parseInt("3"+releaseTime());
 }
 
 dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation files('libs/softwinner_828.jar')
+    implementation files('libs/softwinner_1017.jar')
     implementation 'com.google.android.material:material:1.3.0'
-    compileOnly files('libs/classes.jar')
+    compileOnly files('libs/classes_726_a14.jar')
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.12'
@@ -106,11 +107,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-//    implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
-    compile files('libs/Baidu_Mtj_android_4.0.10.9.jar')
+    implementation files('libs/Baidu_Mtj_android_4.0.10.9.jar')
     implementation 'androidx.cardview:cardview:1.0.0'
-    // https://mvnrepository.com/artifact/org.apache.directory.studio/org.apache.commons.codec
-    compile group: 'org.apache.directory.studio', name: 'org.apache.commons.codec', version: '1.8'
+    implementation group: 'org.apache.directory.studio', name: 'org.apache.commons.codec', version: '1.8'
     implementation 'io.github.youth5201314:banner:2.2.2'
     implementation 'com.airbnb.android:lottie:5.2.0'
 }

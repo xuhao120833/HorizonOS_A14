@@ -3,7 +3,9 @@ package com.htc.horizonos.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.htc.horizonos.R;
@@ -39,8 +41,19 @@ public class WifiChanagerReceiver extends BroadcastReceiver {
 				//请求的连接已经建立或者丢失
 				mcallback.refreshWifi();
 			}else if(action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
+				Parcelable parcelableExtra = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+				if ( null != parcelableExtra) {
+					NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
+					NetworkInfo.State state = networkInfo.getState();
 
-				mcallback.wifiStatueChange(0);
+					if (state==NetworkInfo.State.CONNECTED){
+						mcallback.wifiStatueChange(2);
+					}else if (state==NetworkInfo.State.DISCONNECTED){
+						mcallback.wifiStatueChange(0);
+					}else if (state==NetworkInfo.State.CONNECTING){
+						mcallback.wifiStatueChange(1);
+					}
+				}
 			}else if(action.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)){
 				//请求连接的状态发生改变，（已经加入到一个接入点）
 				int supl_error=intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, -1);

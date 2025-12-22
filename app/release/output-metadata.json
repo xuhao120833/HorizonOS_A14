@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 3,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
@@ -10,11 +10,11 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 25021917,
-      "versionName": "1.0.0",
-      "enabled": true,
-      "outputFile": "HorizonOS_QZ-V1.0.0-25021917-release.apk"
+      "attributes": [],
+      "versionCode": 325122215,
+      "versionName": "1.0.01",
+      "outputFile": "HorizonOS_726_QZ-V1.0.01-25122215-release.apk"
     }
-  ]
+  ],
+  "elementType": "File"
 }

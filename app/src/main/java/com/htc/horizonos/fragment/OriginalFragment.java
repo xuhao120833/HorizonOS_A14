@@ -241,97 +241,90 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         String appname = null;
         String action = null;
         MainActivity activity = (MainActivity) getActivity();
-        switch (v.getId()) {
-            case R.id.rl_screen_cast:
-                try {
-                    String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list1");
-                    if (listaction != null && !listaction.equals("")) { //读取配置
-                        activity.goAction(listaction);
-                    } else {// 默认跳转
-                        AppUtils.startNewApp(getActivity(), "com.ecloud.eshare.server");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        int id = v.getId();
+        if (id == R.id.rl_screen_cast) {
+            try {
+                String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list1");
+                if (listaction != null && !listaction.equals("")) { //读取配置
+                    activity.goAction(listaction);
+                } else {// 默认跳转
+                    AppUtils.startNewApp(getActivity(), "com.ecloud.eshare.server");
                 }
-                break;
-            case R.id.rl_signal_source:
-                try {
-                    String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list2");
-                    if (listaction != null && !listaction.equals("")) { //读取配置
-                        activity.goAction(listaction);
-                    } else {// 默认跳转
-                        if (Utils.sourceList.length > 1) { //支持多信源
-                            showSourceDialog();
-                        } else {
-                            // 默认跳转
-                            startSource("HDMI1");
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.rl_file_explorer:
-                try {
-                    AppUtils.startNewApp(getActivity(), "com.hisilicon.explorer");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.rl_app_store:
-                try {
-                    AppUtils.startNewApp(getActivity(), "com.htc.storeos");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.netflix:
-                Log.d("xuhao", "打开奈飞");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon1");
-                action = DBUtils.getInstance(activity).getActionByTag("icon1");
-                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
-                    if (!AppUtils.startNewApp(activity, action)) {
-                        Log.d("xuhao", "打开奈飞 第一个坑位不为空 " + appname + "2" + action + "3");
-                        activity.appName = appname;
-                        activity.requestChannelData();
-                    }
-                } else if (!AppUtils.startNewApp(activity, "com.netflix.mediaclient")) {
-                    if (!AppUtils.startNewApp(activity, "com.netflix.ninja")) {
-                        Log.d("xuhao", "打开奈飞 第一个坑位为空");
-                        activity.appName = "Netflix";
-                        activity.requestChannelData();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.rl_signal_source) {
+            try {
+                String listaction = DBUtils.getInstance(getActivity()).getActionFromListModules("list2");
+                if (listaction != null && !listaction.equals("")) { //读取配置
+                    activity.goAction(listaction);
+                } else {// 默认跳转
+                    if (Utils.sourceList.length > 1) { //支持多信源
+                        showSourceDialog();
+                    } else {
+                        // 默认跳转
+                        startSource("HDMI1");
                     }
                 }
-                break;
-            case R.id.youtube:
-                Log.d("xuhao", "打开YOUtube");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon2");
-                action = DBUtils.getInstance(activity).getActionByTag("icon2");
-                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
-                    if (!AppUtils.startNewApp(activity, action)) {
-                        activity.appName = appname;
-                        activity.requestChannelData();
-                    }
-                } else if (!AppUtils.startNewApp(activity, "com.google.android.youtube.tv")) {
-                    activity.appName = "Youtube";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.rl_file_explorer) {
+            try {
+                AppUtils.startNewApp(getActivity(), "com.hisilicon.explorer");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.rl_app_store) {
+            try {
+                AppUtils.startNewApp(getActivity(), "com.htc.storeos");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.netflix) {
+            Log.d("xuhao", "打开奈飞");
+            appname = DBUtils.getInstance(activity).getAppNameByTag("icon1");
+            action = DBUtils.getInstance(activity).getActionByTag("icon1");
+            if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                if (!AppUtils.startNewApp(activity, action)) {
+                    Log.d("xuhao", "打开奈飞 第一个坑位不为空 " + appname + "2" + action + "3");
+                    activity.appName = appname;
                     activity.requestChannelData();
                 }
-                break;
-            case R.id.disney:
-                Log.d("xuhao", "打开迪士尼");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon3");
-                action = DBUtils.getInstance(activity).getActionByTag("icon3");
-                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
-                    if (!AppUtils.startNewApp(activity, action)) {
-                        activity.appName = appname;
-                        activity.requestChannelData();
-                    }
-                } else if (!AppUtils.startNewApp(activity, "com.disney.disneyplus")) {
-                    activity.appName = "Disney+";
+            } else if (!AppUtils.startNewApp(activity, "com.netflix.mediaclient")) {
+                if (!AppUtils.startNewApp(activity, "com.netflix.ninja")) {
+                    Log.d("xuhao", "打开奈飞 第一个坑位为空");
+                    activity.appName = "Netflix";
                     activity.requestChannelData();
                 }
-                break;
-//            case R.id.max:
+            }
+        } else if (id == R.id.youtube) {
+            Log.d("xuhao", "打开YOUtube");
+            appname = DBUtils.getInstance(activity).getAppNameByTag("icon2");
+            action = DBUtils.getInstance(activity).getActionByTag("icon2");
+            if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                if (!AppUtils.startNewApp(activity, action)) {
+                    activity.appName = appname;
+                    activity.requestChannelData();
+                }
+            } else if (!AppUtils.startNewApp(activity, "com.google.android.youtube.tv")) {
+                activity.appName = "Youtube";
+                activity.requestChannelData();
+            }
+        } else if (id == R.id.disney) {
+            Log.d("xuhao", "打开迪士尼");
+            appname = DBUtils.getInstance(activity).getAppNameByTag("icon3");
+            action = DBUtils.getInstance(activity).getActionByTag("icon3");
+            if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                if (!AppUtils.startNewApp(activity, action)) {
+                    activity.appName = appname;
+                    activity.requestChannelData();
+                }
+            } else if (!AppUtils.startNewApp(activity, "com.disney.disneyplus")) {
+                activity.appName = "Disney+";
+                activity.requestChannelData();
+            }
+            //            case R.id.max:
 //                Log.d("xuhao", "打开max");
 //                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
 //                action = DBUtils.getInstance(activity).getActionByTag("icon4");
@@ -345,35 +338,33 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 //                    activity.requestChannelData();
 //                }
 //                break;
-            case R.id.prime_video:
-                Log.d("xuhao", "打开prime_video");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
-                action = DBUtils.getInstance(activity).getActionByTag("icon4");
-                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
-                    if (!AppUtils.startNewApp(activity, action)) {
-                        activity.appName = appname;
-                        activity.requestChannelData();
-                    }
-                } else if (!AppUtils.startNewApp(activity, "com.amazon.avod.thirdpartyclient")) {
-                    activity.appName = "prime video";
+        } else if (id == R.id.prime_video) {
+            Log.d("xuhao", "打开prime_video");
+            appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
+            action = DBUtils.getInstance(activity).getActionByTag("icon4");
+            if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                if (!AppUtils.startNewApp(activity, action)) {
+                    activity.appName = appname;
                     activity.requestChannelData();
                 }
-                break;
-            case R.id.hulu:
-                Log.d("xuhao", "打开hulu");
-                appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
-                action = DBUtils.getInstance(activity).getActionByTag("icon5");
-                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
-                    if (!AppUtils.startNewApp(activity, action)) {
-                        activity.appName = appname;
-                        activity.requestChannelData();
-                    }
-                } else if (!AppUtils.startNewApp(activity, "com.hulu.plus")) {
-                    Log.d("xuhao", "打开hulu失败");
-                    activity.appName = "Hulu";
+            } else if (!AppUtils.startNewApp(activity, "com.amazon.avod.thirdpartyclient")) {
+                activity.appName = "prime video";
+                activity.requestChannelData();
+            }
+        } else if (id == R.id.hulu) {
+            Log.d("xuhao", "打开hulu");
+            appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
+            action = DBUtils.getInstance(activity).getActionByTag("icon5");
+            if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
+                if (!AppUtils.startNewApp(activity, action)) {
+                    activity.appName = appname;
                     activity.requestChannelData();
                 }
-                break;
+            } else if (!AppUtils.startNewApp(activity, "com.hulu.plus")) {
+                Log.d("xuhao", "打开hulu失败");
+                activity.appName = "Hulu";
+                activity.requestChannelData();
+            }
         }
     }
 
