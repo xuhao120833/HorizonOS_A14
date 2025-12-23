@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 /**
  * @author 作者：zgr
@@ -29,20 +29,20 @@ public class BondStateReceiver extends BroadcastReceiver {
 			BluetoothDevice device = intent
 					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 			String name = device.getName();
-			Log.d(TAG, "device name: " + name);
+			LogUtils.d(TAG, "device name: " + name);
 			int state = intent
 					.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1);
 			switch (state) {
 			case BluetoothDevice.BOND_NONE://取消配对/未配对
-				Log.d(TAG, "BOND_NONE 删除配对  配对失败");
+				LogUtils.d(TAG, "BOND_NONE 删除配对  配对失败");
 				mcallback.bondState(3, device);
 				break;
 			case BluetoothDevice.BOND_BONDING://正在配对
-				Log.d(TAG, "BOND_BONDING 正在配对");
+				LogUtils.d(TAG, "BOND_BONDING 正在配对");
 				mcallback.bondState(2, device);
 				break;
 			case BluetoothDevice.BOND_BONDED://配对结束
-				Log.d(TAG, "BOND_BONDED 配对成功");
+				LogUtils.d(TAG, "BOND_BONDED 配对成功");
 				mcallback.bondState(1, device);
 				break;
 			}

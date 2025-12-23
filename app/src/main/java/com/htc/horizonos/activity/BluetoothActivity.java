@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -148,7 +148,7 @@ public class BluetoothActivity extends BaseActivity implements BluetoothCallBcak
                         .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // 搜索到的不是已经绑定的蓝牙设备
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED && device.getName()!=null) {
-                    Log.i("hzj", "device "+device.getName());
+                    LogUtils.i("hzj", "device "+device.getName());
                     if (!scanList.contains(device) && !device.getName().equals("")) {
 //						if(device!=null&&!isHtcRemote(device)){
                         scanList.add(device);
@@ -192,7 +192,7 @@ public class BluetoothActivity extends BaseActivity implements BluetoothCallBcak
                         connectDeviceFromA2DP(device);
                     }else if(device.getBluetoothClass().getMajorDeviceClass() == BluetoothClass.Device.Major.PERIPHERAL){
                         if(isKeyboardDevice(device.getUuids())){
-                            Log.i("zouguanrong", "-----connectKeyboard----");
+                            LogUtils.i("zouguanrong", "-----connectKeyboard----");
                             connectKeyboard(device);
                         }else{
                             connectDeviceFromA2DP(device);
@@ -378,7 +378,7 @@ public class BluetoothActivity extends BaseActivity implements BluetoothCallBcak
             // 得到蓝牙状态的方法
             Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
             for (BluetoothDevice device : devices) {
-                //Log.d("hzj","pair device "+device.getName());
+                //LogUtils.d("hzj","pair device "+device.getName());
                 if(device!=null){
                     list.add(device);
                 }

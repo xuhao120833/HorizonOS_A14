@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -227,7 +227,7 @@ public class WifiActivity extends BaseActivity implements WifiEnabledReceiver.Wi
         if (wifiList == null)
             return;
         boolean isAdd;
-        Log.d("xuhao", "wifiList.size() " + wifiList.size());
+        LogUtils.d("xuhao", "wifiList.size() " + wifiList.size());
         if (wifiList.size() > 0) {
             for (int i = 0; i < wifiList.size(); i++) {
                 isAdd = true;
@@ -340,7 +340,7 @@ public class WifiActivity extends BaseActivity implements WifiEnabledReceiver.Wi
 
     @Override
     public void wifiStatueChange(int state) {
-        Log.d("state", String.valueOf(state));
+        LogUtils.d("state", String.valueOf(state));
         if (state == 2 && connectingFlag) {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -361,7 +361,7 @@ public class WifiActivity extends BaseActivity implements WifiEnabledReceiver.Wi
 
     @Override
     public void openWifi() {
-        Log.d("hzj", "openWifi()");
+        LogUtils.d("hzj", "openWifi()");
         updateViewShow(true);
     }
 

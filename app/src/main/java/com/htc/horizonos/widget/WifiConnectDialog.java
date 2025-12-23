@@ -21,7 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -86,7 +86,7 @@ public class WifiConnectDialog extends BaseDialog implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Log.d("hzj", "onclick");
+        LogUtils.d("hzj", "onclick");
         int id = v.getId();
         if (id == R.id.enter) {
             if (wifiConnectDialogBinding.etPassword.getText().toString().isEmpty() ||
@@ -257,7 +257,7 @@ public class WifiConnectDialog extends BaseDialog implements View.OnClickListene
                             break;
                     }
 
-                    Log.d("WIFI", "state " + networkInfo.getState());
+                    LogUtils.d("WIFI", "state " + networkInfo.getState());
                 }
 
             }

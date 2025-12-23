@@ -5,7 +5,7 @@ package com.htc.horizonos.settings.utils;
  * 类说明
  */
 
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -44,7 +44,7 @@ public class SignatureUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TAG,"sign:"+sign);
+        LogUtils.d(TAG,"sign:"+sign);
         return sign;
     }
     
@@ -71,7 +71,7 @@ public class SignatureUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TAG,"sign:"+sign);
+        LogUtils.d(TAG,"sign:"+sign);
         return sign;
     }
     

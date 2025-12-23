@@ -1,6 +1,6 @@
 package com.htc.horizonos.widget;
 
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.widget.GridView;
 
@@ -24,7 +24,7 @@ public class GridViewItemOrderUtil {
                                        int columnNum, int position, int keyCode, KeyEvent event) {
 		boolean isLast = isAnyLineLast(size, columnNum, position);
 		boolean isFirst = isAnyLineFirst(size, columnNum, position);
-//		Log.i("tag", event.getAction() + "onkeyLis执行�?" + keyCode);
+//		LogUtils.i("tag", event.getAction() + "onkeyLis执行�?" + keyCode);
 
 		
 		if (isLast && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
@@ -170,7 +170,7 @@ public class GridViewItemOrderUtil {
 	public  static boolean isAnyLineLast(int size, int columnNum, int position) {
 		// 求出�?共有多少�?
 		int rawNum = size / columnNum + 1;
-//		Log.i("tag", "�?共有多少�?" + rawNum);
+//		LogUtils.i("tag", "�?共有多少�?" + rawNum);
 		for (int i = 1; i <= rawNum; i++) {
 			if (position == columnNum * i - 1) {
 				// 如果当前位置是每�?行的�?后一列，则返回true
@@ -195,7 +195,7 @@ public class GridViewItemOrderUtil {
 	public static boolean isAnyLineFirst(int size, int columnNum, int position) {
 		// 求出�?共有多少�?
 		int rawNum = size / columnNum + 1;
-		Log.i("tag", "�?共有多少�?" + rawNum);
+		LogUtils.i("tag", "�?共有多少�?" + rawNum);
 		// 并不�?要判断第�?行，直接从第二行�?�?
 		for (int i = 2; i <= rawNum; i++) {
 			if (position == columnNum * i - columnNum) {

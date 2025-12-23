@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +91,7 @@ public class NewFragment extends Fragment {
 
                         if (dy > 0) {
                             // RecyclerView 向下滚动
-                            Log.d(TAG, "RecyclerView is scrolling down");
+                            LogUtils.d(TAG, "RecyclerView is scrolling down");
 //                            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                                @Override
 //                                public void onGlobalLayout() {
@@ -103,7 +103,7 @@ public class NewFragment extends Fragment {
 //                            });
                         } else if (dy < 0) {
                             // RecyclerView 向上滚动
-                            Log.d(TAG, "RecyclerView is scrolling up");
+                            LogUtils.d(TAG, "RecyclerView is scrolling up");
                         }
                     }
 
@@ -113,13 +113,13 @@ public class NewFragment extends Fragment {
                         switch (newState) {
                             case RecyclerView.SCROLL_STATE_IDLE:
                                 judageFocus();
-                                Log.d(TAG, "RecyclerView is not scrolling");
+                                LogUtils.d(TAG, "RecyclerView is not scrolling");
                                 break;
                             case RecyclerView.SCROLL_STATE_DRAGGING:
-                                Log.d(TAG, "RecyclerView is actively scrolling");
+                                LogUtils.d(TAG, "RecyclerView is actively scrolling");
                                 break;
                             case RecyclerView.SCROLL_STATE_SETTLING:
-                                Log.d(TAG, "RecyclerView is settling after a fling");
+                                LogUtils.d(TAG, "RecyclerView is settling after a fling");
                                 break;
                         }
                     }
@@ -132,11 +132,11 @@ public class NewFragment extends Fragment {
 //    private void setInitialFocus() {
 //        // 确保 RecyclerView 已经完成布局
 //        RecyclerView.LayoutManager layoutManager = binding.appsRv.getLayoutManager();
-//        Log.d(TAG, " setInitialFocus layoutManager" + layoutManager);
+//        LogUtils.d(TAG, " setInitialFocus layoutManager" + layoutManager);
 //        if (layoutManager != null && layoutManager.getChildCount() > 1) {
 //            // 获取倒数第二个可见的 item
 //            View secondLastVisibleItem = layoutManager.getChildAt(layoutManager.getChildCount() - 2);
-//            Log.d(TAG, " setInitialFocus secondLastVisibleItem"
+//            LogUtils.d(TAG, " setInitialFocus secondLastVisibleItem"
 //                    + secondLastVisibleItem + " " + layoutManager.getPosition(secondLastVisibleItem));
 //            if (secondLastVisibleItem != null && layoutManager.getPosition(secondLastVisibleItem) > 14) {
 //                secondLastVisibleItem.requestFocus(); // 设置焦点
@@ -202,7 +202,7 @@ public class NewFragment extends Fragment {
 //    @Override
 //    public void onHiddenChanged(boolean hidden) {
 //        super.onHiddenChanged(hidden);
-//        Log.d(TAG," 执行onHiddenChanged "+hidden);
+//        LogUtils.d(TAG," 执行onHiddenChanged "+hidden);
 //        if (!hidden) {
 //            // Fragment 切换到显示状态时的操作
 //
@@ -212,7 +212,7 @@ public class NewFragment extends Fragment {
     private void init() {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 5);
         binding.appsRv.setLayoutManager(layoutManager);
-        Log.d(TAG, "binding.appsRv.addItemDecoration " + this);
+        LogUtils.d(TAG, "binding.appsRv.addItemDecoration " + this);
         binding.appsRv.addItemDecoration(new SpacesItemDecoration2(SpacesItemDecoration2.pxAdapter(22.8F), SpacesItemDecoration2.pxAdapter(22.6F),
                 SpacesItemDecoration2.pxAdapter(22.5F), 0, SpacesItemDecoration2.pxAdapter(60F)));
         initData();

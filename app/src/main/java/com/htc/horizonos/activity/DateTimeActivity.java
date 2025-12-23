@@ -15,7 +15,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.format.DateFormat;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -123,7 +123,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         Utils.list = getZones();
         TimeZone tz = Calendar.getInstance().getTimeZone();
         String timeZoneId = tz.getID();
-        Log.d(TAG, " getTimeZoneText timeZoneId" + timeZoneId);
+        LogUtils.d(TAG, " getTimeZoneText timeZoneId" + timeZoneId);
         boolean daylight = tz.inDaylightTime(new Date());
         Locale locale = Locale.getDefault();
         // 根据语言环境获取显示名称
@@ -139,10 +139,10 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
     }
 
     private String searchDisplayName(ArrayList<HashMap> list,String timeZoneId) {
-        Log.d(TAG," TimeZone.getDefault().getID() "+TimeZone.getDefault().getID());
+        LogUtils.d(TAG," TimeZone.getDefault().getID() "+TimeZone.getDefault().getID());
         for (int i = 0; i < list.size(); i++) {
             HashMap map = list.get(i);
-            Log.d(TAG," map.get(Contants.KEY_ID) "+map.get(Contants.KEY_ID));
+            LogUtils.d(TAG," map.get(Contants.KEY_ID) "+map.get(Contants.KEY_ID));
             if (map.get(Contants.KEY_ID).equals(timeZoneId)) {
                 return map.get(Contants.KEY_DISPLAYNAME).toString();
             }
@@ -285,7 +285,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         np_year.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.i("NumberPicker", "oldVal-----" + oldVal + "-----newVal-----" + newVal);
+                LogUtils.i("NumberPicker", "oldVal-----" + oldVal + "-----newVal-----" + newVal);
                 //平年闰年判断
                 if (newVal % 4 == 0) {
                     maxDay = 29;
@@ -301,7 +301,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         np_month.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.i("NumberPicker", "oldVal-----" + oldVal + "-----newVal-----" + newVal);
+                LogUtils.i("NumberPicker", "oldVal-----" + oldVal + "-----newVal-----" + newVal);
                 //月份判断
                 switch (newVal) {
                     case 2:
@@ -510,7 +510,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
                     String id = xrp.getAttributeValue(0);
                     String displayName = xrp.nextText();
                     addItem(myData, id, displayName, date);
-//                    Log.d(TAG," getZones "+id+" "+displayName);
+//                    LogUtils.d(TAG," getZones "+id+" "+displayName);
                 }
                 while (xrp.getEventType() != XmlResourceParser.END_TAG) {
                     xrp.next();
@@ -559,7 +559,7 @@ public class DateTimeActivity extends BaseActivity implements View.OnKeyListener
         map.put(Contants.KEY_OFFSET, offset);
 
 //        if (id.equals(TimeZone.getDefault().getID())) {
-//            Log.d(TAG," addItem id "+id);
+//            LogUtils.d(TAG," addItem id "+id);
 //            mDefault = myData.size()-1;
 //        }
 

@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -57,7 +57,7 @@ public class PowerActivity extends AppCompatActivity implements View.OnClickList
                 }
             }else if (message.what == 201){
                 pm.reboot(null);
-                Log.d(Tag,"reboot");
+                LogUtils.d(Tag,"reboot");
             }
             return false;
         }

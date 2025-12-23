@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.View;
 
 import com.htc.horizonos.databinding.ActivityBluetoothIncomingFileConfirmBinding;
@@ -25,7 +25,7 @@ public class BluetoothIncomingFileConfirmActivity extends BaseActivity implement
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (!BluetoothDevice.ACTION_INCOMINGFILE_CONFIRM_REQUEST.equals(intent.getAction())) {
-            Log.e(TAG, "Error: this activity may be started only with intent " +
+            LogUtils.e(TAG, "Error: this activity may be started only with intent " +
                     BluetoothDevice.ACTION_INCOMINGFILE_CONFIRM_REQUEST);
             finish();
             return;
@@ -52,7 +52,7 @@ public class BluetoothIncomingFileConfirmActivity extends BaseActivity implement
 
 //    @Override
 //    public void onClick(View v) {
-//        Log.d(TAG,"onclick");
+//        LogUtils.d(TAG,"onclick");
 //        switch (v.getId()){
 //            case R.id.accpet:
 //                onTransfer();

@@ -2,7 +2,7 @@ package com.htc.horizonos.adapter;
 
 import android.app.AlarmManager;
 import android.content.Context;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -72,7 +72,7 @@ public class TimezoneAdapter extends RecyclerView.Adapter<TimezoneAdapter.MyView
             @Override
             public void onClick(View v) {
                 String timezone = (String) map.get(Contants.KEY_ID);
-                Log.d(TAG, " 切換时区 " + timezone);
+                LogUtils.d(TAG, " 切換时区 " + timezone);
                 alarm.setTimeZone(timezone);
                 setCurrentPosition(i);
                 notifyDataSetChanged();

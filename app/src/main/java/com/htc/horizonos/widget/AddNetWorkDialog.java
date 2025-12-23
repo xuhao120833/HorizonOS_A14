@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -122,7 +122,7 @@ public class AddNetWorkDialog extends BaseDialog {
 			networkName_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				@Override
 				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-					Log.d("editor","actionId "+actionId);
+					LogUtils.d("editor","actionId "+actionId);
 					if (actionId==EditorInfo.IME_ACTION_NEXT || actionId==EditorInfo.IME_ACTION_DONE
 							||actionId==EditorInfo.IME_ACTION_SEND||actionId== EditorInfo.IME_ACTION_GO){
 						InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -150,7 +150,7 @@ public class AddNetWorkDialog extends BaseDialog {
 			password_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				@Override
 				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-					Log.d("editor","actionId "+actionId);
+					LogUtils.d("editor","actionId "+actionId);
 					if (actionId==EditorInfo.IME_ACTION_NEXT || actionId==EditorInfo.IME_ACTION_DONE
 							||actionId==EditorInfo.IME_ACTION_SEND||actionId== EditorInfo.IME_ACTION_GO){
 

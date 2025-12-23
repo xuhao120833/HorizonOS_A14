@@ -3,7 +3,8 @@ package com.htc.horizonos.activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,7 +121,7 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
 
     private void initData() {
         String pictureName = pqControl.getPictureModeName();
-        Log.d("hzj", "pictureName " + pictureName);
+        LogUtils.d("hzj", "pictureName " + pictureName);
         for (int i = 0; i < picture_mode_values.length; i++) {
             if (picture_mode_values[i].equals(pictureName)) {
                 curPosition = i;
@@ -261,9 +262,9 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
 
             updateSaturation(true);
         } else if (id == R.id.saturation_left) {
-            Log.d(TAG, "饱和度 向左");
+            LogUtils.d(TAG, "饱和度 向左");
             if (mCurSaturation == 1) {
-                Log.d(TAG, "饱和度 向左不执行");
+                LogUtils.d(TAG, "饱和度 向左不执行");
                 return;
             }
 
@@ -282,9 +283,9 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
 
             updateSaturation(true);
         } else if (id == R.id.rl_sharpness) {
-            Log.d(TAG, "锐度 向右");
+            LogUtils.d(TAG, "锐度 向右");
             if (mSharpness == 100) {
-                Log.d(TAG, "锐度 向右不执行");
+                LogUtils.d(TAG, "锐度 向右不执行");
                 return;
             }
 
@@ -303,9 +304,9 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
 
             updateSharpness(true);
         } else if (id == R.id.sharpness_right) {
-            Log.d(TAG, "锐度 向右");
+            LogUtils.d(TAG, "锐度 向右");
             if (mSharpness == 100) {
-                Log.d(TAG, "锐度 向右不执行");
+                LogUtils.d(TAG, "锐度 向右不执行");
                 return;
             }
 
@@ -391,9 +392,9 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                 return true;
 //                    break;
             } else if (id == R.id.rl_saturation) {
-                Log.d(TAG, "饱和度 向左");
+                LogUtils.d(TAG, "饱和度 向左");
                 if (mCurSaturation == 1) {
-                    Log.d(TAG, "饱和度 向左不执行");
+                    LogUtils.d(TAG, "饱和度 向左不执行");
                     return false;
                 }
 
@@ -475,9 +476,9 @@ public class PictureModeActivity extends BaseActivity implements View.OnKeyListe
                 return true;
 //                    break;
             } else if (id == R.id.rl_sharpness) {
-                Log.d(TAG, "锐度 向右");
+                LogUtils.d(TAG, "锐度 向右");
                 if (mSharpness == 100) {
-                    Log.d(TAG, "锐度 向右不执行");
+                    LogUtils.d(TAG, "锐度 向右不执行");
                     return false;
                 }
 

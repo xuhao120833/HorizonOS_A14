@@ -6,7 +6,7 @@ import android.os.storage.DiskInfo;
 import android.os.storage.StorageManager;
 import android.os.storage.VolumeInfo;
 import android.text.TextUtils;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -171,22 +171,22 @@ public class StorageUtils {
 			try {
 				String line = bufferedReader.readLine();
 				while (!TextUtils.isEmpty(line)) {
-					Log.i(TAG, "line:" + line);
+					LogUtils.i(TAG, "line:" + line);
 					list.add(line);
 					line = bufferedReader.readLine();
 				}
 			} catch (Exception e) {
-				Log.i(TAG, "read:" + e);
+				LogUtils.i(TAG, "read:" + e);
 			}
 
 			try {
 				if (bufferedReader != null)
 					bufferedReader.close();
 			} catch (Exception e) {
-				Log.i(TAG, "close:" + e);
+				LogUtils.i(TAG, "close:" + e);
 			}
 		} catch (Exception e) {
-			Log.i(TAG, "" + e);
+			LogUtils.i(TAG, "" + e);
 		}
 
 		return list;

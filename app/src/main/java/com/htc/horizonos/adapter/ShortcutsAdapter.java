@@ -2,7 +2,7 @@ package com.htc.horizonos.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +53,13 @@ public class ShortcutsAdapter extends RecyclerView.Adapter<ShortcutsAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-        Log.d(TAG, "Shortcuts short_list.size() "+short_list.size());
+        LogUtils.d(TAG, "Shortcuts short_list.size() "+short_list.size());
         if (i<short_list.size() && short_list.get(i).getAppname()!=null){
-            Log.d(TAG, "Shortcuts appName存在 ");
+            LogUtils.d(TAG, "Shortcuts appName存在 ");
             myViewHolder.icon.setBackground(short_list.get(i).getAppicon());
             myViewHolder.name.setText(short_list.get(i).getAppname());
         } else if (i<short_list.size()) {
-            Log.d(TAG, "Shortcuts appName为NULL ");
+            LogUtils.d(TAG, "Shortcuts appName为NULL ");
             String appName = DBUtils.getInstance(mContext).getFavoritesAppName(short_list.get(i).getPackageName());
             Drawable drawable = DBUtils.getInstance(mContext).getFavoritesIcon(short_list.get(i).getPackageName());
             if(appName!=null) {

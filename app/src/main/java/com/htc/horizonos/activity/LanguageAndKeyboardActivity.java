@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
@@ -85,7 +85,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void initData() {
         languageKeyboardBinding.keyboardTv.setText(getKeyBoardDefault());
-        Log.d(TAG, " initData默认输入法 " + getKeyBoardDefault());
+        LogUtils.d(TAG, " initData默认输入法 " + getKeyBoardDefault());
         Locale currentLocale = Locale.getDefault();
         // 获取当前语言的显示名称（本地化）
         String displayLanguage = currentLocale.getDisplayLanguage(currentLocale);
@@ -98,7 +98,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
                 super.onChange(selfChange);
                 // 当输入法设置变化时，更新当前输入法
                 String currentInputMethod = getKeyBoardDefault();
-                Log.d(TAG, " inputMethodObserver默认输入法 " + getKeyBoardDefault());
+                LogUtils.d(TAG, " inputMethodObserver默认输入法 " + getKeyBoardDefault());
                 languageKeyboardBinding.keyboardTv.setText(currentInputMethod);
             }
         };
@@ -171,7 +171,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
         int finalSize = 0;
         for (int i = 0; i < origSize; i++) {
             String s = locales[i];
-            Log.d(TAG, " buildLangListItem locales[i] " + locales[i] + " " + locales.length);
+            LogUtils.d(TAG, " buildLangListItem locales[i] " + locales[i] + " " + locales.length);
             String language = "";
             String country = "";
             Locale l = null;
@@ -195,7 +195,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
             } else {
                 if (preprocess[finalSize - 1].getLocale().getLanguage().equals(language)
                         && (language.equals("zh") || language.equals("en"))) {  //只有中文、英文区分具体的国家
-                    Log.d(TAG, " 语言列表 language " + language + " s " + s + " l.getDisplayLanguage(l)" + l.getDisplayLanguage(l));
+                    LogUtils.d(TAG, " 语言列表 language " + language + " s " + s + " l.getDisplayLanguage(l)" + l.getDisplayLanguage(l));
                     preprocess[finalSize - 1].setLabel(toTitleCase(getDisplayName(preprocess[finalSize - 1].getLocale())));
                     preprocess[finalSize++] = new Language(toTitleCase(getDisplayName(l)), l);
                 } else if (preprocess[finalSize - 1].getLocale().getLanguage().equals(language)) {
@@ -214,7 +214,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
         Language mLocales2[] = new Language[finalSize];
         for (int i = 0; i < finalSize; i++) {
             mLocales2[i] = preprocess[i];
-            Log.d(TAG, " 语言列表 getLabel " + mLocales2[i].getLabel());
+            LogUtils.d(TAG, " 语言列表 getLabel " + mLocales2[i].getLabel());
             //阿拉伯语
             if (mLocales2[i].getLabel().contains("[XB]")) {
                 mLocales2[i].setLabel("العربية  (XB)");
@@ -226,12 +226,12 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
         }
         Arrays.sort(mLocales2);
         for (int b = 0; b < mLocales2.length; b++) {
-            Log.d(TAG, " 语言列表 排序后 getLabel " + mLocales2[b].getLabel() + " " + mLocales2.length
+            LogUtils.d(TAG, " 语言列表 排序后 getLabel " + mLocales2[b].getLabel() + " " + mLocales2.length
                     +" "+mLocales2[b].getLocale().getLanguage()+" "+mLocales2[b].getLocale().getCountry());
         }
         // Arrays.sort(preprocess);
         mLocales = new ArrayList<>(Arrays.asList(mLocales2));
-        Log.d(TAG, " buildLangListItem 最后的列表长度 " + mLocales.size());
+        LogUtils.d(TAG, " buildLangListItem 最后的列表长度 " + mLocales.size());
     }
 
 //    最全的语言列表 覆盖204个国家
@@ -244,11 +244,11 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
 //        Arrays.sort(systemLocales, Comparator.comparing(Locale::getLanguage));
 //        List<Language> preprocess = new ArrayList<>();
 //        Set<String> processedLanguages = new HashSet<>();
-//        Log.d(TAG, "语言列表 systemLocales: " + systemLocales.length);
+//        LogUtils.d(TAG, "语言列表 systemLocales: " + systemLocales.length);
 //        for (Locale locale : systemLocales) {
 //            String languageCode = locale.getLanguage();
 //            String countryCode = locale.getCountry();
-//            Log.d(TAG, "语言列表 languageCode: " + languageCode);
+//            LogUtils.d(TAG, "语言列表 languageCode: " + languageCode);
 //            // 检查是否有国家代码并过滤
 //            if (languageCode.isEmpty())
 //                continue;
@@ -279,9 +279,9 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
 //        preprocess.sort((a, b) -> a.getLabel().compareTo(b.getLabel()));
 //        // 转换为最终需要的 List 数据结构
 //        mLocales = new ArrayList<>(preprocess);
-//        Log.d(TAG, "最完整的语言列表长度: " + mLocales.size());
+//        LogUtils.d(TAG, "最完整的语言列表长度: " + mLocales.size());
 //        for (Language lang : mLocales) {
-//            Log.d(TAG, "语言列表 getLabel: " + lang.getLabel());
+//            LogUtils.d(TAG, "语言列表 getLabel: " + lang.getLabel());
 //        }
 //    }
 
@@ -369,7 +369,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
         for (int i = 0; i < N; ++i) {
             InputMethodInfo property = mInputMethodList.get(i);
             String prefKey = property.getId();
-            // Log.i(TAG, mLastInputMethodId+"===+prefKey=="+prefKey);
+            // LogUtils.i(TAG, mLastInputMethodId+"===+prefKey=="+prefKey);
             CharSequence label = property.loadLabel(getPackageManager());
             boolean systemIME = isSystemIme(property);
             // Add a check box.
@@ -463,7 +463,7 @@ public class LanguageAndKeyboardActivity extends BaseActivity {
     }
 
     private void setLanguage(Language locale) {
-        Log.i("hxdii", "the choose locale:" + locale.getLocale().toString());
+        LogUtils.i("hxdii", "the choose locale:" + locale.getLocale().toString());
 
         LocalePicker.updateLocale(locale.getLocale());
         if (!mHandler.hasMessages(0)) {

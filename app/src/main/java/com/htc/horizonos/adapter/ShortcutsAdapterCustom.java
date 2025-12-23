@@ -8,7 +8,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -73,13 +73,13 @@ public class ShortcutsAdapterCustom extends RecyclerView.Adapter<ShortcutsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-        Log.d(TAG, "Shortcuts short_list.size() "+short_list.size());
+        LogUtils.d(TAG, "Shortcuts short_list.size() "+short_list.size());
         if (i < short_list.size() && short_list.get(i).getAppname() != null && i > 0) {
-            Log.d(TAG, "Shortcuts appName存在 ");
+            LogUtils.d(TAG, "Shortcuts appName存在 ");
             myViewHolder.icon.setImageDrawable(short_list.get(i).getAppicon());
             myViewHolder.name.setText(short_list.get(i).getAppname());
         } else if (i < short_list.size() && i > 0) {
-            Log.d(TAG, "Shortcuts appName为NULL ");
+            LogUtils.d(TAG, "Shortcuts appName为NULL ");
             String appName = DBUtils.getInstance(mContext).getFavoritesAppName(short_list.get(i).getPackageName());
             Drawable drawable = DBUtils.getInstance(mContext).getFavoritesIcon(short_list.get(i).getPackageName());
             if(appName!=null&&!appName.isEmpty()) {
@@ -117,13 +117,13 @@ public class ShortcutsAdapterCustom extends RecyclerView.Adapter<ShortcutsAdapte
             public void onFocusChange(View v, boolean hasFocus) {
                 synchronized (Utils.class) {
                     if (hasFocus) {
-                        Log.d("触发焦点获取", " 画白圈");
+                        LogUtils.d("触发焦点获取", " 画白圈");
                         MyCircleImageView myCircleImageView = (MyCircleImageView) v.findViewById(R.id.icon);
                         myCircleImageView.hasFocus = true;
                         myCircleImageView.invalidate();
 
                     } else {
-                        Log.d("触发焦点获取", " 恢复默认");
+                        LogUtils.d("触发焦点获取", " 恢复默认");
                         MyCircleImageView myCircleImageView = (MyCircleImageView) v.findViewById(R.id.icon);
                         myCircleImageView.hasFocus = false;
                         myCircleImageView.invalidate();

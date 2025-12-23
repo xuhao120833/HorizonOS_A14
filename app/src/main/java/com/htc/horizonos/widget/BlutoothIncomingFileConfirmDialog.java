@@ -8,7 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,7 +74,7 @@ public class BlutoothIncomingFileConfirmDialog extends Dialog implements View.On
     }
 
     private void init() {
-        Log.d(TAG," 执行AppDetailDialog init");
+        LogUtils.d(TAG," 执行AppDetailDialog init");
         binding = BluetoothincomingBinding.inflate(LayoutInflater.from(mContext));
         /*View view = LayoutInflater.from(mContext).inflate(
                 R.layout.wifi_settings_layout, null);*/

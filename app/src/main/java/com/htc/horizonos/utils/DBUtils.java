@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -62,13 +62,13 @@ public class DBUtils extends SQLiteOpenHelper {
         try {
             // TODO Auto-generated method stub
             // 创建我的收藏表
-            Log.d(TAG, " 创建apps数据表 ");
+            LogUtils.d(TAG, " 创建apps数据表 ");
             String favorites_sql = "CREATE TABLE " + TABLENAME_FAVORITES
                     + " ( id integer primary key, appName TEXT, packagename text, iconData BLOB );";
             db.execSQL(favorites_sql);
 
 
-            Log.d(TAG, " 创建filterApps数据表 ");
+            LogUtils.d(TAG, " 创建filterApps数据表 ");
             String filterApps_sql = "CREATE TABLE " + TABLENAME_FILTERAPPS + " (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "packageName TEXT);";
@@ -76,7 +76,7 @@ public class DBUtils extends SQLiteOpenHelper {
 
 
             // 创建mainApp表
-            Log.d(TAG, " 创建mainApp数据表 ");
+            LogUtils.d(TAG, " 创建mainApp数据表 ");
             String mainApp_sql = "CREATE TABLE " + TABLENAME_MAINAPP + " (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "tag TEXT , " +
@@ -86,7 +86,7 @@ public class DBUtils extends SQLiteOpenHelper {
             db.execSQL(mainApp_sql);
 
             // 创建listModules表
-            Log.d(TAG, " 创建 listModules 表 ");
+            LogUtils.d(TAG, " 创建 listModules 表 ");
             String listModules_sql = "CREATE TABLE " + TABLENAME_LISTMODULES + " (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "tag TEXT , " +
@@ -96,7 +96,7 @@ public class DBUtils extends SQLiteOpenHelper {
             db.execSQL(listModules_sql);
 
             // 创建brand品牌表
-            Log.d(TAG, " 创建brand品牌表");
+            LogUtils.d(TAG, " 创建brand品牌表");
             String brandLogo_sql = "CREATE TABLE " + TABLENAME_BRANDLOGO + " (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "iconData BLOB );";
@@ -112,7 +112,7 @@ public class DBUtils extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.d(TAG, " 执行onUpgrade ");
+        LogUtils.d(TAG, " 执行onUpgrade ");
 
         // TODO Auto-generated method stub
         String favorites_sql = "DROP TABLE IF EXISTS " + TABLENAME_FAVORITES;
@@ -249,7 +249,7 @@ public class DBUtils extends SQLiteOpenHelper {
                 }
                 db.close();
             }
-            Log.d(TAG, "Shortcuts 读取iconDrawable " + iconDrawable);
+            LogUtils.d(TAG, "Shortcuts 读取iconDrawable " + iconDrawable);
             return iconDrawable;
         }
     }
@@ -278,7 +278,7 @@ public class DBUtils extends SQLiteOpenHelper {
                 }
                 db.close();
             }
-            Log.d(TAG, "Shortcuts 读取appName " + appName);
+            LogUtils.d(TAG, "Shortcuts 读取appName " + appName);
             return appName;
         }
     }
@@ -357,12 +357,12 @@ public class DBUtils extends SQLiteOpenHelper {
                 // 如果没有记录被更新，说明不存在这个 tag，执行插入操作
                 long code = db.insert(TABLENAME_MAINAPP, null, values);
                 if (code == -1) {
-                    Log.d(TAG, "MainApp插入数据失败");
+                    LogUtils.d(TAG, "MainApp插入数据失败");
                 } else {
-                    Log.d(TAG, "MainApp插入数据成功，行ID：" + code);
+                    LogUtils.d(TAG, "MainApp插入数据成功，行ID：" + code);
                 }
             } else {
-                Log.d(TAG, "MainApp数据更新成功，更新行数：" + rowsAffected);
+                LogUtils.d(TAG, "MainApp数据更新成功，更新行数：" + rowsAffected);
             }
             db.close();
         }
@@ -379,9 +379,9 @@ public class DBUtils extends SQLiteOpenHelper {
                 values.put("packageName", packageName);
                 long code = db.insert(TABLENAME_FILTERAPPS, null, values);
                 if (code == -1) {
-                    Log.d(TAG, "FilterApps插入数据失败");
+                    LogUtils.d(TAG, "FilterApps插入数据失败");
                 } else {
-                    Log.d(TAG, "FilterApps插入数据成功，行ID：" + code);
+                    LogUtils.d(TAG, "FilterApps插入数据成功，行ID：" + code);
                 }
             }
             db.close();
@@ -410,12 +410,12 @@ public class DBUtils extends SQLiteOpenHelper {
                         String packageName = cursor.getString(cursor.getColumnIndex("packageName"));
                         packageName = packageName.trim();
                         packageNames[index++] = packageName;
-                        Log.d(TAG, " getFilterApps " + packageName);
+                        LogUtils.d(TAG, " getFilterApps " + packageName);
                     } while (cursor.moveToNext());
                 }
             } catch (Exception e) {
                 // 捕获异常并记录日志
-                Log.e(TAG, "读取数据失败", e);
+                LogUtils.e(TAG, "读取数据失败 "+e);
             } finally {
                 // 确保Cursor和数据库连接在完成后关闭
                 if (cursor != null) {
@@ -447,12 +447,12 @@ public class DBUtils extends SQLiteOpenHelper {
                 // 如果没有记录被更新，说明不存在这个 tag，执行插入操作
                 long code = db.insert(TABLENAME_LISTMODULES, null, values);
                 if (code == -1) {
-                    Log.d(TAG, "ListModules插入数据失败");
+                    LogUtils.d(TAG, "ListModules插入数据失败");
                 } else {
-                    Log.d(TAG, "ListModules插入数据成功，行ID：" + code);
+                    LogUtils.d(TAG, "ListModules插入数据成功，行ID：" + code);
                 }
             } else {
-                Log.d(TAG, "ListModules数据更新成功，更新行数：" + rowsAffected);
+                LogUtils.d(TAG, "ListModules数据更新成功，更新行数：" + rowsAffected);
             }
             db.close();
         }
@@ -471,12 +471,12 @@ public class DBUtils extends SQLiteOpenHelper {
                 // 如果没有记录被更新，说明表中还没有数据，执行插入操作
                 long code = db.insert(TABLENAME_BRANDLOGO, null, values);
                 if (code == -1) {
-                    Log.d(TAG, "BrandLogo插入数据失败");
+                    LogUtils.d(TAG, "BrandLogo插入数据失败");
                 } else {
-                    Log.d(TAG, "BrandLogo插入数据成功，行ID：" + code);
+                    LogUtils.d(TAG, "BrandLogo插入数据成功，行ID：" + code);
                 }
             } else {
-                Log.d(TAG, "BrandLogo数据更新成功，更新行数：" + rowsAffected);
+                LogUtils.d(TAG, "BrandLogo数据更新成功，更新行数：" + rowsAffected);
             }
             db.close();
         }
@@ -502,7 +502,7 @@ public class DBUtils extends SQLiteOpenHelper {
             if (cursor != null && cursor.moveToFirst()) {
                 String jsonString = cursor.getString(cursor.getColumnIndex("hashtable_data"));
 
-                Log.d(TAG, " 读取到的jsonString的值为 " + jsonString);
+                LogUtils.d(TAG, " 读取到的jsonString的值为 " + jsonString);
 
                 // 使用Gson将JSON字符串反序列化为Hashtable
                 Gson gson = new Gson();
@@ -510,7 +510,7 @@ public class DBUtils extends SQLiteOpenHelper {
                 }.getType();
                 hashtable = gson.fromJson(jsonString, type);
 
-                Log.d(TAG, " 获取到的阿拉伯语言 " + hashtable.get("ar"));
+                LogUtils.d(TAG, " 获取到的阿拉伯语言 " + hashtable.get("ar"));
 
                 cursor.close();  // 关闭Cursor
             }
@@ -539,9 +539,9 @@ public class DBUtils extends SQLiteOpenHelper {
                 if (cursor != null && cursor.moveToFirst()) {
                     action = cursor.getString(cursor.getColumnIndex("action"));
                 }
-                Log.d(TAG, "getActionFromListModules action " + action);
+                LogUtils.d(TAG, "getActionFromListModules action " + action);
             } catch (Exception e) {
-                Log.d(TAG, "getActionFromListModules查询失败", e);
+                LogUtils.d(TAG, "getActionFromListModules查询失败 "+e);
             } finally {
                 if (cursor != null) {
                     cursor.close();
@@ -664,7 +664,7 @@ public class DBUtils extends SQLiteOpenHelper {
                     byte[] iconData = cursor.getBlob(cursor.getColumnIndex("iconData"));
                     drawable = byteArrayToDrawable(iconData);  // 将字节数组转换为 Drawable
                 }
-                Log.d(TAG, "查询数据成功");
+                LogUtils.d(TAG, "查询数据成功");
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -757,7 +757,7 @@ public class DBUtils extends SQLiteOpenHelper {
         Gson gson = new Gson();
         String jsonString = gson.toJson(hashtable);
 
-        Log.d(TAG, "序列化之后的hashtable_data值为 " + jsonString);
+        LogUtils.d(TAG, "序列化之后的hashtable_data值为 " + jsonString);
 
         // 创建ContentValues用于插入数据
         values.put("hashtable_data", jsonString);  // 将序列化后的字符串存入ContentValues

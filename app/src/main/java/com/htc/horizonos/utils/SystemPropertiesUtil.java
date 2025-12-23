@@ -1,6 +1,6 @@
 package com.htc.horizonos.utils;
 
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,7 +22,7 @@ public class SystemPropertiesUtil {
             propertyValue = reader.readLine();
             reader.close();
             process.waitFor();
-            Log.d(TAG,"电池状态 获取系统属性 "+propertyName+" 获取的值为"+propertyValue);
+            LogUtils.d(TAG,"电池状态 获取系统属性 "+propertyName+" 获取的值为"+propertyValue);
         } catch (Exception e) {
             e.printStackTrace();
         }

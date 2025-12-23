@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -79,7 +79,7 @@ public class ClearMemoryUtils {
 
 			arrayOfString = str2.split("\\s+");
 			for (String num : arrayOfString) {
-				Log.i(str2, num + "\t");
+				LogUtils.i(str2, num + "\t");
 			}
 
 			initial_memory = Integer.valueOf(arrayOfString[1]).intValue() * 1024;// 获得系统总内存，单位是KB，乘以1024转换为Byte
@@ -106,7 +106,7 @@ public class ClearMemoryUtils {
 
 			arrayOfString = str2.split("\\s+");
 			for (String num : arrayOfString) {
-				Log.i(str2, num + "\t");
+				LogUtils.i(str2, num + "\t");
 			}
 
 			initial_memory = Integer.valueOf(arrayOfString[1]).intValue();// 获得系统总内存，单位是KB，乘以1024转换为Byte
@@ -171,16 +171,16 @@ public class ClearMemoryUtils {
 		if (infoList != null) {
 			for (int i = 0; i < infoList.size(); ++i) {
 				RunningAppProcessInfo appProcessInfo = infoList.get(i);
-				// Log.d(TAG, "process name : " + appProcessInfo.processName);
+				// LogUtils.d(TAG, "process name : " + appProcessInfo.processName);
 				// importance 该进程的重要程度 分为几个级别，数值越低就越重要。
-				// Log.d(TAG, "importance : " + appProcessInfo.importance);
+				// LogUtils.d(TAG, "importance : " + appProcessInfo.importance);
 				// 一般数值大于RunningAppProcessInfo.IMPORTANCE_SERVICE的进程都长时间没用或者空进程了
 				// 一般数值大于RunningAppProcessInfo.IMPORTANCE_VISIBLE的进程都是非可见进程，也就是在后台运行着
 				if (appProcessInfo.importance > RunningAppProcessInfo.IMPORTANCE_VISIBLE) {
 					String[] pkgList = appProcessInfo.pkgList;
 					for (int j = 0; j < pkgList.length; ++j) {
 						// pkgList 得到该进程下运行的包名
-						// Log.i("Clear", "It will be killed, package name : "+
+						// LogUtils.i("Clear", "It will be killed, package name : "+
 						// pkgList[j]);
 						am.killBackgroundProcesses(pkgList[j]);
 						count++;
@@ -207,7 +207,7 @@ public class ClearMemoryUtils {
 		am.getMemoryInfo(mi);
 		// mi.availMem; 当前系统的可用内存
 		// return Formatter.formatFileSize(context, mi.availMem);// 将获取的内存大小规格化
-		// Log.d(TAG, "可用内存---->>>" + mi.availMem / (1024 * 1024));
+		// LogUtils.d(TAG, "可用内存---->>>" + mi.availMem / (1024 * 1024));
 		return mi.availMem / (1024 * 1024);
 	}
 

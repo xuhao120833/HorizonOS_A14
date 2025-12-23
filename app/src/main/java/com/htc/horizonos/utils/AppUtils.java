@@ -16,7 +16,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import com.htc.horizonos.R;
 import com.htc.horizonos.entry.AppInfoBean;
@@ -64,7 +64,7 @@ public class AppUtils {
         String[] filterApps = DBUtils.getInstance(context).getFilterApps();
         List<String> stringList = new ArrayList<>();
         if (filterApps != null) {
-            Log.d(TAG, " 禁用名单 " + filterApps[0]);
+            LogUtils.d(TAG, " 禁用名单 " + filterApps[0]);
             stringList = Arrays.asList(filterApps);
         }
         // 调用系统排序 ， 根据name排序
@@ -239,7 +239,7 @@ public class AppUtils {
      */
     public static boolean startNewApp(Context context, String packageName) {
 
-        Log.d(TAG, " startNewApp " + packageName);
+        LogUtils.d(TAG, " startNewApp " + packageName);
         try {
             PackageManager packageManager = context.getPackageManager();
             Intent intent = packageManager.getLaunchIntentForPackage(packageName);

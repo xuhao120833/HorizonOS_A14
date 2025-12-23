@@ -5,7 +5,7 @@ import android.app.Instrumentation;
 import android.os.Build;
 import android.os.Environment;
 import android.os.SystemProperties;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 
 import java.io.IOException;
@@ -169,9 +169,9 @@ public class Constants {
 		if (crc_hex.length()==1){
 			crc_hex = "0"+crc_hex;
 		}
-		Log.d("hzj","CRC "+crc_hex);
+		LogUtils.d("hzj","CRC "+crc_hex);
 		boolean status = crc_hex.equals(String.valueOf(dataChar[152])+ dataChar[153]);
-		Log.d("hzj","CRC check="+status);
+		LogUtils.d("hzj","CRC check="+status);
 		return status?3:2;
 	}
 

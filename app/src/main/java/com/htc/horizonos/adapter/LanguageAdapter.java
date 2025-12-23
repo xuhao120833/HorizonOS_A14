@@ -1,7 +1,7 @@
 package com.htc.horizonos.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -90,7 +90,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.MyView
             locale = language.getLocale().getLanguage();
         }
 
-        Log.d(TAG," 语言环境 "+cur_language+" "+locale);
+        LogUtils.d(TAG," 语言环境 "+cur_language+" "+locale);
         if (cur_language.equals(locale)){
             myViewHolder.status.setVisibility(View.VISIBLE);
         }else {

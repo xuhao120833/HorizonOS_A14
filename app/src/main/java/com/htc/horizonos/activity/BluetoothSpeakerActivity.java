@@ -13,7 +13,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.PrjScreen;
 import android.os.SystemProperties;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,13 +139,13 @@ public class BluetoothSpeakerActivity extends Activity {
 
     @Override
     protected void onPause() {
-        Log.d(TAG,"onPause()");
+        LogUtils.d(TAG,"onPause()");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        Log.d(TAG,"onStop()");
+        LogUtils.d(TAG,"onStop()");
         PrjScreen.set_led_power(3,1);
         SwitchBluetoothSpeaker(0);
         unregisterReceiver(broadcastReceiver);
@@ -155,7 +155,7 @@ public class BluetoothSpeakerActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG,"onDestroy()");
+        LogUtils.d(TAG,"onDestroy()");
         super.onDestroy();
     }
 }

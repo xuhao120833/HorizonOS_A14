@@ -2,7 +2,7 @@ package com.htc.horizonos.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.widget.RelativeLayout;
 
 /**
@@ -29,7 +29,7 @@ public class RLRelativelayout extends RelativeLayout {
 
     @Override
     public boolean isFocused() {
-        Log.d("getChildCount",getChildCount()+"");
+        LogUtils.d("getChildCount",getChildCount()+"");
         if (getChildCount()==0)
             return super.isFocused();
 

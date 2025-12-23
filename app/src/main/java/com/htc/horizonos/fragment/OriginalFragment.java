@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -162,7 +162,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, " 执行onResume");
+        LogUtils.d(TAG, " 执行onResume");
         setIconOrText();
         binding.screenCastTxt.setSelected(true);
         binding.signalSourceTxt.setSelected(true);
@@ -175,7 +175,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.d(TAG, " 执行onHiddenChanged " + hidden);
+        LogUtils.d(TAG, " 执行onHiddenChanged " + hidden);
         if (!hidden) {
             // Fragment 切换到显示状态时的操作
             // 设置焦点
@@ -187,12 +187,12 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Log.d(TAG, " onKey收到 " + keyCode);
+        LogUtils.d(TAG, " onKey收到 " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN && (binding.netflix.hasFocus()
                 || binding.youtube.hasFocus() || binding.disney.hasFocus()
                 || binding.primeVideo.hasFocus() || binding.hulu.hasFocus())
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
-            Log.d(TAG, " 底部焦点向下");
+            LogUtils.d(TAG, " 底部焦点向下");
             disableFocus();//防止焦点跳变
             MainActivity activity = (MainActivity) getActivity();
             if (activity.newFragment != null) {
@@ -203,7 +203,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                         .show(activity.newFragment)
                         .commit();
             } else {
-                Log.d(TAG, "newFragment 未初始化完成");
+                LogUtils.d(TAG, "newFragment 未初始化完成");
             }
             return true;
         } else if (getActivity().getCurrentFocus() == null) {
@@ -282,24 +282,24 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 e.printStackTrace();
             }
         } else if (id == R.id.netflix) {
-            Log.d("xuhao", "打开奈飞");
+            LogUtils.d("xuhao", "打开奈飞");
             appname = DBUtils.getInstance(activity).getAppNameByTag("icon1");
             action = DBUtils.getInstance(activity).getActionByTag("icon1");
             if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
                 if (!AppUtils.startNewApp(activity, action)) {
-                    Log.d("xuhao", "打开奈飞 第一个坑位不为空 " + appname + "2" + action + "3");
+                    LogUtils.d("xuhao", "打开奈飞 第一个坑位不为空 " + appname + "2" + action + "3");
                     activity.appName = appname;
                     activity.requestChannelData();
                 }
             } else if (!AppUtils.startNewApp(activity, "com.netflix.mediaclient")) {
                 if (!AppUtils.startNewApp(activity, "com.netflix.ninja")) {
-                    Log.d("xuhao", "打开奈飞 第一个坑位为空");
+                    LogUtils.d("xuhao", "打开奈飞 第一个坑位为空");
                     activity.appName = "Netflix";
                     activity.requestChannelData();
                 }
             }
         } else if (id == R.id.youtube) {
-            Log.d("xuhao", "打开YOUtube");
+            LogUtils.d("xuhao", "打开YOUtube");
             appname = DBUtils.getInstance(activity).getAppNameByTag("icon2");
             action = DBUtils.getInstance(activity).getActionByTag("icon2");
             if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
@@ -312,7 +312,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 activity.requestChannelData();
             }
         } else if (id == R.id.disney) {
-            Log.d("xuhao", "打开迪士尼");
+            LogUtils.d("xuhao", "打开迪士尼");
             appname = DBUtils.getInstance(activity).getAppNameByTag("icon3");
             action = DBUtils.getInstance(activity).getActionByTag("icon3");
             if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
@@ -325,7 +325,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 activity.requestChannelData();
             }
             //            case R.id.max:
-//                Log.d("xuhao", "打开max");
+//                LogUtils.d("xuhao", "打开max");
 //                appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
 //                action = DBUtils.getInstance(activity).getActionByTag("icon4");
 //                if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
@@ -339,7 +339,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
 //                }
 //                break;
         } else if (id == R.id.prime_video) {
-            Log.d("xuhao", "打开prime_video");
+            LogUtils.d("xuhao", "打开prime_video");
             appname = DBUtils.getInstance(activity).getAppNameByTag("icon4");
             action = DBUtils.getInstance(activity).getActionByTag("icon4");
             if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
@@ -352,7 +352,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 activity.requestChannelData();
             }
         } else if (id == R.id.hulu) {
-            Log.d("xuhao", "打开hulu");
+            LogUtils.d("xuhao", "打开hulu");
             appname = DBUtils.getInstance(activity).getAppNameByTag("icon5");
             action = DBUtils.getInstance(activity).getActionByTag("icon5");
             if (appname != null && action != null && !appname.equals("") && !action.equals("")) {
@@ -361,7 +361,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                     activity.requestChannelData();
                 }
             } else if (!AppUtils.startNewApp(activity, "com.hulu.plus")) {
-                Log.d("xuhao", "打开hulu失败");
+                LogUtils.d("xuhao", "打开hulu失败");
                 activity.appName = "Hulu";
                 activity.requestChannelData();
             }
@@ -427,17 +427,17 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
         }
         Hashtable<String, String> mHashtable1 = DBUtils.getInstance(getContext()).getHashtableFromListModules("list1");
         Hashtable<String, String> mHashtable2 = DBUtils.getInstance(getContext()).getHashtableFromListModules("list2");
-        Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
+        LogUtils.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
         if (mHashtable1 != null) {
             String text = mHashtable1.get(LanguageUtil.getCurrentLanguage());
-            Log.d(TAG, "xu当前语言 text eshareText" + text);
+            LogUtils.d(TAG, "xu当前语言 text eshareText" + text);
             if (text != null && !text.isEmpty()) {
                 binding.screenCastTxt.setText(text);
             }
         }
         if (mHashtable2 != null) {
             String text = mHashtable2.get(LanguageUtil.getCurrentLanguage());
-            Log.d(TAG, "xu当前语言 text hdmiText" + text);
+            LogUtils.d(TAG, "xu当前语言 text hdmiText" + text);
             if (text != null && !text.isEmpty()) {
                 binding.signalSourceTxt.setText(text);
             }
@@ -529,7 +529,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
     }
 
     private void startSource(String sourceName) {
-        Log.d(TAG, " startSource启动信源 " + sourceName);
+        LogUtils.d(TAG, " startSource启动信源 " + sourceName);
         Intent intent_hdmi = new Intent();
         intent_hdmi.setComponent(new ComponentName("com.softwinner.awlivetv", "com.softwinner.awlivetv.MainActivity"));
         intent_hdmi.putExtra("input_source", sourceName);

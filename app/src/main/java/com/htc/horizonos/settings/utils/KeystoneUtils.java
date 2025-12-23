@@ -7,7 +7,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.provider.Settings;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import java.text.DecimalFormat;
 
@@ -214,7 +214,7 @@ public class KeystoneUtils {
 				}else if((y+xy_OppositeTo[1])>minV_size){
 					y=minV_size - xy_OppositeTo[1];
 				}
-				Log.d("test3","x "+x+"y"+y);
+				LogUtils.d("test3","x "+x+"y"+y);
 				//y = lcd_h - y;
 				lt_X =x;
 				lt_Y =y;
@@ -329,7 +329,7 @@ public class KeystoneUtils {
 	private static IBinder flinger;
 
 	public static void UpdateKeystone(){
-		Log.d("UpdateKeystone","rb_X "+ rb_X+"rb_Y "+rb_Y);
+		LogUtils.d("UpdateKeystone","rb_X "+ rb_X+"rb_Y "+rb_Y);
 		try {
 			if (flinger==null)
 				flinger = ServiceManager.getService("SurfaceFlinger");
@@ -349,10 +349,10 @@ public class KeystoneUtils {
 				flinger.transact(1050, data, null, 0);
 				data.recycle();
 			} else {
-				Log.i("tag","error get surfaceflinger service");
+				LogUtils.i("tag","error get surfaceflinger service");
 			}
 		} catch (RemoteException ex) {
-			Log.i("tag","error talk with surfaceflinger service");
+			LogUtils.i("tag","error talk with surfaceflinger service");
 		}
 	}
 
@@ -361,7 +361,7 @@ public class KeystoneUtils {
 			SystemProperties.set("persist.sys.zoom.value",lb_X+","+lb_Y+","+lt_X+","+lt_Y+","+rt_X+","+rt_Y+","+rb_X+","+rb_Y);
 			return;
 		}
-		Log.d("UpdateKeystone","rb_X "+ rb_X+"rb_Y "+rb_Y);
+		LogUtils.d("UpdateKeystone","rb_X "+ rb_X+"rb_Y "+rb_Y);
 		try {
 			if (flinger==null)
 				flinger = ServiceManager.getService("SurfaceFlinger");
@@ -382,10 +382,10 @@ public class KeystoneUtils {
 				data.recycle();
 				SystemProperties.set("persist.sys.zoom.value",lb_X+","+lb_Y+","+lt_X+","+lt_Y+","+rt_X+","+rt_Y+","+rb_X+","+rb_Y);
 			} else {
-				Log.i("tag","error get surfaceflinger service");
+				LogUtils.i("tag","error get surfaceflinger service");
 			}
 		} catch (RemoteException ex) {
-			Log.i("tag","error talk with surfaceflinger service");
+			LogUtils.i("tag","error talk with surfaceflinger service");
 		}
 	}
 

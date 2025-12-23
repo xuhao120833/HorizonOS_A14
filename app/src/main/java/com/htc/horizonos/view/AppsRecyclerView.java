@@ -2,7 +2,7 @@ package com.htc.horizonos.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -46,13 +46,13 @@ public class AppsRecyclerView extends RecyclerView {
 //                }
 //            } catch (Exception e) {
 //                // 捕获异常，并打印日志，便于调试
-//                Log.d(TAG, "dispatchKeyEvent nextFocusView Exception");
+//                LogUtils.d(TAG, "dispatchKeyEvent nextFocusView Exception");
 //                nextFocusView = null;
 //            }
 
             // 如果下一个焦点为空，消耗事件，不让系统处理，并保持当前焦点
             if (focusedView != null && keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                Log.d(TAG, "dispatchKeyEvent nextFocusView == null && focusedView != null");
+                LogUtils.d(TAG, "dispatchKeyEvent nextFocusView == null && focusedView != null");
                 focusedView.requestFocus();
                 return super.dispatchKeyEvent(event);
             }

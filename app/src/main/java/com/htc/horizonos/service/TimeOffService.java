@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import com.htc.horizonos.R;
 import com.htc.horizonos.utils.Contants;
@@ -67,14 +67,14 @@ public class TimeOffService extends Service {
         timer = new Timer();
         timer.schedule(timerTask,10000,10000);
         sharedPreferences = ShareUtil.getInstans(this);
-        Log.d(TAG,"onCreate()");
+        LogUtils.d(TAG,"onCreate()");
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initData(intent);
-        Log.d(TAG,"onStartCommand()");
+        LogUtils.d(TAG,"onStartCommand()");
         return START_STICKY;
     }
 
@@ -106,7 +106,7 @@ public class TimeOffService extends Service {
 
     @Override
     public boolean stopService(Intent name) {
-        Log.d(TAG,"stopService()");
+        LogUtils.d(TAG,"stopService()");
         return super.stopService(name);
     }
 
@@ -129,7 +129,7 @@ public class TimeOffService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"onDestroy()");
+        LogUtils.d(TAG,"onDestroy()");
         if (timer!=null) {
             timer.cancel();
             timer=null;

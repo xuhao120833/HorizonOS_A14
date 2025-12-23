@@ -16,7 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -331,7 +331,7 @@ public class AboutActivity extends BaseActivity {
     private String findUpdateFile() {
 
         String dataPath = FLASH_ROOT + "/" + OTA_PACKAGE_FILE;
-        Log.d("findUpdateFile", " dataPath " + dataPath);
+        LogUtils.d("findUpdateFile", " dataPath " + dataPath);
 
         if (new File(dataPath).exists())  //优先检查本地存储有没有 storage/emulated/0/update.zip
             return dataPath;
@@ -343,13 +343,13 @@ public class AboutActivity extends BaseActivity {
         }
 
         for (File tmp : pfiles) {//findUpdateFile:  tmp F3DE-C571 1 /mnt/media_rw/F3DE-C571
-            Log.d("findUpdateFile", " tmp " + tmp.getName()+" "+pfiles.length+" "+tmp.getAbsolutePath() );
+            LogUtils.d("findUpdateFile", " tmp " + tmp.getName()+" "+pfiles.length+" "+tmp.getAbsolutePath() );
             if (tmp.isDirectory()) {
 
                 File[] subfiles = tmp.listFiles();
 
                 if (subfiles == null) {
-                    Log.d("findUpdateFile", " subfiles  null ");
+                    LogUtils.d("findUpdateFile", " subfiles  null ");
 //                        continue;//跳过当前目录，进入下一个循环
                 }
 
@@ -358,7 +358,7 @@ public class AboutActivity extends BaseActivity {
 
                     for (File subtmp : subfiles) {
 
-                        Log.d("findUpdateFile", " subtmp " + subtmp.getName());
+                        LogUtils.d("findUpdateFile", " subtmp " + subtmp.getName());
                         if (subtmp.isDirectory()) {
                             File[] files = subtmp.listFiles(new FileFilter() {
                                 @Override

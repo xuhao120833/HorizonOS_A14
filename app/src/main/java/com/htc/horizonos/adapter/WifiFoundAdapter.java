@@ -9,7 +9,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 import android.text.format.Formatter;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -100,7 +100,7 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
             if (wifiConfiguration != null) {
                 if (wifiInfo != null
                         && wifiInfo.getNetworkId() == wifiConfiguration.networkId) {
-                    // Log.i("zouguanrong", "--wifiinfo not null");
+                    // LogUtils.i("zouguanrong", "--wifiinfo not null");
                     if (wifiInfo.getIpAddress() != 0) {
                         state_str = mContext.getResources().getString(
                                 R.string.isconnected);
@@ -120,7 +120,7 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
         }
 
         int level = scanResult.level;
-        Log.d(TAG," 信号强度更新 "+level);
+        LogUtils.d(TAG," 信号强度更新 "+level);
         if (level < -85){
             myViewHolder.wifi_level.setBackgroundResource(R.drawable.wifi_custom_1);
         }else if (level < -70){
@@ -390,7 +390,7 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
 
             android.net.wifi.WifiConfiguration.NetworkSelectionStatus networkSelectionStatus = config
                     .getNetworkSelectionStatus();
-            // Log.i("zouguanrong",
+            // LogUtils.i("zouguanrong",
             // "getNetworkSelectionDisableReason-->"+networkSelectionStatus.getNetworkSelectionDisableReason());
             switch (networkSelectionStatus.getNetworkSelectionDisableReason()) {
 
@@ -420,12 +420,12 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
 
                     switch (config.status) {
                         case WifiConfiguration.Status.CURRENT:
-                            // Log.i("zouguanrong", "--SSID-->" + config.SSID
+                            // LogUtils.i("zouguanrong", "--SSID-->" + config.SSID
                             // + "-->CURRENT");
                             break;
 
                         case WifiConfiguration.Status.ENABLED:
-                            // Log.i("zouguanrong", "--SSID-->" + config.SSID
+                            // LogUtils.i("zouguanrong", "--SSID-->" + config.SSID
                             // + "-->ENABLED");
 //					if (WIFIActivity.isShow) {
 //						WIFIActivity.isShow = false;
@@ -435,7 +435,7 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
                             break;
 
                         case WifiConfiguration.Status.DISABLED:
-                            // Log.i("zouguanrong", "--SSID-->" + config.SSID
+                            // LogUtils.i("zouguanrong", "--SSID-->" + config.SSID
                             // + "-->DISABLED");
                             break;
                     }
@@ -482,7 +482,7 @@ public class WifiFoundAdapter extends RecyclerView.Adapter<WifiFoundAdapter.MyVi
             // String units = WifiInfo.LINK_SPEED_UNITS;
             // Wifi源名称
             // String ssid = info.getSSID();
-            Log.d(TAG,"getStrength信号强度更新 "+strength);
+            LogUtils.d(TAG,"getStrength信号强度更新 "+strength);
             return strength;
         }
         return 0;

@@ -12,7 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -149,10 +149,10 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Log.d(TAG, " 测试KeyCode "+keyCode);
+        LogUtils.d(TAG, " 测试KeyCode "+keyCode);
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
         if ((keyCode == KeyEvent.KEYCODE_DPAD_UP && v.hasFocus() && position < 5 && event.getAction() == KeyEvent.ACTION_DOWN)) {
-            Log.d(TAG, " 顶部焦点向上 "+position);
+            LogUtils.d(TAG, " 顶部焦点向上 "+position);
             MainActivity mainActivity = (MainActivity)activity;
             activity.getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
@@ -163,7 +163,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
                         @Override
                         public void run() {
                             // 在 commit 完成后执行的回调逻辑
-                            Log.d(" 完成后执行的回调逻辑 ", "Commit completed");
+                            LogUtils.d(" 完成后执行的回调逻辑 ", "Commit completed");
                             // 在 0.5 秒后执行 e
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 if(!mainActivity.originalFragment.binding.rlScreenCast.hasFocus()) {
@@ -178,7 +178,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
         }
 
         if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
-            Log.d(TAG, "卸载收到MENU按键");
+            LogUtils.d(TAG, "卸载收到MENU按键");
             final AppInfoBean info = infoBeans.get(position);
             boolean[] result = AppUtils.checkIfSystemAppAndCanUninstall(mContext, info.getApplicationInfo().packageName);
             if (result[0] && !result[1]) {
@@ -240,7 +240,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.MyViewHolder> 
 
     @Override
     public boolean onLongClick(View v) {
-        Log.d(TAG,"卸载收到MENU按键");
+        LogUtils.d(TAG,"卸载收到MENU按键");
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
         final AppInfoBean info = infoBeans.get(position);
 

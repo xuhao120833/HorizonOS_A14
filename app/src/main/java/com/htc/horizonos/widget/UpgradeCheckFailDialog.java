@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,7 +30,7 @@ public class UpgradeCheckFailDialog extends Dialog implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        Log.d("hzj","onclick");
+        LogUtils.d("hzj","onclick");
         int id = v.getId();
         if (id == R.id.enter) {
             if (mcallback != null)

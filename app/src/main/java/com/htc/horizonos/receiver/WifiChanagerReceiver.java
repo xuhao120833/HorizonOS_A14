@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Parcelable;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 import com.htc.horizonos.R;
 
@@ -36,7 +36,7 @@ public class WifiChanagerReceiver extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		String action=intent.getAction();
 		if(action!=null){
-			Log.i("hxdwifi"," onReceive :" +action);
+			LogUtils.i("hxdwifi"," onReceive :" +action);
 			if(action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)){
 				//请求的连接已经建立或者丢失
 				mcallback.refreshWifi();
@@ -57,7 +57,7 @@ public class WifiChanagerReceiver extends BroadcastReceiver {
 			}else if(action.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)){
 				//请求连接的状态发生改变，（已经加入到一个接入点）
 				int supl_error=intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, -1);
-				Log.d("wifi","supl_error "+supl_error);
+				LogUtils.d("wifi","supl_error "+supl_error);
 				if (supl_error == WifiManager.ERROR_AUTHENTICATING ) {
 					//ToastUtil.showShortToast(context, context.getString(R.string.Authentication_error));
 				}

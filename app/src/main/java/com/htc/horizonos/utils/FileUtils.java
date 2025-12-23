@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -141,13 +141,13 @@ public class FileUtils {
 			BufferedReader buffReader = new BufferedReader(reader);
 			while((content = buffReader.readLine())!=null){
 				if (content.contains("##")){
-					//Log.d("content",content);
+					//LogUtils.d("content",content);
 					continue;
 				}
 				fsb.append(content);
 			}
 			buffReader.close();
-			//Log.d("hzj","readFileContent "+fsb.toString());
+			//LogUtils.d("hzj","readFileContent "+fsb.toString());
 			return fsb.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -170,7 +170,7 @@ public class FileUtils {
 			fileWriter = new FileWriter(file);
 			fileWriter.write(content);
 			fileWriter.flush();
-			Log.d("test","write finish");
+			LogUtils.d("test","write finish");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

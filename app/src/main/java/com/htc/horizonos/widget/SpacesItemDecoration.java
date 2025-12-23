@@ -2,7 +2,7 @@ package com.htc.horizonos.widget;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,12 +29,12 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         outRect.right = right_space;
         outRect.left = left_space;
         outRect.bottom = bottom_space;
-        Log.d(TAG, "getItemOffsets " + outRect.right + " " + outRect.left);
+        LogUtils.d(TAG, "getItemOffsets " + outRect.right + " " + outRect.left);
         outRect.top = top_space;
     }
 
     public static int px2dp(float dpValue) {
-        Log.d(TAG, "px2dp density" + Resources.getSystem().getDisplayMetrics().density);
+        LogUtils.d(TAG, "px2dp density" + Resources.getSystem().getDisplayMetrics().density);
         return (int) (0.5f + dpValue * Resources.getSystem().getDisplayMetrics().density);
     }
 

@@ -14,7 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -103,7 +103,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        Log.d(TAG, " 执行onCreateViewHolder " + i);
+        LogUtils.d(TAG, " 执行onCreateViewHolder " + i);
         MyViewHolder myViewHolder = new MyViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.wallpaper_custom_item, null));
         myViewHolder.setIsRecyclable(false);
         return myViewHolder;
@@ -112,7 +112,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, @SuppressLint("RecyclerView") final int i) {
         selectpostion = readShared();
-        Log.d(TAG, "onBindViewHolder selectpostion " + selectpostion);
+        LogUtils.d(TAG, "onBindViewHolder selectpostion " + selectpostion);
         if (i == selectpostion) {
             myViewHolder.check.setVisibility(View.VISIBLE);
             myViewHolder.check.setImageResource(R.drawable.check_correct);
@@ -135,7 +135,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
                     //xuhao add
                     int position = myViewHolder.getAdapterPosition();
                     if (position < drawables.size() - 1) {
-                        Log.d(TAG, " 图片背景选择 position < drawables.size()-1" + position + " drawables.size " + drawables.size());
+                        LogUtils.d(TAG, " 图片背景选择 position < drawables.size()-1" + position + " drawables.size " + drawables.size());
                         if (selectpostion == position) { //当前点击的和上次点击的位置一样，不做处理
 //                            myViewHolder.check.setVisibility(View.GONE);
                         } else {
@@ -143,7 +143,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
                             writeShared(position);
                             notifyItemChanged(selectpostion);
                             selectpostion = readShared();
-                            Log.d(TAG, " 图片背景选择 selectpostion" + selectpostion);
+                            LogUtils.d(TAG, " 图片背景选择 selectpostion" + selectpostion);
                             //xuhao
                             myViewHolder.check.setImageResource(R.drawable.check_correct);
                             myViewHolder.check.setVisibility(View.VISIBLE);
@@ -152,7 +152,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
                             }
                         }
                     } else {
-                        Log.d(TAG, " 图片背景选择 position" + position + " drawables.size " + drawables.size());
+                        LogUtils.d(TAG, " 图片背景选择 position" + position + " drawables.size " + drawables.size());
                         // 打开文件管理器选择图片
                         startExplorer();
                     }
@@ -169,12 +169,12 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
         super.onViewAttachedToWindow(holder);
         // 可以在这里做一些只需要在可见时才执行的操作
         int position = holder.getAdapterPosition();
-        Log.d(TAG, " onViewAttachedToWindow " + position);
+        LogUtils.d(TAG, " onViewAttachedToWindow " + position);
         if (position < drawables.size() - 1) {
-            Log.d(TAG, " 添加View i " + position);
+            LogUtils.d(TAG, " 添加View i " + position);
             loadAndSetBackground(position, holder);
         } else {
-            Log.d(TAG, " 添加最后一个View " + position);
+            LogUtils.d(TAG, " 添加最后一个View " + position);
 //            myViewHolder.icon.setImageBitmap(whiteBitmap);
             holder.icon_card.setCardBackgroundColor(Color.parseColor("#00000000"));
             Object object = drawables.get(position);
@@ -194,7 +194,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
     }
 
     private void loadAndSetBackground(int i, MyViewHolder myViewHolder) {
-        Log.d(TAG, "loadAndSetBackground");
+        LogUtils.d(TAG, "loadAndSetBackground");
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -207,7 +207,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
                         public void run() {
                             // 如果 i 在可见范围内
                             myViewHolder.icon.setImageBitmap(bitmap);
-                            Log.d(TAG, "loadAndSetBackground object instanceof Drawable " + i);
+                            LogUtils.d(TAG, "loadAndSetBackground object instanceof Drawable " + i);
                         }
                     });
                 } else if (object instanceof Integer) {
@@ -219,12 +219,12 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
                         @Override
                         public void run() {
                             myViewHolder.icon.setImageBitmap(bitmap);
-                            Log.d(TAG, "loadAndSetBackground object instanceof Integer " + i);
+                            LogUtils.d(TAG, "loadAndSetBackground object instanceof Integer " + i);
                         }
                     });
 
                 } else if (object instanceof String) {
-                    Log.d(TAG, "loadAndSetBackground object instanceof String");
+                    LogUtils.d(TAG, "loadAndSetBackground object instanceof String");
                     // 处理 String 类型的情况
                     String filePath = (String) object;
                     Bitmap bitmap = compressBitmapByPath(filePath);
@@ -232,7 +232,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
                         @Override
                         public void run() {
                             myViewHolder.icon.setImageBitmap(bitmap);
-                            Log.d(TAG, "loadAndSetBackground object instanceof String " + i);
+                            LogUtils.d(TAG, "loadAndSetBackground object instanceof String " + i);
                         }
                     });
                 } else {
@@ -243,37 +243,37 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
     }
 
     private Bitmap compressBitmapByPath(String srcPath) {
-        Log.d(TAG, " 图片缩略图 BitmapHunter run()");
+        LogUtils.d(TAG, " 图片缩略图 BitmapHunter run()");
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         BitmapFactory.decodeFile(srcPath, options);
-        Log.d(TAG, " 图片缩略图 图片信息 " + options.outWidth + " " + options.outHeight);
+        LogUtils.d(TAG, " 图片缩略图 图片信息 " + options.outWidth + " " + options.outHeight);
         options.inSampleSize = ImageUtils.calculateInSampleSize(options);
-        Log.d(TAG, " 图片缩略图 inSampleSize " + options.inSampleSize);
+        LogUtils.d(TAG, " 图片缩略图 inSampleSize " + options.inSampleSize);
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(srcPath, options);
     }
 
     private Bitmap compressBitmapById(int resId) {
-        Log.d(TAG, " 图片缩略图 BitmapHunter run()");
+        LogUtils.d(TAG, " 图片缩略图 BitmapHunter run()");
         // 获取图片的宽高
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         // 通过资源ID获取图片的宽高
         BitmapFactory.decodeResource(mContext.getResources(), resId, options);
-        Log.d(TAG, " 图片缩略图 图片信息 " + options.outWidth + " " + options.outHeight);
+        LogUtils.d(TAG, " 图片缩略图 图片信息 " + options.outWidth + " " + options.outHeight);
         // 计算缩放比例
         options.inSampleSize = ImageUtils.calculateInSampleSize(options);
-        Log.d(TAG, " 图片缩略图 inSampleSize " + options.inSampleSize);
+        LogUtils.d(TAG, " 图片缩略图 inSampleSize " + options.inSampleSize);
         // 解码图片并返回压缩后的Bitmap
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(mContext.getResources(), resId, options);
     }
 
     private Bitmap compressBitmapByDrawable(Drawable drawable) {
-        Log.d(TAG, " 图片缩略图 BitmapHunter run()");
+        LogUtils.d(TAG, " 图片缩略图 BitmapHunter run()");
         // 将Drawable转换为Bitmap
         Bitmap bitmap = null;
         if (drawable instanceof BitmapDrawable) {
@@ -288,13 +288,13 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
         // 获取图片的宽高
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        Log.d(TAG, " 图片缩略图 图片信息 " + width + " " + height);
+        LogUtils.d(TAG, " 图片缩略图 图片信息 " + width + " " + height);
         // 设置压缩参数
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         // 计算缩放比例
         int sampleSize = ImageUtils.calculateInSampleSize(options);
-        Log.d(TAG, " 图片缩略图 inSampleSize " + sampleSize);
+        LogUtils.d(TAG, " 图片缩略图 inSampleSize " + sampleSize);
         // 根据缩放比例压缩Bitmap
         options.inSampleSize = sampleSize;
         return Bitmap.createScaledBitmap(bitmap, width / sampleSize, height / sampleSize, true);
@@ -304,7 +304,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
     @Override
     public int getItemCount() {
 //        if (isLocal)
-        Log.d(TAG, "getItemCount ");
+        LogUtils.d(TAG, "getItemCount ");
         return drawables.size();
 //        else return files.length;
     }
@@ -373,7 +373,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
     }
 
     private void startExplorer() {
-        Log.d(TAG, " startExplorer打开文件管理器");
+        LogUtils.d(TAG, " startExplorer打开文件管理器");
         // 定义目标应用的包名
         String packageName = "com.hisilicon.explorer";
         // 检查系统中是否安装了这个应用
@@ -395,7 +395,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.MyVi
             mContext.startActivity(intent);
         } catch (PackageManager.NameNotFoundException e) {
             // 如果没有安装这个应用，处理异常
-            Log.d(TAG, "应用未安装");
+            LogUtils.d(TAG, "应用未安装");
             Toast.makeText(mContext, "未找到com.hisilicon.explorer应用", Toast.LENGTH_SHORT).show();
         }
 

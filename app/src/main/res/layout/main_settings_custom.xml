@@ -40,10 +40,10 @@
 
                 <ImageView
                     android:id="@+id/wifi_icon"
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_wifi">
+                    android:src="@drawable/set_icon_wifi">
 
                 </ImageView>
             </FrameLayout>
@@ -83,10 +83,10 @@
 
                 <ImageView
                     android:id="@+id/bluetooth_icon"
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_bt">
+                    android:src="@drawable/set_icon_bt">
 
                 </ImageView>
             </FrameLayout>
@@ -125,10 +125,10 @@
                 android:background="@drawable/settings_button_bg">
 
                 <ImageView
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_mode">
+                    android:src="@drawable/set_icon_mode">
 
                 </ImageView>
             </FrameLayout>
@@ -166,10 +166,10 @@
                 android:background="@drawable/settings_button_bg">
 
                 <ImageView
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_typewriting">
+                    android:src="@drawable/set_icon_language">
 
                 </ImageView>
             </FrameLayout>
@@ -217,10 +217,10 @@
                 android:background="@drawable/settings_button_bg">
 
                 <ImageView
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_app">
+                    android:src="@drawable/set_icon_app">
 
                 </ImageView>
             </FrameLayout>
@@ -259,10 +259,10 @@
                 android:background="@drawable/settings_button_bg">
 
                 <ImageView
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_date2">
+                    android:src="@drawable/set_icon_date">
 
                 </ImageView>
             </FrameLayout>
@@ -301,10 +301,10 @@
                 android:background="@drawable/settings_button_bg">
 
                 <ImageView
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_other">
+                    android:src="@drawable/set_icon_set_other">
 
                 </ImageView>
             </FrameLayout>
@@ -342,10 +342,10 @@
                 android:background="@drawable/settings_button_bg">
 
                 <ImageView
-                    android:layout_width="@dimen/x_53"
-                    android:layout_height="@dimen/y_53"
+                    android:layout_width="@dimen/x_67"
+                    android:layout_height="@dimen/y_67"
                     android:layout_gravity="center"
-                    android:src="@drawable/settings_about">
+                    android:src="@drawable/set_icon_about">
 
                 </ImageView>
             </FrameLayout>

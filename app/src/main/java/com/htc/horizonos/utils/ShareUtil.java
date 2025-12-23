@@ -2,7 +2,7 @@ package com.htc.horizonos.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 
 /**
  * Author:
@@ -82,7 +82,7 @@ public class ShareUtil {
 
 
     public static void clear(Context context) {
-        Log.d(TAG," clear清空SharedPreferences");
+        LogUtils.d(TAG," clear清空SharedPreferences");
         SharedPreferences sp = getInstans(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();

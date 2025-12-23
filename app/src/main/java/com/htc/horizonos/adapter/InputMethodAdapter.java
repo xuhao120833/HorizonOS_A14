@@ -2,7 +2,7 @@ package com.htc.horizonos.adapter;
 
 import android.content.Context;
 import android.provider.Settings;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,7 +67,7 @@ public class InputMethodAdapter extends RecyclerView.Adapter<InputMethodAdapter.
                 Settings.Secure.putString(mContext.getContentResolver(),
                         Settings.Secure.DEFAULT_INPUT_METHOD,
                         bean.getPrefkey());
-                Log.d(TAG," bean.getPrefkey() "+bean.getPrefkey());
+                LogUtils.d(TAG," bean.getPrefkey() "+bean.getPrefkey());
                 setCurrentPosition(i);
                 notifyDataSetChanged();
             }

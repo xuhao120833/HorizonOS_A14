@@ -31,6 +31,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     externalNativeBuild {
@@ -50,7 +51,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled  false  //true混淆打开
+            minifyEnabled  true  //true混淆打开
             zipAlignEnabled true  //优化代码
             shrinkResources false  //优化资源
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

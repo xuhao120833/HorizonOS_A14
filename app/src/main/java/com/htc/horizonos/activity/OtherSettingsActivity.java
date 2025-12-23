@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemProperties;
 import android.provider.Settings;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,7 +172,7 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
     }
 
     private void setTimeOff(int index) {
-        Log.d(TAG, " 定时关机时间为 " + time_off_title.length + " " + index);
+        LogUtils.d(TAG, " 定时关机时间为 " + time_off_title.length + " " + index);
         otherSettingsBinding.timerOffTv.setText(time_off_title[index]);
         ShareUtil.put(this, Contants.TimeOffIndex, index);
         Intent intent = new Intent(this, TimeOffService.class);
@@ -229,7 +229,7 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                     AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_DIRECT : AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_STANDBY);
         } else if (id == R.id.rl_account) {//                Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Log.d(TAG, "打开Google账号切换界面");
+            LogUtils.d(TAG, "打开Google账号切换界面");
 //                startActivity(intent);
             Intent intent = new Intent(Settings.ACTION_SYNC_SETTINGS);
             intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, new String[]{"com.google"});

@@ -3,7 +3,7 @@ package com.htc.horizonos.adapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -86,9 +86,9 @@ public class BluetoothFoundAdapter extends RecyclerView.Adapter<BluetoothFoundAd
                     boolean result = ClsUtils.createBond(device.getClass(),
                             device);
                     if (result) {
-                        Log.i("hzj", "配对成功!");
+                        LogUtils.i("hzj", "配对成功!");
                     } else {
-                        Log.i("hzj", "配对失败!");
+                        LogUtils.i("hzj", "配对失败!");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

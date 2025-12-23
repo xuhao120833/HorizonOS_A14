@@ -44,7 +44,7 @@ import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.util.Base64;
-import android.util.Log;
+import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -241,7 +241,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             storageManager = (StorageManager) getSystemService(Context.STORAGE_SERVICE);
             localDevicesList = new ArrayList<StorageVolume>();
             devicesPathAdd();
-            Log.d(TAG, " onCreate ");
+            LogUtils.d(TAG, " onCreate ");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -259,7 +259,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //                handler.sendEmptyMessage(204);
                 ShareUtil.put(this, Contants.MODIFY, false);
             }
-            Log.d(TAG, " onResume快捷图标 short_list " + short_list.size());
+            LogUtils.d(TAG, " onResume快捷图标 short_list " + short_list.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -313,13 +313,13 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     }
 
     public void initBattery() {
-        Log.d(TAG, "电池状态 初始化");
+        LogUtils.d(TAG, "电池状态 初始化");
         htcosBinding.rlBattery.setOnHoverListener(this);
         if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryEnable).equals("1")) {//是否有电池
-            Log.d(TAG, "电池状态 初始化 有电池");
+            LogUtils.d(TAG, "电池状态 初始化 有电池");
             htcosBinding.rlBattery.setVisibility(View.VISIBLE);
             if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
-                Log.d(TAG, "电池状态 初始化 正在充电");
+                LogUtils.d(TAG, "电池状态 初始化 正在充电");
                 switch (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryLevel)) {
                     case "0":
                         htcosBinding.battery.setImageResource(R.drawable.battery_charging_1);
@@ -338,7 +338,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                         break;
                 }
             } else if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("0")) {
-                Log.d(TAG, "电池状态 初始化 没充电");
+                LogUtils.d(TAG, "电池状态 初始化 没充电");
                 switch (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryLevel)) {
                     case "0":
                         htcosBinding.battery.setImageResource(R.drawable.battery_1);
@@ -358,14 +358,14 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 }
             }
         } else {
-            Log.d(TAG, "电池状态 初始化 没有电池");
+            LogUtils.d(TAG, "电池状态 初始化 没有电池");
         }
 
     }
 
     @Override
     public void setBatteryLevel(String level) {
-        Log.d(TAG, "电池状态 setBatteryLevel");
+        LogUtils.d(TAG, "电池状态 setBatteryLevel");
         switch (level) {
             case "0":
                 if (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryDc).equals("1")) {
@@ -408,7 +408,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public void Plug_in_charger() {
-        Log.d(TAG, "电池状态 Plug_in_charger");
+        LogUtils.d(TAG, "电池状态 Plug_in_charger");
         switch (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryLevel)) {
             case "0":
                 htcosBinding.battery.setImageResource(R.drawable.battery_charging_1);
@@ -430,7 +430,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public void Unplug_the_charger() {
-        Log.d(TAG, "电池状态 Unplug_the_charger");
+        LogUtils.d(TAG, "电池状态 Unplug_the_charger");
         switch (SystemPropertiesUtil.getSystemProperty(SystemPropertiesUtil.batteryLevel)) {
             case "0":
                 htcosBinding.battery.setImageResource(R.drawable.battery_1);
@@ -456,7 +456,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             public void run() {
                 //读取首页的配置文件，优先读取网络服务器配置，其次读本地配置。只读取一次，清除应用缓存可触发再次读取。
                 initDataApp();
-                Log.d(TAG, " initDataCustom ");
+                LogUtils.d(TAG, " initDataCustom ");
             }
         }).start();
     }
@@ -548,13 +548,13 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         public void onItemClick(int i, String name) {
             if (i < short_list.size()) {
 
-                Log.d(TAG, " xuhao执行点击前 " + i);
+                LogUtils.d(TAG, " xuhao执行点击前 " + i);
                 if (i == 0) {
-                    Log.d(TAG, " 打开APP详情页");
+                    LogUtils.d(TAG, " 打开APP详情页");
                     startNewActivity(AppsActivity.class);
                     return;
                 }
-                Log.d(TAG, " short_list.get(i).getPackageName() " + short_list.get(i).getPackageName());
+                LogUtils.d(TAG, " short_list.get(i).getPackageName() " + short_list.get(i).getPackageName());
                 if (!AppUtils.startNewApp(MainActivity.this, short_list.get(i).getPackageName())) {
                     appName = name;
                     requestChannelData();
@@ -653,12 +653,12 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     }
 
     public void goAction(String listaction) {
-        Log.d(TAG, " goAction list配置跳转 " + listaction);
+        LogUtils.d(TAG, " goAction list配置跳转 " + listaction);
         if (listaction.contains("/")) {
             String[] parts = listaction.split("/", 2);
             String packageName = parts[0];
             String activityName = parts[1];
-            Log.d(TAG, " goAction 包名活动名 " + packageName + " " + activityName);
+            LogUtils.d(TAG, " goAction 包名活动名 " + packageName + " " + activityName);
             startNewActivity(packageName, activityName);
         } else if (listaction.equals("HDMI1") || listaction.equals("HDMI2") || listaction.equals("VGA") || listaction.equals("CVBS1")) {
             startSource(listaction);
@@ -684,12 +684,12 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int code = sharedPreferences.getInt("code", 0);
-        Log.d(TAG, " initDataApp读code值 " + code);
+        LogUtils.d(TAG, " initDataApp读code值 " + code);
         if (code == 0) {  //保证配置文件只在最初读一次
             //1、优先连接服务器读取配置
 
             //2、服务器没有，就读本地
-            Log.d(TAG, " MainActivity开始读取配置文件 ");
+            LogUtils.d(TAG, " MainActivity开始读取配置文件 ");
 
             // 读取文件,优先读取oem分区
             File file = new File("/oem/shortcuts.config");
@@ -697,7 +697,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 file = new File("/system/shortcuts.config");
             }
             if (!file.exists()) {
-                Log.d(TAG, " 配置文件不存在 ");
+                LogUtils.d(TAG, " 配置文件不存在 ");
                 DBUtils.getInstance(this).deleteTable();
                 editor.putInt("code", 1);
                 editor.apply();
@@ -706,7 +706,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     public void run() {
                         // 设置首页的配置图标
                         try {
-                            Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
+                            LogUtils.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
                             if (savedInstanceState == null) {
                                 originalFragment = new OriginalFragment();
                                 // 添加初始 Fragment
@@ -730,7 +730,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 byte[] b = new byte[is.available()];
                 is.read(b);
                 String result = new String(b);
-                Log.d(TAG, " MainActivity读取到的配置文件 " + result); //这里把配置文件原封不动的读取出来，不做一整行处理
+                LogUtils.d(TAG, " MainActivity读取到的配置文件 " + result); //这里把配置文件原封不动的读取出来，不做一整行处理
                 List<String> residentList = new ArrayList<>();
                 JSONObject obj = new JSONObject(result);
 
@@ -748,7 +748,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
                 //读取首页第一行四个功能区
                 readListModules(obj);
-                Log.d(TAG, " 当前的语言环境是： " + LanguageUtil.getCurrentLanguage());
+                LogUtils.d(TAG, " 当前的语言环境是： " + LanguageUtil.getCurrentLanguage());
 
                 //读取品牌图标 HtcOs暂时不需要
 //                readBrand(obj);
@@ -774,7 +774,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             public void run() {
                 // 设置首页的配置图标
                 try {
-                    Log.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
+                    LogUtils.d(TAG, " readListModules originalFragment信息 " + originalFragment + " newFragment " + newFragment + " transaction " + transaction);
                     if (savedInstanceState == null) {
                         originalFragment = new OriginalFragment();
                         // 添加初始 Fragment
@@ -799,7 +799,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        try {
 //            if (obj.has("defaultbackground")) {
 //                String DefaultBackground = obj.getString("defaultbackground").trim();
-//                Log.d(TAG, " readDefaultBackground " + DefaultBackground);
+//                LogUtils.d(TAG, " readDefaultBackground " + DefaultBackground);
 //                // 将字符串存入数据库；
 //                SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
 //                SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -823,7 +823,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     String iconPath = jsonobject.getString("iconPath");
                     String action = jsonobject.getString("action");
 
-                    Log.d(TAG, " 读取到的mainApp " + tag + appName + iconPath + action);
+                    LogUtils.d(TAG, " 读取到的mainApp " + tag + appName + iconPath + action);
 
                     //从iconPath中把png读出来赋值给drawable
                     Drawable drawable = FileUtils.loadImageAsDrawable(this, iconPath);
@@ -853,18 +853,18 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //                    String packageName = jsonobject.getString("packageName");
 //
 //                    for (int d = 0; d < mylist.size(); d++) {
-//                        Log.d(TAG, " 对比 " + mylist.get(d).getPackagename() + " " + packageName);
+//                        LogUtils.d(TAG, " 对比 " + mylist.get(d).getPackagename() + " " + packageName);
 //                        if (mylist.get(d).getPackagename().equals(packageName)) { //去除掉两个队列中相同的部分
-//                            Log.d(TAG, " 移除两个队列中的相同部分 " + packageName + mylist.size());
+//                            LogUtils.d(TAG, " 移除两个队列中的相同部分 " + packageName + mylist.size());
 //                            mylist.remove(d);
-//                            Log.d(TAG, " mylist.size " + mylist.size());
+//                            LogUtils.d(TAG, " mylist.size " + mylist.size());
 //                            break;
 //                        }
 //                    }
 //                }
 //                for (int d = 0; d < mylist.size(); d++) { //剩余的不同的就是无效的，把无效的delet，保证每次修改配置之后都正确生效
 //                    if (sharedPreferences.getString("resident", "").contains(mylist.get(d).getPackagename())) {
-//                        Log.d(TAG, " 移除APP快捷图标栏废弃的配置 ");
+//                        LogUtils.d(TAG, " 移除APP快捷图标栏废弃的配置 ");
 //                        DBUtils.getInstance(this).deleteFavorites(mylist.get(d).getPackagename());
 //                    }
 //                }
@@ -883,7 +883,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //                            packageName)) {
 //                        long addCode = DBUtils.getInstance(this)
 //                                .addFavorites(appName, packageName, drawable);
-//                        Log.d(TAG, " Shortcuts 添加快捷数据库成功 " + appName + " " + packageName);
+//                        LogUtils.d(TAG, " Shortcuts 添加快捷数据库成功 " + appName + " " + packageName);
 //                    }
 //                }
 //            }
@@ -896,7 +896,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         try {
             if (obj.has("filterApps")) {
                 String filterApps = obj.getString("filterApps");
-                Log.d(TAG, " readFilterApps " + filterApps);
+                LogUtils.d(TAG, " readFilterApps " + filterApps);
                 // 将字符串按分号拆分成数组
                 String[] packageNames = filterApps.split(";");
                 DBUtils.getInstance(this).insertFilterApps(packageNames);
@@ -919,12 +919,12 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     String action = jsonobject.getString("action");
                     JSONObject textObject = jsonobject.getJSONObject("text");
                     JSONArray keys = textObject.names();
-                    Log.d(TAG, " 读取到的listModules keys " + keys);
+                    LogUtils.d(TAG, " 读取到的listModules keys " + keys);
                     if (keys != null) {
                         for (int b = 0; b < keys.length(); b++) {
                             String key = keys.getString(b);
                             String value = textObject.getString(key);
-                            Log.d(TAG, " 读取到的listModules " + tag + iconPath + key + value);
+                            LogUtils.d(TAG, " 读取到的listModules " + tag + iconPath + key + value);
                             hashtable.put(key, value);
                         }
                     }
@@ -963,8 +963,8 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         mshortInfoBean.setAppicon(ContextCompat.getDrawable(this, R.drawable.home_app_manager));
         shortInfoBeans.add(mshortInfoBean);
         //xuhao
-        Log.d(TAG, " loadHomeAppData快捷图标 appList " + appList.size());
-        Log.d(TAG, " loadHomeAppData快捷图标 appSimpleBeans " + appSimpleBeans.size());
+        LogUtils.d(TAG, " loadHomeAppData快捷图标 appList " + appList.size());
+        LogUtils.d(TAG, " loadHomeAppData快捷图标 appSimpleBeans " + appSimpleBeans.size());
         for (int i = 0; i < appSimpleBeans.size(); i++) {
             ShortInfoBean shortInfoBean = new ShortInfoBean();
             shortInfoBean.setPackageName(appSimpleBeans.get(i).getPackagename());
@@ -986,7 +986,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         int keyCode = event.getKeyCode();
         if (keyCode == KeyEvent.KEYCODE_BACK) { //NewFragment BACK键返回 OriginalFragment
             if(newFragment != null) {
-                Log.d(TAG, " dispatchKeyEvent测试 KEYCODE_BACK" + event.getKeyCode() + " newFragment.isVisible " + newFragment.isVisible());
+                LogUtils.d(TAG, " dispatchKeyEvent测试 KEYCODE_BACK" + event.getKeyCode() + " newFragment.isVisible " + newFragment.isVisible());
                 if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN && newFragment.isVisible()) {
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -1005,7 +1005,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //    @Override
 //    protected void onUserLeaveHint() {
 //        super.onUserLeaveHint();
-//        Log.d(TAG," 用户按下Home键 ");
+//        LogUtils.d(TAG," 用户按下Home键 ");
 //        if(newFragment == null) {
 //            return;
 //        }
@@ -1034,7 +1034,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         String builder = TimeUtils.getCurrentTime(this) +
                 "|";
 //        mainBinding.timeTv.setText(builder);
-        Log.d(TAG," updateTime时间更新 "+TimeUtils.getCurrentTime(this)+" builder "+builder);
+        LogUtils.d(TAG," updateTime时间更新 "+TimeUtils.getCurrentTime(this)+" builder "+builder);
         htcosBinding.time.setText(builder);
         htcosBinding.calendar.setText(TimeUtils.getCurrentDate());
         htcosBinding.week.setText(TimeUtils.getShortWeekDay());
@@ -1060,15 +1060,15 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public void UsbDeviceChange() {
-        Log.d("UsbDeviceChange ", String.valueOf(Utils.hasUsbDevice));
+        LogUtils.d("UsbDeviceChange ", String.valueOf(Utils.hasUsbDevice));
         if (Utils.hasUsbDevice) {
-            Log.d("UsbDeviceChange ", "usbConnect设为VISIBLE");
+            LogUtils.d("UsbDeviceChange ", "usbConnect设为VISIBLE");
             htcosBinding.rlUsbConnect.setVisibility(View.VISIBLE);
         } else {
             htcosBinding.rlUsbConnect.clearFocus();
             htcosBinding.rlUsbConnect.clearAnimation();
             htcosBinding.rlUsbConnect.setVisibility(View.GONE);
-            Log.d("UsbDeviceChange ", "usbConnect设为GONE");
+            LogUtils.d("UsbDeviceChange ", "usbConnect设为GONE");
         }
     }
 
@@ -1089,7 +1089,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     @Override
     public void getWifiNumber(int count) {
         List<ScanResult> wifiList = wifiManager.getScanResults();
-        Log.d(TAG, "getWifiNumber " + count);
+        LogUtils.d(TAG, "getWifiNumber " + count);
         if (count == 1) {
             htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_4);
             return;
@@ -1097,7 +1097,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_4);
             return;
         }
-        Log.d(TAG, " level数据" + count);
+        LogUtils.d(TAG, " level数据" + count);
         if (count < -85) {
             htcosBinding.homeWifi.setImageResource(R.drawable.wifi_custom_green_1);
         } else if (count < -70) {
@@ -1219,12 +1219,12 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        }
 //        Hashtable<String, String> mHashtable1 = DBUtils.getInstance(this).getHashtableFromListModules("list1");
 //        Hashtable<String, String> mHashtable2 = DBUtils.getInstance(this).getHashtableFromListModules("list3");
-//        Log.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
+//        LogUtils.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
 //        if (mHashtable1 != null) {
 //            String text = null;
 //            switch (LanguageUtil.getCurrentLanguage()) {
 //                case "zh-CN":
-//                    Log.d(TAG, "中文设置eshareText和hdmiText");
+//                    LogUtils.d(TAG, "中文设置eshareText和hdmiText");
 //                    text = mHashtable1.get("zh-CN");
 //                    if (text != null && !text.equals("")) {
 //                        customBinding.eshareText.setText(mHashtable1.get("zh-CN"));
@@ -1278,7 +1278,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //            String text = null;
 //            switch (LanguageUtil.getCurrentLanguage()) {
 //                case "zh-CN":
-//                    Log.d(TAG, "中文设置eshareText和hdmiText");
+//                    LogUtils.d(TAG, "中文设置eshareText和hdmiText");
 //                    text = mHashtable2.get("zh-CN");
 //                    if (text != null && !text.equals("")) {
 //                        customBinding.hdmiText.setText(mHashtable2.get("zh-CN"));
@@ -1342,16 +1342,16 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
 //        int selectBg = sharedPreferences.getInt(Contants.SelectWallpaperLocal, -1);
 //        if (selectBg != -1) {
-//            Log.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
+//            LogUtils.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
 //            return;
 //        }
 //        //背景控制end
 //        String defaultbg = sharedPreferences.getString(Contants.DefaultBg, "1");
-//        Log.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
+//        LogUtils.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
 //        int number = Integer.parseInt(defaultbg);
-//        Log.d(TAG, " setDefaultBackground number " + number);
+//        LogUtils.d(TAG, " setDefaultBackground number " + number);
 //        if (number > Utils.drawables.size()) {
-//            Log.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
+//            LogUtils.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
 //            return;
 //        }
 //        MyApplication.mainDrawable = (BitmapDrawable) Utils.drawables.get(number - 1);
@@ -1370,17 +1370,17 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public void appChange(String packageName) {
-        Log.d(TAG, "MainActivity 收到Change广播");
+        LogUtils.d(TAG, "MainActivity 收到Change广播");
     }
 
     @Override
     public void appUnInstall(String packageName) {
-        Log.d(TAG, "MainActivity 收到卸载广播 " + packageName);
+        LogUtils.d(TAG, "MainActivity 收到卸载广播 " + packageName);
         SharedPreferences sp = ShareUtil.getInstans(this);
         SharedPreferences.Editor ed = sp.edit();
         String resident = sp.getString("resident", "");
         if (resident.contains(packageName)) {
-            Log.d(TAG, " 配置文件中apps：\"resident\":true 常驻首页前台，应用删除了，也不能从首页APP快捷栏移除");
+            LogUtils.d(TAG, " 配置文件中apps：\"resident\":true 常驻首页前台，应用删除了，也不能从首页APP快捷栏移除");
             return;
         }
         DBUtils.getInstance(this).deleteFavorites(packageName);
@@ -1388,7 +1388,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     @Override
     public void appInstall(String packageName) {
-        Log.d(TAG, "MainActivity 收到安装广播");
+        LogUtils.d(TAG, "MainActivity 收到安装广播");
     }
 
 //    private void CopyResIdToSd(int resId) {
@@ -1445,22 +1445,22 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //            Bundle extras = usbStateIntent.getExtras();
 //            boolean connected = extras.getBoolean(UsbManager.USB_CONNECTED);
 //            if (connected) {
-//                Log.d(TAG, " 开机检测到U盘插入 ");
+//                LogUtils.d(TAG, " 开机检测到U盘插入 ");
 //                customBinding.rlUsbConnect.setVisibility(View.VISIBLE);
 //            } else {
-//                Log.d(TAG, " 开机没有检测到U盘插入 ");
+//                LogUtils.d(TAG, " 开机没有检测到U盘插入 ");
 //            }
 //        }
 //        return true;
 
 //        int usbCount = countUsbDevices(getApplicationContext());
 //        if (usbCount != 0) {
-//            Log.d(TAG, "checkUsb  开机检测到U盘 " + Utils.usbDevicesNumber);
+//            LogUtils.d(TAG, "checkUsb  开机检测到U盘 " + Utils.usbDevicesNumber);
 //            customBinding.rlUsbConnect.setVisibility(View.VISIBLE);
 //            Utils.usbDevicesNumber = usbCount * 2;
-//            Log.d(TAG, "checkUsb  开机检测到U盘 usbCount*2 " + Utils.usbDevicesNumber);
+//            LogUtils.d(TAG, "checkUsb  开机检测到U盘 usbCount*2 " + Utils.usbDevicesNumber);
 //        } else {
-//            Log.d(TAG, "checkUsb  开机没有检测到U盘");
+//            LogUtils.d(TAG, "checkUsb  开机没有检测到U盘");
 //        }
 //    }
 
@@ -1480,7 +1480,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //                usbCount++;
 //            }
 //        }
-//        Log.d(TAG, "checkUsb  开机检测到 " + usbCount + " 个U盘");
+//        LogUtils.d(TAG, "checkUsb  开机检测到 " + usbCount + " 个U盘");
 //        return usbCount;
 //    }
 
@@ -1548,19 +1548,19 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     private void devicesPathAdd() {
         if (storageManager == null) {
-            Log.e(TAG, "devicesPathAdd manager is null return error!");
+            LogUtils.e(TAG, "devicesPathAdd manager is null return error!");
             return;
         }
         localDevicesList = storageManager.getStorageVolumes();
-        Log.d(TAG, " 检测到devicesPathAdd " + localDevicesList.size());
+        LogUtils.d(TAG, " 检测到devicesPathAdd " + localDevicesList.size());
         StorageVolume storageVolume;
         for (int i = 0; i < localDevicesList.size(); i++) {
             storageVolume = localDevicesList.get(i);
-//            Log.d(TAG," 检测到storageVolume.getPath() "+storageVolume.getPath()+" "+Environment.getExternalStorageDirectory().getPath());
+//            LogUtils.d(TAG," 检测到storageVolume.getPath() "+storageVolume.getPath()+" "+Environment.getExternalStorageDirectory().getPath());
             if (!storageVolume.getPath().equals(Environment.getExternalStorageDirectory().getPath())) {
                 if (storageVolume.getId().startsWith("public:179")) {
                     /* 获取SD卡设备路径列表 */
-                    Log.d(TAG, " 检测到SD卡 " + storageVolume.getPath());
+                    LogUtils.d(TAG, " 检测到SD卡 " + storageVolume.getPath());
                 } else if (storageVolume.getId().startsWith("public:8")) {
                     /* 获取USB设备路径列表 */
                     Utils.hasUsbDevice = true;
@@ -1568,11 +1568,11 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                     if (customBinding.rlUsbConnect.getVisibility() == View.GONE) {
                         customBinding.rlUsbConnect.setVisibility(View.VISIBLE);
                     }
-                    Log.d(TAG, " 检测到USB设备 " + storageVolume.getPath() + " Utils.hasUsbDevice " + Utils.hasUsbDevice
+                    LogUtils.d(TAG, " 检测到USB设备 " + storageVolume.getPath() + " Utils.hasUsbDevice " + Utils.hasUsbDevice
                             + " Utils.usbDevicesNumber " + Utils.usbDevicesNumber);
                 } else if (storageVolume.getPath().contains("sata")) {
                     /* 获取sata设备路径列表 */
-                    Log.d(TAG, " 检测到sata设备 " + storageVolume.getPath());
+                    LogUtils.d(TAG, " 检测到sata设备 " + storageVolume.getPath());
                 }
             }
         }
@@ -1633,16 +1633,16 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
 //        int selectBg = sharedPreferences.getInt(Contants.SelectWallpaperLocal, -1);
 //        if (selectBg != -1) {
-//            Log.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
+//            LogUtils.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
 //            return;
 //        }
 //        //背景控制end
 //        String defaultbg = sharedPreferences.getString(Contants.DefaultBg, "1");
-//        Log.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
+//        LogUtils.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
 //        int number = Integer.parseInt(defaultbg);
-//        Log.d(TAG, " setDefaultBackground number " + number);
+//        LogUtils.d(TAG, " setDefaultBackground number " + number);
 //        if (number > Utils.drawablesId.length) {
-//            Log.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
+//            LogUtils.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
 //            return;
 //        }
 //        setWallPaper(Utils.drawablesId[number - 1]);
@@ -1657,7 +1657,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
         int selectBg = sharedPreferences.getInt(Contants.SelectWallpaperLocal, -1);
         if (selectBg != -1) {
-            Log.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
+            LogUtils.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
             return;
         }
         //背景控制end
@@ -1667,17 +1667,17 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             defaultbg = "1";
         }
         int number = Integer.parseInt(defaultbg);
-        Log.d(TAG, " setDefaultBackground number " + number);
-        Log.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
+        LogUtils.d(TAG, " setDefaultBackground number " + number);
+        LogUtils.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
         if(Utils.customBackground) {
             String path = (String) Utils.drawables.get(number-1);
-            Log.d(TAG, " loadImageFromPath path " + path);
+            LogUtils.d(TAG, " loadImageFromPath path " + path);
             Drawable drawable = ImageUtils.loadImageFromPath(path,getApplicationContext());
             MyApplication.mainDrawable = (BitmapDrawable) drawable;
             setDefaultBg(drawable);
         }else {
             if (number > Utils.drawablesId.length) {
-                Log.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
+                LogUtils.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
                 return;
             }
             if(number == 1) {
