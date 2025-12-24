@@ -33,6 +33,7 @@ public class Utils {
     public static final int REQUEST_CODE_PICK_IMAGE = 1;
     //一个全局的特定IP APP信息
     public static SpecialApps specialApps = null;
+    public static boolean audio_change = false;
 
     public static int[] drawablesId = {
             R.drawable.background_main,

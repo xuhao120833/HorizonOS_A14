@@ -54,6 +54,14 @@
             android:name=".receiver.BatteryReceiver"
             android:enabled="true"
             android:exported="true" /> <!-- 您从百度网站获取的APP KEY，根据实际您的APP申请的APP_KEY进行修改 -->
+        <receiver
+            android:name=".receiver.DisplaySettingsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.htc.DISPLAY_SETTINGS" />
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
             android:value="5dd227fad8" /> <!-- 渠道商编号 -->

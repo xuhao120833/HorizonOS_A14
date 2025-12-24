@@ -32,6 +32,7 @@ import com.htc.horizonos.fragment.OriginalFragment;
 import com.htc.horizonos.receiver.AppCallBack;
 import com.htc.horizonos.receiver.AppReceiver;
 import com.htc.horizonos.receiver.BatteryReceiver;
+import com.htc.horizonos.receiver.DisplaySettingsReceiver;
 import com.htc.horizonos.receiver.UsbDeviceCallBack;
 import com.htc.horizonos.utils.BatteryCallBack;
 import com.htc.horizonos.utils.BlurImageView;
@@ -153,6 +154,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 
     //电池
     private BatteryReceiver batteryReceiver = null;
+    public static DisplaySettingsReceiver displaySettingsReceiver = null;
 
     private static String TAG = "MainActivity";
 
@@ -515,6 +517,15 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         batteryFilter.addAction("action.projector.dcin");
         batteryFilter.addAction("action.projector.batterylevel");
         registerReceiver(batteryReceiver, batteryFilter);
+
+        //Display Settings悬浮窗
+        if (displaySettingsReceiver == null) {
+            LogUtils.d(TAG, "registerReceiver displaySettingsReceiver");
+            displaySettingsReceiver = new DisplaySettingsReceiver(getApplicationContext());
+            IntentFilter displayFilter = new IntentFilter();
+            displayFilter.addAction(DisplaySettingsReceiver.DisplayAction);
+            getApplicationContext().registerReceiver(displaySettingsReceiver, displayFilter);
+        }
     }
 
     ShortcutsAdapter.ItemCallBack itemCallBack = new ShortcutsAdapter.ItemCallBack() {
@@ -1050,6 +1061,8 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         unregisterReceiver(usbDeviceReceiver);
         unregisterReceiver(appReceiver);
         unregisterReceiver(batteryReceiver);
+        getApplicationContext().unregisterReceiver(displaySettingsReceiver);
+        displaySettingsReceiver = null;
         super.onDestroy();
     }
 
