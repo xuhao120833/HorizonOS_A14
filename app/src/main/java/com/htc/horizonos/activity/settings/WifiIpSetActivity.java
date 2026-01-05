@@ -8,7 +8,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-
 import com.htc.horizonos.activity.BaseActivity;
 import com.htc.horizonos.utils.LogUtils;
 import android.view.KeyEvent;
@@ -68,11 +67,6 @@ public class WifiIpSetActivity extends BaseActivity implements View.OnKeyListene
     protected void onPause() {
         super.onPause(); // 确保调用父类的 onPause 方法
         LogUtils.d(TAG,"执行onPause 方法");
-//        if(wifiIpSet2Binding.ip.hasFocus() || wifiIpSet2Binding.gateway.hasFocus() || wifiIpSet2Binding.netmask.hasFocus()
-//            || wifiIpSet2Binding.dns1.hasFocus() || wifiIpSet2Binding.dns2.hasFocus()) {
-//            LogUtils.d(TAG,"onPause中执行editTextFocusChange方法");
-//            editTextFocusChange();
-//        }
     }
 
     private void initView() {

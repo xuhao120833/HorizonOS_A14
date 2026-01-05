@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.wifi.WifiConfiguration;
+import android.net.wifi.SoftApConfiguration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.htc.horizonos.R;
 import com.htc.horizonos.databinding.HotspotNameDialogBinding;
 import com.htc.horizonos.utils.InputMethodUtil;
@@ -28,7 +29,7 @@ public class HotspotNameDialog extends BaseDialog implements View.OnClickListene
     private HotspotNameDialogBinding hotspotNameDialogBinding;
     private HotspotNameCallBack mcallback;
     private WifiHotUtil wifiHotUtil;
-    private WifiConfiguration wifiConfiguration;
+    private SoftApConfiguration wifiConfiguration;
 
     @Override
     public void onClick(View v) {
@@ -84,7 +85,7 @@ public class HotspotNameDialog extends BaseDialog implements View.OnClickListene
     @Override
     protected void onStart() {
         wifiConfiguration = wifiHotUtil.getWifiConfig();
-        hotspotNameDialogBinding.hotspotName.setText(wifiConfiguration.SSID);
+        hotspotNameDialogBinding.hotspotName.setText(wifiConfiguration.getSsid());
         super.onStart();
     }
 
