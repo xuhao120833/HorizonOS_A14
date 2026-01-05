@@ -45,7 +45,9 @@ import android.os.SystemProperties;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.util.Base64;
+
 import com.htc.horizonos.utils.LogUtils;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -181,7 +183,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     public FragmentManager fragmentManager = getSupportFragmentManager();
     public FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-    Bundle savedInstanceState =null;
+    Bundle savedInstanceState = null;
     private ConnectivityManager.NetworkCallback networkCallback;
 
     private boolean isEther = false;
@@ -994,7 +996,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
     public boolean dispatchKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
         if (keyCode == KeyEvent.KEYCODE_BACK) { //NewFragment BACK键返回 OriginalFragment
-            if(newFragment != null) {
+            if (newFragment != null) {
                 LogUtils.d(TAG, " dispatchKeyEvent测试 KEYCODE_BACK" + event.getKeyCode() + " newFragment.isVisible " + newFragment.isVisible());
                 if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN && newFragment.isVisible()) {
                     getSupportFragmentManager()
@@ -1043,7 +1045,7 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         String builder = TimeUtils.getCurrentTime(this) +
                 "|";
 //        mainBinding.timeTv.setText(builder);
-        LogUtils.d(TAG," updateTime时间更新 "+TimeUtils.getCurrentTime(this)+" builder "+builder);
+        LogUtils.d(TAG, " updateTime时间更新 " + TimeUtils.getCurrentTime(this) + " builder " + builder);
         htcosBinding.time.setText(builder);
         htcosBinding.calendar.setText(TimeUtils.getCurrentDate());
         htcosBinding.week.setText(TimeUtils.getShortWeekDay());
@@ -1188,7 +1190,16 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
                 return;
             }
         }
-        ToastUtil.showShortToast(this, getString(R.string.data_none));
+        if ("YouTube".equals(appName)) {
+            // 第一次失败 → 换 TV 继续请求
+            if (!AppUtils.startNewApp(MainActivity.this, "com.google.android.youtube.tv")) {
+                appName = "Youtube";
+                requestChannelData();
+            }
+        } else {
+            // TV 也失败了 → 你原来的错误处理
+            ToastUtil.showShortToast(this, getString(R.string.data_none));
+        }
     }
 
     private void startRebootService() {
@@ -1331,7 +1342,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        LogUtils.d(TAG, "checkUsb  开机检测到 " + usbCount + " 个U盘");
 //        return usbCount;
 //    }
-
     private void CopyDrawableToSd(Drawable drawable) {
         Bitmap bitmap = null;
         if (drawable instanceof BitmapDrawable) {
@@ -1498,7 +1508,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
 //        MyApplication.mainDrawable = (BitmapDrawable) drawable;
 //        setDefaultBg(drawable);
 //    }
-
     @SuppressLint("UseCompatLoadingForDrawables")
     private void setDefaultBackgroundById() {
         //如果用户自主修改了背景，那么重启之后不再设置默认背景start
@@ -1517,22 +1526,22 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         int number = Integer.parseInt(defaultbg);
         LogUtils.d(TAG, " setDefaultBackground number " + number);
         LogUtils.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
-        if(Utils.customBackground) {
-            String path = (String) Utils.drawables.get(number-1);
+        if (Utils.customBackground) {
+            String path = (String) Utils.drawables.get(number - 1);
             LogUtils.d(TAG, " loadImageFromPath path " + path);
-            Drawable drawable = ImageUtils.loadImageFromPath(path,getApplicationContext());
+            Drawable drawable = ImageUtils.loadImageFromPath(path, getApplicationContext());
             MyApplication.mainDrawable = (BitmapDrawable) drawable;
             setDefaultBg(drawable);
-        }else {
+        } else {
             if (number > Utils.drawablesId.length) {
                 LogUtils.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
                 return;
             }
-            if(number == 1) {
+            if (number == 1) {
                 Drawable drawable = (Drawable) Utils.drawables.get(0);
                 MyApplication.mainDrawable = (BitmapDrawable) drawable;
                 setDefaultBg(drawable);
-            }else if(number>1) {
+            } else if (number > 1) {
                 setWallPaper(Utils.drawablesId[number - 1]);
                 Drawable drawable = getResources().getDrawable(Utils.drawablesId[number - 1]);
                 MyApplication.mainDrawable = (BitmapDrawable) drawable;

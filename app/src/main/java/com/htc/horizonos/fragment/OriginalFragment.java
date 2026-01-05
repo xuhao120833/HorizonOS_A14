@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.htc.horizonos.utils.LogUtils;
+
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -307,8 +308,8 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                     activity.appName = appname;
                     activity.requestChannelData();
                 }
-            } else if (!AppUtils.startNewApp(activity, "com.google.android.youtube.tv")) {
-                activity.appName = "Youtube";
+            } else if (!AppUtils.startNewApp(activity, "com.google.android.youtube")) {//优先手机版
+                activity.appName = "YouTube";
                 activity.requestChannelData();
             }
         } else if (id == R.id.disney) {
@@ -500,7 +501,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 layout.addView(source_item);
                 source_title.setSelected(true);
             } else {
-                String title = Utils.sourceListTitle[i-1];
+                String title = Utils.sourceListTitle[i - 1];
                 // 获取 LayoutInflater 对象
                 source_title.setText(title);
                 // 设置上下外边距
@@ -516,7 +517,7 @@ public class OriginalFragment extends Fragment implements View.OnKeyListener, Vi
                 source_item.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startSource(Utils.sourceList[finalI-1]);
+                        startSource(Utils.sourceList[finalI - 1]);
                     }
                 });
                 source_item.setOnHoverListener(this);

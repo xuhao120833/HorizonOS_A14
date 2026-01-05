@@ -8,6 +8,7 @@ import android.provider.Settings;
 import com.htc.horizonos.activity.BaseActivity;
 import com.htc.horizonos.activity.settings.DeveloperModeActivity;
 import com.htc.horizonos.utils.LogUtils;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
