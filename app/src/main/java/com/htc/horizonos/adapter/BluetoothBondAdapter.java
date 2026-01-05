@@ -1,7 +1,6 @@
 package com.htc.horizonos.adapter;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
@@ -27,11 +26,11 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.htc.horizonos.activity.BluetoothActivity.a2dp;
-import static com.htc.horizonos.activity.BluetoothActivity.connectDeviceFromA2DP;
-import static com.htc.horizonos.activity.BluetoothActivity.connectKeyboard;
-import static com.htc.horizonos.activity.BluetoothActivity.isKeyboardDevice;
-import static com.htc.horizonos.activity.BluetoothActivity.mBluetoothProfile;
+import static com.htc.horizonos.activity.settings.BluetoothActivity.a2dp;
+import static com.htc.horizonos.activity.settings.BluetoothActivity.connectDeviceFromA2DP;
+import static com.htc.horizonos.activity.settings.BluetoothActivity.connectKeyboard;
+import static com.htc.horizonos.activity.settings.BluetoothActivity.isKeyboardDevice;
+import static com.htc.horizonos.activity.settings.BluetoothActivity.mBluetoothProfile;
 
 /**
  * Author:

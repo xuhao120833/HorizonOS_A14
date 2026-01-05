@@ -44,7 +44,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 		<activity
-            android:name=".activity.WifiIpSetActivity"
+            android:name=".activity.settings.WifiIpSetActivity"
             android:exported="false" />
         <receiver
             android:name=".receiver.VaFocusReceiver"
@@ -85,7 +85,7 @@
             android:value="true" />
 
         <activity
-            android:name=".activity.BluetoothIncomingFileConfirmActivity"
+            android:name=".activity.settings.BluetoothIncomingFileConfirmActivity"
             android:theme="@style/TransparentActivity"
             android:configChanges="keyboard|keyboardHidden|navigation"
             android:excludeFromRecents="true"
@@ -96,39 +96,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.DisplaySettingsActivity"
+            android:name=".activity.settings.DisplaySettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.WiredActivity"
+            android:name=".activity.settings.WiredActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.HotspotActivity"
+            android:name=".activity.settings.HotspotActivity"
             android:exported="false" />
         <activity
             android:name=".activity.settings.InitAngleActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.NetworkActivity"
+            android:name=".activity.settings.NetworkActivity"
             android:exported="true" />
-        <activity android:name=".activity.DeveloperModeActivity" />
+        <activity android:name=".activity.settings.DeveloperModeActivity" />
         <activity
-            android:name=".activity.PowerActivity"
+            android:name=".activity.settings.PowerActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/MyDialogStyleBottom" />
-        <activity android:name=".activity.BluetoothSpeakerActivity" />
+        <activity android:name=".activity.settings.BluetoothSpeakerActivity" />
         <activity
             android:name=".activity.WallPaperActivity"
             android:launchMode="singleInstance" />
-        <activity android:name=".activity.AppsManagerActivity" />
+        <activity android:name=".activity.settings.AppsManagerActivity" />
         <activity
             android:name=".activity.AppFavoritesActivity"
             android:launchMode="singleInstance" />
-        <activity android:name=".activity.CorrectionActivity" />
-        <activity android:name=".activity.PictureModeActivity" />
-        <activity android:name=".activity.AudioModeActivity" />
+        <activity android:name=".activity.settings.CorrectionActivity" />
+        <activity android:name=".activity.settings.PictureModeActivity" />
+        <activity android:name=".activity.settings.AudioModeActivity" />
         <activity
-            android:name=".activity.BluetoothActivity"
+            android:name=".activity.settings.BluetoothActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter android:priority="999">
@@ -137,12 +137,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DateTimeActivity" />
-        <activity android:name=".activity.LanguageAndKeyboardActivity" />
-        <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.OtherSettingsActivity" />
+        <activity android:name=".activity.settings.DateTimeActivity" />
+        <activity android:name=".activity.settings.LanguageAndKeyboardActivity" />
+        <activity android:name=".activity.settings.AboutActivity" />
+        <activity android:name=".activity.settings.OtherSettingsActivity" />
         <activity
-            android:name=".activity.WifiActivity"
+            android:name=".activity.settings.WifiActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter android:priority="999">
@@ -161,9 +161,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ProjectActivity" />
+        <activity android:name=".activity.settings.ProjectActivity" />
         <activity
-            android:name=".activity.MainSettingActivity"
+            android:name=".activity.settings.MainSettingActivity"
             android:exported="true"
             android:launchMode="singleTop"></activity>
         <activity
@@ -193,6 +193,10 @@
 
         <service
             android:name=".service.TimeOffService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".service.KeepAliveService"
             android:enabled="true"
             android:exported="true" />
     </application>

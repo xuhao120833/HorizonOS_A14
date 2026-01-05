@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.htc.horizonos.MyApplication;
 import com.htc.horizonos.R;
-import com.htc.horizonos.activity.ProjectActivity;
+import com.htc.horizonos.activity.settings.ProjectActivity;
 import com.htc.horizonos.databinding.InitAngleLayoutBinding;
 import com.htc.horizonos.utils.KeystoneUtils;
 import com.htc.horizonos.utils.LogUtils;

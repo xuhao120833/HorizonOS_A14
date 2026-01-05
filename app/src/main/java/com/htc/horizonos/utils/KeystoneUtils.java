@@ -169,8 +169,10 @@ public class KeystoneUtils {
 	public static void setkeystoneValue(int type, int[] xy, boolean rtl) {
 		int x = xy[0];
 		int y = xy[1];
-		if (x < 0 || y < 0)
-			return;
+		if (x < 0)
+			x = 0;
+		if (y < 0)
+			y = 0;
 		if (x > max_X || y > max_Y)
 			return;
 		int type_1 = 0;

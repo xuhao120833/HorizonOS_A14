@@ -13,19 +13,18 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import com.htc.horizonos.MyApplication;
+import com.htc.horizonos.activity.settings.BluetoothActivity;
+import com.htc.horizonos.activity.settings.MainSettingActivity;
+import com.htc.horizonos.activity.settings.WifiActivity;
 import com.htc.horizonos.databinding.ActivityMainHtcosBinding;
 import com.htc.horizonos.fragment.NewFragment;
 import com.htc.horizonos.fragment.OriginalFragment;
@@ -34,8 +33,9 @@ import com.htc.horizonos.receiver.AppReceiver;
 import com.htc.horizonos.receiver.BatteryReceiver;
 import com.htc.horizonos.receiver.DisplaySettingsReceiver;
 import com.htc.horizonos.receiver.UsbDeviceCallBack;
+import com.htc.horizonos.service.KeepAliveService;
+import com.htc.horizonos.service.TimeOffService;
 import com.htc.horizonos.utils.BatteryCallBack;
-import com.htc.horizonos.utils.BlurImageView;
 import com.htc.horizonos.utils.FileUtils;
 
 import android.os.Environment;
@@ -78,7 +78,6 @@ import com.htc.horizonos.utils.Contants;
 import com.htc.horizonos.utils.DBUtils;
 import com.htc.horizonos.utils.ImageUtils;
 import com.htc.horizonos.utils.LanguageUtil;
-import com.htc.horizonos.utils.LogUtils;
 import com.htc.horizonos.utils.NetWorkUtils;
 import com.htc.horizonos.utils.ShareUtil;
 import com.htc.horizonos.utils.SystemPropertiesUtil;
@@ -91,12 +90,10 @@ import com.htc.horizonos.utils.VerifyUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -244,6 +241,10 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             localDevicesList = new ArrayList<StorageVolume>();
             devicesPathAdd();
             LogUtils.d(TAG, " onCreate ");
+            startRebootService();
+
+            //桌面保活默认启动一个前台服务
+            startForegroundService(new Intent(this, KeepAliveService.class));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -256,9 +257,6 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
             updateTime();
             updateBle();
             if ((boolean) ShareUtil.get(this, Contants.MODIFY, false)) {
-//                short_list = loadHomeAppData();
-//            handler.sendEmptyMessage(202);
-//                handler.sendEmptyMessage(204);
                 ShareUtil.put(this, Contants.MODIFY, false);
             }
             LogUtils.d(TAG, " onResume快捷图标 short_list " + short_list.size());
@@ -1193,184 +1191,21 @@ public class MainActivity extends BaseMainActivity implements BluetoothCallBcak,
         ToastUtil.showShortToast(this, getString(R.string.data_none));
     }
 
-//    private void setIconOrText() {
-//        setDefaultBackground();
-//    }
-
-//    private void setMainApp() {
-//        Drawable drawable = DBUtils.getInstance(this).getIconDataByTag("icon1");
-//        if (drawable != null) {
-//            customBinding.icon1.setImageDrawable(drawable);
-//        }
-//
-//        drawable = DBUtils.getInstance(this).getIconDataByTag("icon2");
-//        if (drawable != null) {
-//            customBinding.icon2.setImageDrawable(drawable);
-//        }
-//
-//        drawable = DBUtils.getInstance(this).getIconDataByTag("icon3");
-//        if (drawable != null) {
-//            customBinding.icon3.setImageDrawable(drawable);
-//        }
-//
-//        drawable = DBUtils.getInstance(this).getIconDataByTag("icon4");
-//        if (drawable != null) {
-//            customBinding.icon4.setImageDrawable(drawable);
-//        }
-//    }
-
-//    private void setListModules() {
-//        Drawable drawable = DBUtils.getInstance(this).getDrawableFromListModules("list1");
-//        if (drawable != null) {
-//            customBinding.eshareIcon.setImageDrawable(drawable);
-//            drawable = null;
-//        }
-//        drawable = DBUtils.getInstance(this).getDrawableFromListModules("list3");
-//        if (drawable != null) {
-//            customBinding.hdmiIcon.setImageDrawable(drawable);
-//            drawable = null;
-//        }
-//        Hashtable<String, String> mHashtable1 = DBUtils.getInstance(this).getHashtableFromListModules("list1");
-//        Hashtable<String, String> mHashtable2 = DBUtils.getInstance(this).getHashtableFromListModules("list3");
-//        LogUtils.d(TAG, "xu当前语言" + LanguageUtil.getCurrentLanguage());
-//        if (mHashtable1 != null) {
-//            String text = null;
-//            switch (LanguageUtil.getCurrentLanguage()) {
-//                case "zh-CN":
-//                    LogUtils.d(TAG, "中文设置eshareText和hdmiText");
-//                    text = mHashtable1.get("zh-CN");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("zh-CN"));
-//                    }
-//                    break;
-//                case "zh-TW":
-//                    text = mHashtable1.get("zh-TW");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("zh-TW"));
-//                    }
-//                    break;
-//                case "zh-HK":
-//                    text = mHashtable1.get("zh-HK");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("zh-HK"));
-//                    }
-//                    break;
-//                case "ko-KR":
-//                    text = mHashtable1.get("ko-KR");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("ko-KR"));
-//                    }
-//                    break;
-//                case "ja-JP":
-//                    text = mHashtable1.get("ja-JP");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("ja-JP"));
-//                    }
-//                    break;
-//                case "en-US":
-//                    text = mHashtable1.get("en-US");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("en-US"));
-//                    }
-//                    break;
-//                case "ru-RU":
-//                    text = mHashtable1.get("ru-RU");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("ru-RU"));
-//                    }
-//                    break;
-//                case "ar-EG":
-//                    text = mHashtable1.get("ar-EG");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.eshareText.setText(mHashtable1.get("ar-EG"));
-//                    }
-//                    break;
-//            }
-//        }
-//        if (mHashtable2 != null) {
-//            String text = null;
-//            switch (LanguageUtil.getCurrentLanguage()) {
-//                case "zh-CN":
-//                    LogUtils.d(TAG, "中文设置eshareText和hdmiText");
-//                    text = mHashtable2.get("zh-CN");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("zh-CN"));
-//                    }
-//                    break;
-//                case "zh-TW":
-//                    text = mHashtable2.get("zh-TW");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("zh-TW"));
-//                    }
-//                    break;
-//                case "zh-HK":
-//                    text = mHashtable2.get("zh-HK");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("zh-HK"));
-//                    }
-//                    break;
-//                case "ko-KR":
-//                    text = mHashtable2.get("ko-KR");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("ko-KR"));
-//                    }
-//                    break;
-//                case "ja-JP":
-//                    text = mHashtable2.get("ja-JP");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("ja-JP"));
-//                    }
-//                    break;
-//                case "en-US":
-//                    text = mHashtable2.get("en-US");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("en-US"));
-//                    }
-//                    break;
-//                case "ru-RU":
-//                    text = mHashtable2.get("ru-RU");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("ru-RU"));
-//                    }
-//                    break;
-//                case "ar-EG":
-//                    text = mHashtable2.get("ar-EG");
-//                    if (text != null && !text.equals("")) {
-//                        customBinding.hdmiText.setText(mHashtable2.get("ar-EG"));
-//                    }
-//                    break;
-//            }
-//        }
-//    }
-
-//    private void setbrandLogo() {
-//        Drawable drawable = DBUtils.getInstance(this).getDrawableFromBrandLogo(1);
-//        if (drawable != null) {
-//            customBinding.brand.setImageDrawable(drawable);
-//        }
-//    }
-
-//    private void setDefaultBackground() {
-//        //如果用户自主修改了背景，那么重启之后不再设置默认背景start
-//        SharedPreferences sharedPreferences = ShareUtil.getInstans(getApplicationContext());
-//        int selectBg = sharedPreferences.getInt(Contants.SelectWallpaperLocal, -1);
-//        if (selectBg != -1) {
-//            LogUtils.d(TAG, " setDefaultBackground 用户已经自主修改了背景");
-//            return;
-//        }
-//        //背景控制end
-//        String defaultbg = sharedPreferences.getString(Contants.DefaultBg, "1");
-//        LogUtils.d(TAG, " setDefaultBackground defaultbg " + defaultbg);
-//        int number = Integer.parseInt(defaultbg);
-//        LogUtils.d(TAG, " setDefaultBackground number " + number);
-//        if (number > Utils.drawables.size()) {
-//            LogUtils.d(TAG, " setDefaultBackground 用户设置的默认背景，超出了范围");
-//            return;
-//        }
-//        MyApplication.mainDrawable = (BitmapDrawable) Utils.drawables.get(number - 1);
-//        setWallPaper(Utils.drawables.get(number - 1));
-//        setDefaultBg(Utils.drawables.get(number - 1));
-//    }
+    private void startRebootService() {
+        int[] time_off_value = getResources().getIntArray(R.array.time_off_value);
+        int cur_time_off_index = (int) ShareUtil.get(this, Contants.TimeOffIndex, 0);
+        Intent intent = new Intent(this, TimeOffService.class);
+        if (cur_time_off_index == 0) {
+            ShareUtil.put(this, Contants.TimeOffStatus, false);
+            ShareUtil.put(this, Contants.TimeOffTime, time_off_value[cur_time_off_index]);
+            intent.putExtra(Contants.TimeOffStatus, false);
+        } else {
+            ShareUtil.put(this, Contants.TimeOffStatus, true);
+            ShareUtil.put(this, Contants.TimeOffTime, time_off_value[cur_time_off_index]);
+            intent.putExtra(Contants.TimeOffStatus, true);
+        }
+        startForegroundService(intent);
+    }
 
     private void setDefaultBg(Drawable drawable) {
         threadExecutor.execute(new Runnable() {

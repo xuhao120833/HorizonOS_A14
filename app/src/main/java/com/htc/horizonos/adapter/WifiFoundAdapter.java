@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.htc.horizonos.R;
-import com.htc.horizonos.activity.WifiActivity;
+import com.htc.horizonos.activity.settings.WifiActivity;
 import com.htc.horizonos.utils.LinkWifi;
 import com.htc.horizonos.widget.CustomConfigDisConnectDialog;
 import com.htc.horizonos.widget.CustomConfigSuccessDialog;
