@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.htc.horizonos.MyApplication;
 import com.htc.horizonos.R;
+import com.htc.horizonos.utils.PasswordUtils;
 import com.htc.horizonos.utils.Utils;
 
 import androidx.annotation.Nullable;
@@ -36,6 +37,14 @@ public class BaseMainActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (PasswordUtils.isPasswordSwitchEnabled() && !PasswordUtils.isSessionVerified()) {
+            if(!PasswordUtils.hasPasswordBeenSet(getApplicationContext())) {
+                startNewActivity(PasswordVerifyActivity.class);
+            } else {
+                startNewActivity(PasswordVerifyActivity2.class);
+            }
+            finish();
+        }
     }
 
     @Override

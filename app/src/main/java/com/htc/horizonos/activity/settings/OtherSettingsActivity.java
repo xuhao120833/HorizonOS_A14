@@ -20,6 +20,7 @@ import com.htc.horizonos.utils.Contants;
 import com.htc.horizonos.utils.ShareUtil;
 import com.htc.horizonos.utils.Utils;
 import com.htc.horizonos.widget.FactoryResetDialog;
+import com.htc.horizonos.widget.SetPasswordDialog;
 import com.softwinner.tv.AwTvSystemManager;
 import com.softwinner.tv.common.AwTvSystemTypes;
 
@@ -72,6 +73,7 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
                 }
             }
         });
+        otherSettingsBinding.rlSetPassword.setOnClickListener(this);
         otherSettingsBinding.rlAccount.setOnClickListener(this);
         otherSettingsBinding.rlDeveloper.setOnClickListener(this);
 
@@ -83,6 +85,7 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
         otherSettingsBinding.rlTimerOff.setOnHoverListener(this);
         otherSettingsBinding.rlBootInput.setOnHoverListener(this);
         otherSettingsBinding.rlPowerMode.setOnHoverListener(this);
+        otherSettingsBinding.rlSetPassword.setOnHoverListener(this);
         otherSettingsBinding.rlAccount.setOnHoverListener(this);
         otherSettingsBinding.rlDeveloper.setOnHoverListener(this);
 
@@ -96,6 +99,7 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
 
 //        otherSettingsBinding.rlAudioMode.setVisibility(MyApplication.config.AudioMode?View.VISIBLE:View.GONE);
         otherSettingsBinding.rlPowerMode.setVisibility(MyApplication.config.powerMode ? View.VISIBLE : View.GONE);
+        otherSettingsBinding.rlSetPassword.setVisibility(MyApplication.config.set_password ? View.VISIBLE : View.GONE);
         otherSettingsBinding.rlAccount.setVisibility(MyApplication.config.account ? View.VISIBLE : View.GONE);
         otherSettingsBinding.rlBootInput.setVisibility(MyApplication.config.bootSource ? View.VISIBLE : View.GONE);
 
@@ -221,6 +225,9 @@ public class OtherSettingsActivity extends BaseActivity implements View.OnKeyLis
             otherSettingsBinding.powerModeTv.setText(powerModes[curPowerMode]);
             mAwTvSystemManager.setPowerOnMode(curPowerMode == 1 ?
                     AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_DIRECT : AwTvSystemTypes.EnumPowerMode.E_AW_POWER_MODE_STANDBY);
+        } else if (id == R.id.rl_set_password) {
+            SetPasswordDialog passwordDialog = new SetPasswordDialog(this);
+            passwordDialog.show();
         } else if (id == R.id.rl_account) {
             LogUtils.d(TAG, "打开Google账号切换界面");
             startNewActivity(AccountActivity.class);

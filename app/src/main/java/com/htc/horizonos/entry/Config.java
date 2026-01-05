@@ -38,8 +38,9 @@ public class Config {
 
 	//电源模式 上电开机 上电待机，默认关闭
     public boolean powerMode = false;
+    public boolean set_password = false;
     //其它设置 谷歌账号切换，默认打开
-    public boolean account = true;
+    public boolean account = false;
     public int brightnessDefault = 50;
     public int contrastDefault = 50;
     public int hueDefault = 50;

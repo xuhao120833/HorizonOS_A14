@@ -13,6 +13,7 @@ import android.view.animation.ScaleAnimation;
 
 import com.htc.horizonos.MyApplication;
 import com.htc.horizonos.R;
+import com.htc.horizonos.utils.PasswordUtils;
 import com.htc.horizonos.utils.Utils;
 
 import androidx.annotation.Nullable;
@@ -28,7 +29,14 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (PasswordUtils.isPasswordSwitchEnabled() && !PasswordUtils.isSessionVerified()) {
+            if(!PasswordUtils.hasPasswordBeenSet(getApplicationContext())) {
+                startNewActivity(PasswordVerifyActivity.class);
+            } else {
+                startNewActivity(PasswordVerifyActivity2.class);
+            }
+            finish();
+        }
     }
 
     @Override
@@ -66,10 +74,22 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    public void startNewActivityClearTask(Class<?> cls) {
+        Intent intent = new Intent(this, cls);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     public void startNewActivityWifi(Class<?> cls) {
         Intent intent = new Intent(this, cls);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    public void startNewActivityBlue(Class<?> cls) {
+        Intent intent = new Intent(this, cls);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
