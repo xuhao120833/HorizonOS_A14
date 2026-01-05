@@ -141,6 +141,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         projectBinding.rlInitAngle.setOnClickListener(this);
         projectBinding.rlInitAngle.setOnHoverListener(this);
         projectBinding.autoKeystoneSwitch.setOnClickListener(this);
+        projectBinding.rlOneTouchCalibration.setOnClickListener(this);
+        projectBinding.rlOneTouchCalibration.setOnHoverListener(this);
 
         projectBinding.rlProjectMode.setOnKeyListener(this);
         projectBinding.rlDeviceMode2.setOnKeyListener(this);
@@ -306,6 +308,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
 
         //16:9 16:10 4:3 画面缩放
 //        updateSzoomTv();
+
+        setOneVisiblity();
     }
 
     private void updateSzoomTv() {
@@ -397,12 +401,17 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
             ShowResetKeystoreDialog();
         } else if (id == R.id.rl_auto_keystone || id == R.id.auto_keystone_switch) {
             setAuto();
+            setOneVisiblity();
         } else if (id == R.id.rl_auto_focus || id == R.id.auto_focus_switch) {
             set_auto_focus(!get_auto_focus());
             projectBinding.autoFocusSwitch.setChecked(get_auto_focus());
+            setOneVisiblity();
         } else if (id == R.id.rl_auto_four_corner || id == R.id.auto_four_corner_switch) {
             setAutoFourCorner();
-        } else if (id == R.id.rl_screen_recognition || id == R.id.screen_recognition_switch) {
+            setOneVisiblity();
+        } else if (id == R.id.rl_one_touch_calibration) {
+            setOneTouch();
+        }  else if (id == R.id.rl_screen_recognition || id == R.id.screen_recognition_switch) {
             setMbRecognize();
         } else if (id == R.id.rl_intelligent_obstacle || id == R.id.intelligent_obstacle_switch) {
             setBstacle();
@@ -1045,6 +1054,45 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         int[] tpData = scUtils.getpxRatioxy(px4, py4, old_ratio, scale, a, KeystoneUtils.lcd_w, KeystoneUtils.lcd_h);
         if (tpData[8] == 1) {
             KeystoneUtils.optKeystoneFun(tpData);
+        }
+    }
+
+    private void setOneVisiblity() {
+//        if(MyApplication.config.oneTouchCalibration) {
+        //一键校正
+        if (SystemProperties.getBoolean("persist.htc.one_touch_calib", false)) {
+            //梯形校正
+            boolean b1 = projectBinding.rlAutoKeystone.getVisibility() == View.VISIBLE;
+            boolean c1 = projectBinding.autoKeystoneSwitch.isChecked();
+            //自动对焦
+            boolean b2 = projectBinding.rlAutoFocus.getVisibility() == View.VISIBLE;
+            boolean c2 = projectBinding.autoFocusSwitch.isChecked();
+            //四角矫正
+            boolean b3 = projectBinding.rlAutoFourCorner.getVisibility() == View.VISIBLE;
+            boolean c3 = projectBinding.autoFourCornerSwitch.isChecked();
+
+            if ((b2 && b3 && c2 && c3) || (b1 && b2 && c2)) {
+                projectBinding.rlOneTouchCalibration.setVisibility(View.VISIBLE);
+            } else {
+                projectBinding.rlOneTouchCalibration.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void setOneTouch() {
+        boolean one = get_OneTouch();
+        set_OneTouch(!one);
+    }
+
+    public boolean get_OneTouch() {
+        return SystemProperties.getBoolean("hotack.sensor.anti_shake", false);
+    }
+
+    public void set_OneTouch(boolean b) {
+        if (b) {
+            SystemProperties.set("hotack.sensor.anti_shake", "1");
+        } else {
+            SystemProperties.set("hotack.sensor.anti_shake", "0");
         }
     }
 }
