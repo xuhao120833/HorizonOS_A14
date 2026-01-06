@@ -3,11 +3,14 @@ package com.htc.horizonos.activity.settings;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManagerEx;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemProperties;
@@ -18,6 +21,8 @@ import com.htc.horizonos.activity.settings.CorrectionActivity;
 import com.htc.horizonos.activity.settings.InitAngleActivity;
 import com.htc.horizonos.activity.settings.PictureModeActivity;
 import com.htc.horizonos.utils.LogUtils;
+
+import android.provider.Settings;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -95,8 +100,11 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
     public int[] rt_xy = new int[2];
     public int[] lb_xy = new int[2];
     public int[] rb_xy = new int[2];
-
+    AudioManagerEx audioManagerEx;
     String[] screen_zoom;
+    private  final int SETTING_ENABLE = 1;
+
+    private  final int SETTING_DISABLE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +222,13 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         projectBinding.screenZoomLeft.setOnClickListener(this);
         projectBinding.screenZoomRight.setOnClickListener(this);
 
+        projectBinding.rlHdmiCecSwitch.setOnClickListener(this);
+        projectBinding.rlHdmiCecSwitch.setOnHoverListener(this);
+        projectBinding.hdmiCecSwitch.setOnClickListener(this);
+        projectBinding.rlArcSwitch.setOnClickListener(this);
+        projectBinding.rlArcSwitch.setOnHoverListener(this);
+        projectBinding.arcSwitch.setOnClickListener(this);
+
         projectBinding.rlDisplaySettings.setVisibility(MyApplication.config.displaySetting ? View.VISIBLE : View.GONE);
         projectBinding.rlColorMode.setVisibility(MyApplication.config.brightAndColor ? View.VISIBLE : View.GONE);
         projectBinding.rlAudioMode.setVisibility(MyApplication.config.AudioMode ? View.VISIBLE : View.GONE);
@@ -229,6 +244,8 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         projectBinding.rlAutoFourCorner.setVisibility(MyApplication.config.autoFourCorner ? View.VISIBLE : View.GONE);
         projectBinding.rlScreenRecognition.setVisibility(MyApplication.config.screenRecognition ? View.VISIBLE : View.GONE);
         projectBinding.rlIntelligentObstacle.setVisibility(MyApplication.config.intelligentObstacle ? View.VISIBLE : View.GONE);
+        projectBinding.rlHdmiCecSwitch.setVisibility(MyApplication.config.hdmi_cec_switch ? View.VISIBLE : View.GONE);
+        projectBinding.rlArcSwitch.setVisibility(MyApplication.config.arcSwitch ? View.VISIBLE : View.GONE);
 
         if (SystemProperties.get("persist.sys.camok", "0").equals("1")) {
             projectBinding.rlAutoFocus.setVisibility(View.VISIBLE);
@@ -305,6 +322,19 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         initMbRecognize();
         initAutoFourCorner();
         projectBinding.autoFocusSwitch.setChecked(get_auto_focus());
+
+        if (getHdmiCecEnable(this)){
+            updateView(1);
+        }
+        else {
+            updateView(0);
+        }
+
+        audioManagerEx = new AudioManagerEx(this);
+        ArrayList<String> audioDevices = audioManagerEx.getAudioDeviceActive(AudioManagerEx.AUDIO_OUTPUT_ACTIVE);
+        if (audioDevices != null && audioDevices.size() > 0)
+//            projectBinding.arcSwitch.setChecked(audioDevices.get(0).equals("AUDIO_ARC"));
+            projectBinding.arcSwitch.setChecked(audioDevices.get(0).equals("OUT_ARC"));
 
         //16:9 16:10 4:3 画面缩放
 //        updateSzoomTv();
@@ -479,6 +509,19 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
 //            KeystoneUtils.writeGlobalSettings(this, KeystoneUtils.ZOOM_SCALE, zoom_scale);
             KeystoneUtils.writeSystemProperties(KeystoneUtils.PROP_ZOOM_SCALE, zoom_scale);
             updateSzoomTv();
+        } else if(id == R.id.rl_hdmi_cec_switch || id == R.id.hdmi_cec_switch) {
+            if (projectBinding.hdmiCecSwitch.isChecked()) {
+                updateView(0);
+                enableHdmiCec(this,false);
+            }else {
+                updateView(1);
+                enableHdmiCec(this,true);
+            }
+        } else if (id == R.id.arc_switch || id == R.id.rl_arc_switch) {
+            boolean isChecked = projectBinding.arcSwitch.isChecked();
+            projectBinding.arcSwitch.setChecked(!isChecked);
+//            updateAudioDevice(!isChecked ? "AUDIO_ARC" : "AUDIO_SPEAKER");
+            updateAudioDevice(!isChecked ? "OUT_ARC" : "OUT_SPK");
         }
     }
 
@@ -1094,5 +1137,69 @@ public class ProjectActivity extends BaseActivity implements View.OnKeyListener,
         } else {
             SystemProperties.set("hotack.sensor.anti_shake", "0");
         }
+    }
+
+    /**
+     * Gets hdmi cec enable.
+     *
+     * @param context the application context
+     * @return the hdmi cec enable
+     */
+    public  boolean getHdmiCecEnable(Context context) {
+        return readIntSetting(context,
+                Settings.Global.HDMI_SYSTEM_AUDIO_CONTROL_ENABLED, SETTING_ENABLE) == SETTING_ENABLE;
+    }
+
+    /**
+     * Enable hdmi cec.
+     *
+     * @param context the application context
+     * @param isEnable the is enable
+     * @return 0 :success,-1:failure
+     */
+    public  int enableHdmiCec(Context context, boolean isEnable) {
+
+        return writeIntSetting(context,
+                Settings.Global.HDMI_SYSTEM_AUDIO_CONTROL_ENABLED, isEnable ? SETTING_ENABLE : SETTING_DISABLE) ? 0 : -1;
+    }
+
+    /**
+     * Write int setting.
+     *
+     * @param mContext the m context
+     * @param key the key
+     * @param value the value
+     * @return true if success, otherwise false
+     */
+    public  boolean writeIntSetting(Context mContext, String key, int value) {
+        ContentResolver cr = mContext.getContentResolver();
+        return Settings.Global.putInt(cr, key, value);
+    }
+
+    /**
+     * Read int setting int.
+     *
+     * @param mContext the m context
+     * @param key the key
+     * @param value the value
+     * @return 0 :success,-1:failure
+     */
+    public  int readIntSetting(Context mContext, String key, int value) {
+        ContentResolver cr = mContext.getContentResolver();
+        return Settings.Global.getInt(cr, key, value);
+    }
+
+    private void updateView(int open){
+        if (open == 1){
+            projectBinding.hdmiCecSwitch.setChecked(true);
+        }else {
+            projectBinding.hdmiCecSwitch.setChecked(false);
+        }
+    }
+
+    private void updateAudioDevice(String value) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(value);
+        audioManagerEx.setAudioDeviceActive(channels, AudioManagerEx.AUDIO_OUTPUT_ACTIVE);
     }
 }

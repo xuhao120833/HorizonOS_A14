@@ -77,6 +77,10 @@ public class Config {
     public boolean autoFocus = true;
     public boolean screenRecognition = true;
     public boolean intelligentObstacle = true;
+    //cec
+    public boolean hdmi_cec_switch = false;
+
+    public boolean arcSwitch = false;
     public boolean calibration = true;
     public boolean projectMode = true;
     public boolean displaySetting = false;
