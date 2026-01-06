@@ -99,6 +99,7 @@ public class Config {
     public boolean wlanMacAddress = true;
     public boolean updateFirmware = true;
     public boolean onlineUpdate = true;
+    public boolean privacyTerms = false;
     public boolean serialNumber = true;
 
     public boolean AudioMode = false; //声音模式
